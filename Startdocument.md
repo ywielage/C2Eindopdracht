@@ -4,7 +4,7 @@ Cody Vos, Tom Olijve, Lars Kuizenga, Yanniek Wielage
 
 # Het Idee
 
-Het idee is om een 2d game te maken waarin de speler zich verplaatst door een proceduraal gegenereerde level. Hierin is het doel om steeds verder te komen, doormiddel van upgrades en nieuwe wapens te vinden.  Dit heeft veel af van een roguelike. Echter de combat die hierin word gebruikt is meer als een Smashlike, denk bijvoorbeeld aan brawlhalla of aan super smash bros.
+Het idee is om een 2d game te maken waarin de speler zich verplaatst door een proceduraal gegenereerde level. Een produreel gegeneerd level is een level waarin de computer het level heeft gecreëerd. Hierdoor kan een level willekeurig worden ingedeeld, en kan elk level verschillend zijn. Hierin is het doel om steeds verder te komen, doormiddel van upgrades en nieuwe wapens te vinden.  Dit heeft veel af van een roguelike. Een roguelike is een gamegenre waarin door verschillende kleine levels wordt gemanouvreerd. Dit werkt goed als het proceduraal gegenereerd is, want dan ik elk level verschillend. Echter de combat die hierin word gebruikt is meer als een Smashlike, denk bijvoorbeeld aan brawlhalla of aan super smash bros.
 
 ## **Development Framework** 
 
