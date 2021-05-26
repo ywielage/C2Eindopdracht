@@ -18,5 +18,14 @@ De planning is te vinden in het bijgevoegde Excel bestand.
 
 ## **Visualisatie**
 
+Dit zijn de eerste visualisaties, welke een eerste idee geven van hoe de game eruit gaat zien. 
 
 
+
+Ingang standaard level:
+
+
+
+Sprite karakter:
+
+![img](https://cdn.discordapp.com/attachments/833974509425786880/847036989307617310/unknown.png)
