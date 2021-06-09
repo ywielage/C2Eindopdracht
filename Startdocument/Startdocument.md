@@ -4,9 +4,9 @@ Cody Vos, Tom Olijve, Lars Kuizenga, Yanniek Wielage
 
 # Het Idee
 
-Het idee is om een 2d game te maken waarin de speler zich verplaatst door een procedureel gegenereerde level. Een produreel gegeneerd level is een level waarin de computer het level heeft gecreëerd. Hierdoor kan een level willekeurig worden ingedeeld, en kan elk level verschillend zijn. Hierin is het doel om steeds verder te komen, doormiddel van upgrades en nieuwe wapens te vinden. Dit heeft veel af van een roguelike. Een roguelike is een gamegenre waarin door verschillende kleine levels wordt gemanoeuvreerd. Dit werkt goed als het procedureel gegenereerd is, want dan ik elk level verschillend. 
+Het idee is om een 2d game te maken waarin de speler zich verplaatst door een procedureel gegenereerde level. Een procedureel gegeneerd level is een level waarin de computer het level heeft gecreëerd. Hierdoor kan een level willekeurig worden ingedeeld, en kan elk level verschillend zijn. Hierin is het doel om steeds verder te komen, doormiddel van upgrades en nieuwe wapens te vinden. Dit heeft veel af van een roguelike. Een roguelike is een gamegenre waarin door verschillende kleine levels wordt gemanoeuvreerd. Dit werkt goed als het procedureel gegenereerd is, want dan ik elk level verschillend. 
 
-Om het procedurele genereren een werkelijkheid te maken, zullen er delen van een basislevel worden gemaakt. Deze delen worden gemaakt zodat zij op alle andere delen passen. De computer zal hier willekeurig voor elk deel van het scherm een deel uitkiezen. Hierdoor is elke level anders.
+Om het procedurele genereren een werkelijkheid te maken, zullen er delen van een basislevel worden gemaakt. Deze delen worden gemaakt zodat zij op alle andere delen passen, je kunt hierbij denken aan het in elkaar leggen van een puzzel waarbij elk deel een opening heeft waardoor niet alles op elkaar past. De computer zal hier willekeurig voor elk deel van het scherm een deel uitkiezen. Hierdoor is elk level anders.
 
 Echter de gevechtsstijl die hierin word gebruikt is meer als een Smashlike, denk bijvoorbeeld aan brawlhalla of aan super smash bros. Het essentiële van deze gevechtsstijl is dat de aanval bepaald wordt door de richting welke wordt aangegeven door de gebruiker. Als die richting rechts is, zal er bijvoorbeeld een zware aanval kunnen worden gebruikt. Door deze gevechtsstijl te implementeren zal het doorlopen van de verschillende levens een stuk interactiever worden, en kan elke level op een andere manier worden aangepakt. 
 
@@ -38,14 +38,13 @@ In dit hoofdstuk staat welke features vereist zijn om af te hebben, en welke fea
 
 **Extra features**
 
-4. Een uitgebreid gevechtsysteem, met een andere aanval afhankelijk van de positie waarin de speler zich bevindt.
-5. Een grotere variatie van levels.
-6. Een grotere variatie van tegenstanders.
+5. Een uitgebreid gevechtsysteem, met een andere aanval afhankelijk van de positie waarin de speler zich bevindt.
+6. Een grotere variatie van levels.
+7. Een grotere variatie van tegenstanders.
 
 ## **Planning**
 
 De planning is te vinden in het bijgevoegde Excel bestand.
-
 
 
 ## **Literatuur**
@@ -65,18 +64,18 @@ Dit zijn de eerste visualisaties, welke een eerste idee geven van hoe de game er
 
 Ingang standaard level:
 
-![img](C:\xampp\htdocs\GithubRepos\C2Eindopdracht\Startdocument\cave.png)
+![img](cave.png)
 
 Voorbeelden gegenereerde levels: 
 
-![level2](C:\xampp\htdocs\GithubRepos\C2Eindopdracht\Startdocument\level1.png)
+![level2](level1.png)
 
-![level2](C:\xampp\htdocs\GithubRepos\C2Eindopdracht\Startdocument\level2.png)
+![level2](level2.png)
 
-![level2](C:\xampp\htdocs\GithubRepos\C2Eindopdracht\Startdocument\level3.png)
+![level2](level3.png)
 
-![level2](C:\xampp\htdocs\GithubRepos\C2Eindopdracht\Startdocument\level4.png)
+![level2](level4.png)
 
 Sprite karakter:
 
-![sprite](C:\xampp\htdocs\GithubRepos\C2Eindopdracht\Startdocument\sprite.png)
+![sprite](sprite.png)
