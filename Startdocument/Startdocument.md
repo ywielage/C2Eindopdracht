@@ -25,9 +25,39 @@ Een voorbeeld van een hulpmiddel welke Monogame de gebruiker biedt is de Game cl
 
 Dit is een goede basis waar verder op kan worden gebouwd voor ons project.
 
+## **Features en Prioriteiten**
+
+In dit hoofdstuk staat welke features vereist zijn om af te hebben, en welke features extra zijn. Ook zullen er prioriteiten worden gesteld, welke aan bod komen bij tijdsnood. De features staan in prioriteitsvolgorde. 
+
+**Vereiste features**
+
+1. Basis van het procedureel genereren van de levels.
+2. Bewegen door de levels
+3. Een basis gevechtssysteem, waarbij beide de tegenstander zowel als de speler schade kan nemen
+4. 1 basis tegenstander bestuurd door de computer in elk level
+
+**Extra features**
+
+4. Een uitgebreid gevechtsysteem, met een andere aanval afhankelijk van de positie waarin de speler zich bevindt.
+5. Een grotere variatie van levels.
+6. Een grotere variatie van tegenstanders.
+
 ## **Planning**
 
 De planning is te vinden in het bijgevoegde Excel bestand.
+
+
+
+## **Literatuur**
+
+De volgende literatuur en documentatie zal worden gebruikt om dit project te realiseren: 
+
+- https://docs.monogame.net/
+  - Als documentatie voor Monogame
+- https://docs.microsoft.com/en-us/dotnet/csharp/
+  - Als documentatie voor C#
+- https://docs.microsoft.com/en-us/dotnet/
+  - Als documentatie voor .NET
 
 ## **Visualisatie**
 
@@ -36,6 +66,16 @@ Dit zijn de eerste visualisaties, welke een eerste idee geven van hoe de game er
 Ingang standaard level:
 
 ![img](C:\xampp\htdocs\GithubRepos\C2Eindopdracht\Startdocument\cave.png)
+
+Voorbeelden gegenereerde levels: 
+
+![level2](C:\xampp\htdocs\GithubRepos\C2Eindopdracht\Startdocument\level1.png)
+
+![level2](C:\xampp\htdocs\GithubRepos\C2Eindopdracht\Startdocument\level2.png)
+
+![level2](C:\xampp\htdocs\GithubRepos\C2Eindopdracht\Startdocument\level3.png)
+
+![level2](C:\xampp\htdocs\GithubRepos\C2Eindopdracht\Startdocument\level4.png)
 
 Sprite karakter:
 
