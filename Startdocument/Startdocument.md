@@ -35,8 +35,8 @@ Dit zijn de eerste visualisaties, welke een eerste idee geven van hoe de game er
 
 Ingang standaard level:
 
-![img](https://cdn.discordapp.com/attachments/833974509425786880/847038023853932544/unknown.png)
+![img](C:\xampp\htdocs\GithubRepos\C2Eindopdracht\Startdocument\cave.png)
 
 Sprite karakter:
 
-![img](https://cdn.discordapp.com/attachments/833974509425786880/847036989307617310/unknown.png)
+![sprite](C:\xampp\htdocs\GithubRepos\C2Eindopdracht\Startdocument\sprite.png)
