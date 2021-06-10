@@ -4,19 +4,19 @@ Cody Vos, Tom Olijve, Lars Kuizenga, Yanniek Wielage
 
 # Het Idee
 
-Het idee is om een 2d game te maken waarin de speler zich verplaatst door een procedureel gegenereerde level. Een procedureel gegeneerd level is een level waarin de computer het level heeft gecreëerd. Hierdoor kan een level willekeurig worden ingedeeld, en kan elk level verschillend zijn. Hierin is het doel om steeds verder te komen, doormiddel van upgrades en nieuwe wapens te vinden. Dit heeft veel af van een roguelike. Een roguelike is een gamegenre waarin door verschillende kleine levels wordt gemanoeuvreerd. Dit werkt goed als het procedureel gegenereerd is, want dan ik elk level verschillend. 
+Ons idee is het maken van een 2D platformer game waarin je speelt als een schaduw karakter dat vecht tegen karakters van het licht. De levels worden semi-automatisch gegenereerd. Er bestaat een achttal levelcomponenten met ieder ten minste één opening. Deze componenten passen als puzzelstukjes op elkaar waardoor er een pad door alle componenten van het begin tot het einde ontstaat.
 
-Om het procedurele genereren een werkelijkheid te maken, zullen er delen van een basislevel worden gemaakt. Deze delen worden gemaakt zodat zij op alle andere delen passen, je kunt hierbij denken aan het in elkaar leggen van een puzzel waarbij elk deel een opening heeft waardoor niet alles op elkaar past. De computer zal hier willekeurig voor elk deel van het scherm een deel uitkiezen. Hierdoor is elk level anders.
+Het doel is om steeds verder te komen, door upgrades te vinden. De dood is permanent wat betekend dat het spel opnieuw begint wanneer je sterft. Samen met het de semi-automatisch gegenereerde levels wordt dit vaak als een roquelike gezien.
 
-Echter de gevechtsstijl die hierin word gebruikt is meer als een Smashlike, denk bijvoorbeeld aan brawlhalla of aan super smash bros. Het essentiële van deze gevechtsstijl is dat de aanval bepaald wordt door de richting welke wordt aangegeven door de gebruiker. Als die richting rechts is, zal er bijvoorbeeld een zware aanval kunnen worden gebruikt. Door deze gevechtsstijl te implementeren zal het doorlopen van de verschillende levens een stuk interactiever worden, en kan elke level op een andere manier worden aangepakt. 
+Echter de gevechtsstijl die hierin word gebruikt is meer als een Smashlike, denk bijvoorbeeld aan brawlhalla of aan super smash bros. Het essentiële van deze gevechtsstijl is dat de aanval bepaald wordt door de richting welke wordt aangegeven door de gebruiker. Door deze gevechtsstijl te implementeren zal het doorlopen van de verschillende levens een stuk interactiever worden, en kan elke level op een andere manier worden aangepakt.
 
 ## **Development Framework** 
 
-Om het idee tot leven te brengen, zal er gebruik worden gemaakt van een development framework. Een development framework is essentieel tot het creëren van het idee.
+Om het idee tot leven te brengen, zal er gebruik worden gemaakt van een development framework. Een development framework is een geheel van componenten dat gebruikt kan worden bij het programmeren van applicaties.
 
-Voor dit project zal er gebruik worden gemaakt van Monogame. Monogame is een .NET library bedoeld voor het creëren van games op desktop, consoles of mobile. Monogame heeft de optie om 2D games te ontwikkelen, wat belangrijk is voor dit project. Dit komt doordat de hele game zal worden ontwikkeld in 2D. Monogame maaakt gebruik van C#, en het hele project word dus ontwikkeld binnen deze programmeertaal.
+Voor dit project zal er gebruik worden gemaakt van Monogame. Monogame is een .NET library bedoeld voor het creëren van games op desktop, consoles of mobile. Monogame heeft de optie om 2D games te ontwikkelen, wat belangrijk is voor dit project. Dit komt doordat de hele game zal worden ontwikkeld in 2D. Monogame maakt gebruik van C#, en het hele project word dus ontwikkeld binnen deze programmeertaal.
 
-Een voorbeeld van een hulpmiddel welke Monogame de gebruiker biedt is de Game class. Deze geeft toegang tot de functies: 
+Een voorbeeld van een component welke Monogame de gebruiker biedt is de Game class. Deze geeft toegang tot de functies: 
 
 - Load/Unload content
 - Update
@@ -31,16 +31,16 @@ In dit hoofdstuk staat welke features vereist zijn om af te hebben, en welke fea
 
 **Vereiste features**
 
-1. Basis van het procedureel genereren van de levels.
-2. Bewegen door de levels
-3. Een basis gevechtssysteem, waarbij beide de tegenstander zowel als de speler schade kan nemen
-4. 1 basis tegenstander bestuurd door de computer in elk level
+1. Het semi-automatisch genereren van levels op basis van acht bestaande levelcomponenten.
+2. Bewegen door de levels.
+3. Een gevechtssysteem, waarbij zowel de tegenstander als de speler schade kan nemen en dood kan gaan.
+4. Eén soort tegenstander bestuurd door de computer in elk level.
 
 **Extra features**
 
-5. Een uitgebreid gevechtsysteem, met een andere aanval afhankelijk van de positie waarin de speler zich bevindt.
-6. Een grotere variatie van levels.
-7. Een grotere variatie van tegenstanders.
+5. Een uitgebreid gevechtssysteem, met een andere aanval afhankelijk van de positie waarin de speler zich bevindt.
+6. Meer dan acht levelcomponenten.
+7. Meer dan één soort tegenstander.
 
 ## **Planning**
 
@@ -51,31 +51,38 @@ De planning is te vinden in het bijgevoegde Excel bestand.
 
 De volgende literatuur en documentatie zal worden gebruikt om dit project te realiseren: 
 
-- https://docs.monogame.net/
-  - Als documentatie voor Monogame
-- https://docs.microsoft.com/en-us/dotnet/csharp/
-  - Als documentatie voor C#
-- https://docs.microsoft.com/en-us/dotnet/
-  - Als documentatie voor .NET
+*MonoGame Documentation*. (z.d.). MonoGame. Geraadpleegd op 10 juni 2021, van 
+	https://docs.monogame.net/
+
+B. (z.d.). *C# docs - get started, tutorials, reference.* Microsoft Docs. Geraadpleegd op 10 juni 2021, van 
+	https://docs.microsoft.com/en-us/dotnet/csharp/
+
+B. (z.d.-c). .*NET documentation*. Microsoft Docs. Geraadpleegd op 10 juni 2021, van 
+	https://docs.microsoft.com/en-us/dotnet/
 
 ## **Visualisatie**
 
 Dit zijn de eerste visualisaties, welke een eerste idee geven van hoe de game eruit gaat zien. 
 
-Ingang standaard level:
+### Ingang standaard level:
 
 ![img](cave.png)
 
-Voorbeelden gegenereerde levels: 
+### Voorbeelden gegenereerde levels:
+Level component 1
 
-![level2](level1.png)
+![gedeelte1](gedeelte1.png)
 
-![level2](level2.png)
+Level component 1 met karakter
 
-![level2](level3.png)
+![gedeelte1metkarakter](gedeelte1metkarakter.png)
 
-![level2](level4.png)
+Level component 1 hitboxes
 
-Sprite karakter:
+![level2](walls.png)
 
-![sprite](sprite.png)
+### Sprite karakter en enemy:
+
+![character1](character1.png)
+
+![enemy1wit](enemy1wit.png)
