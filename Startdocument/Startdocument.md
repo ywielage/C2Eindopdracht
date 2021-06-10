@@ -83,6 +83,15 @@ Level component 1 hitboxes
 
 ### Sprite karakter en enemy:
 
+Het speler karakter
+
 ![character1](character1.png)
 
+Het vijand karakter
+
 ![enemy1wit](enemy1wit.png)
+
+Het speler karakter lopend
+
+![character1moving](cscherp3.gif)
+
