@@ -25,11 +25,11 @@ Een voorbeeld van een component welke Monogame de gebruiker biedt is de Game cla
 
 Dit is een goede basis waar verder op kan worden gebouwd voor ons project.
 
-## **Features en Prioriteiten**
+## **Functionaliteiten en Prioriteiten**
 
-In dit hoofdstuk staat welke features vereist zijn om af te hebben, en welke features extra zijn. Ook zullen er prioriteiten worden gesteld, welke aan bod komen bij tijdsnood. De features staan in prioriteitsvolgorde. 
+In dit hoofdstuk staat welke functionaliteiten vereist zijn om af te hebben, en welke extra zijn. Ook zullen er prioriteiten worden gesteld, welke aan bod komen bij tijdsnood. De features staan in prioriteitsvolgorde. 
 
-**Vereiste features**
+**Vereiste functionaliteiten**
 
 1. Het semi-automatisch genereren van levels op basis van acht bestaande levelcomponenten.
 2. Bewegen door de levels.
@@ -83,11 +83,11 @@ Level component 1 hitboxes
 
 ### Sprite karakter en enemy:
 
-Het speler karakter
+Despeler karakter
 
 ![character1](character1.png)
 
-Het vijand karakter
+De vijand karakter
 
 ![enemy1wit](enemy1wit.png)
 
