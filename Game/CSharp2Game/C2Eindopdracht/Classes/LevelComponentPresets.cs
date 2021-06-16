@@ -7,7 +7,7 @@ namespace C2Eindopdracht.Classes
 {
     static class LevelComponentPresets
     {
-        public static List<Rectangle> getPresetWestEastPreset(int xPos, int yPos)
+        public static List<Rectangle> getPresetWestEast(int xPos, int yPos)
         {
             List<Rectangle> colliders = new List<Rectangle>();
 
@@ -17,17 +17,22 @@ namespace C2Eindopdracht.Classes
             return colliders;
         }
 
-        public static List<Rectangle> getPresetNorthSouthPreset(int xPos, int yPos)
+        public static List<Rectangle> getPresetNorthSouth(int xPos, int yPos)
         {
             List<Rectangle> colliders = new List<Rectangle>();
 
             colliders.Add(new Rectangle(xPos, yPos, 200, 500));
             colliders.Add(new Rectangle(xPos + 300, yPos, 200, 500));
+            colliders.Add(new Rectangle(xPos + 225, yPos + 25, 50, 25));
+            colliders.Add(new Rectangle(xPos + 225, yPos + 125, 50, 25));
+            colliders.Add(new Rectangle(xPos + 225, yPos + 225, 50, 25));
+            colliders.Add(new Rectangle(xPos + 225, yPos + 325, 50, 25));
+            colliders.Add(new Rectangle(xPos + 225, yPos + 425, 50, 25));
 
             return colliders;
         }
 
-        public static List<Rectangle> getPresetWestSouthPreset(int xPos, int yPos)
+        public static List<Rectangle> getPresetWestSouth(int xPos, int yPos)
         {
             List<Rectangle> colliders = new List<Rectangle>();
 
@@ -38,7 +43,7 @@ namespace C2Eindopdracht.Classes
             return colliders;
         }
 
-        public static List<Rectangle> getPresetNorthEastPreset(int xPos, int yPos)
+        public static List<Rectangle> getPresetNorthEast(int xPos, int yPos)
         {
             List<Rectangle> colliders = new List<Rectangle>();
 
@@ -49,7 +54,7 @@ namespace C2Eindopdracht.Classes
             return colliders;
         }
 
-        public static List<Rectangle> getPresetWestNorthPreset(int xPos, int yPos)
+        public static List<Rectangle> getPresetWestNorth(int xPos, int yPos)
         {
             List<Rectangle> colliders = new List<Rectangle>();
 
@@ -60,7 +65,7 @@ namespace C2Eindopdracht.Classes
             return colliders;
         }
 
-        public static List<Rectangle> getPresetEastSouthPreset(int xPos, int yPos)
+        public static List<Rectangle> getPresetEastSouth(int xPos, int yPos)
         {
             List<Rectangle> colliders = new List<Rectangle>();
 
@@ -70,7 +75,7 @@ namespace C2Eindopdracht.Classes
 
             return colliders;
         }
-        public static List<Rectangle> getPresetEmptyPreset(int xPos, int yPos)
+        public static List<Rectangle> getPresetEmpty(int xPos, int yPos)
         {
             List<Rectangle> colliders = new List<Rectangle>();
 

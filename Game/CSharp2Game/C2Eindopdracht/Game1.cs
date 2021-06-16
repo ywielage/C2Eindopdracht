@@ -15,6 +15,7 @@ namespace C2Eindopdracht
         private Camera camera;
         private Character character;
         private Texture2D characterTexture;
+        private Texture2D enemyTexture;
         private Texture2D blankTexture;
         private Level level;
         
@@ -31,7 +32,7 @@ namespace C2Eindopdracht
         {
             // TODO: Add your initialization logic here
             camera = new Camera();
-            character = new Character(0, 220, .3f);
+            character = new Character(50, 220, .3f);
             
             level = new Level(5, 5);
             level.init(false);
@@ -71,7 +72,7 @@ namespace C2Eindopdracht
 
             if (SmartKeyboard.HasBeenPressed(Keys.Space))
             {
-                character.jump(-4.5f, 3f);
+                character.jump(-6f, 3f);
             }
 
             if (SmartKeyboard.HasBeenPressed(Keys.J) && character.canAttack)
@@ -89,7 +90,7 @@ namespace C2Eindopdracht
         {
             GraphicsDevice.Clear(Color.DeepSkyBlue);
             camera.Pos = character.getPosition();
-            camera.Zoom = .2f;
+            camera.Zoom = .8f;
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));

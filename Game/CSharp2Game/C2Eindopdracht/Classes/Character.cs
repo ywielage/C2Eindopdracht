@@ -81,29 +81,25 @@ namespace C2Eindopdracht.Classes
                             {
                                 touchingGrounds++;
                             }
-                            else if (hitBox.Top - wall.Bottom < 1 && hitBox.Top - wall.Bottom > -1)
+                            else if (hitBox.Top - wall.Bottom < 1 && hitBox.Top - wall.Bottom > - 10)
                             {
                                 ySpeed = 0;
                             }
-                            else if (wall.Top - hitBox.Bottom < 2 && wall.Top - hitBox.Bottom > -8)
+                            else if (wall.Top - hitBox.Bottom < 1 && wall.Top - hitBox.Bottom > - 11)
                             {
                                 touchingGrounds++;
                                 position.Y = wall.Top - hitBox.Height;
                             }
                         }
-                        else if (wall.Left == hitBox.Right)
+                        if (wall.Top < hitBox.Bottom && wall.Bottom > hitBox.Top)
                         {
-                            if ((wall.Top < hitBox.Bottom && wall.Bottom > hitBox.Bottom) || (wall.Top < hitBox.Top && wall.Bottom > hitBox.Top) || (wall.Top > hitBox.Top && wall.Bottom < hitBox.Bottom))
-                            {
-                                position.X = wall.Left - 1 - hitBox.Width;
-                            }
-
-                        }
-                        else if (wall.Right == hitBox.Left)
-                        {
-                            if ((wall.Top < hitBox.Bottom && wall.Bottom > hitBox.Bottom) || (wall.Top < hitBox.Top && wall.Bottom > hitBox.Top) || (wall.Top > hitBox.Top && wall.Bottom < hitBox.Bottom))
+                            if (hitBox.Left - wall.Right < 1 && hitBox.Left - wall.Right > -5)
                             {
                                 position.X = wall.Right + 2;
+                            }
+                            if (wall.Left - hitBox.Right < 1 && wall.Left - hitBox.Right > -5)
+                            {
+                                position.X = wall.Left - hitBox.Width - 2;
                             }
                         }
                     }
