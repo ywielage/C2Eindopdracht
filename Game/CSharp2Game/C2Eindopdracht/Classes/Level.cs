@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -11,7 +12,7 @@ namespace C2Eindopdracht.Classes
     {
         private int width;
         private int height;
-        private List<List<LevelComponent>> list;
+        public List<List<LevelComponent>> list { get; set; }
         
         public Level(int width, int height, bool debug)
         {
@@ -33,13 +34,15 @@ namespace C2Eindopdracht.Classes
                     resetCount++;
                 }
             }
+
+            assignColliders();
         }
 
         private bool createPath(int width, int height, bool debug)
         {
             int xPos = 0;
             int yPos = 0;
-            Side lastExit = Side.SOUTH;
+            Directions lastExit = Directions.SOUTH;
             var random = new Random();
             int count = 0;
 
@@ -57,11 +60,11 @@ namespace C2Eindopdracht.Classes
                 {
                     if(debug)
                     {
-                        printLevelComponent(xPos, yPos, Side.WEST, 3);
+                        printLevelComponent(xPos, yPos, Directions.WEST, 3);
                     }
                     
-                    list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], Side.WEST, Side.SOUTH);
-                    lastExit = Side.SOUTH;
+                    list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], Directions.WEST, Directions.SOUTH, 0, 0);
+                    lastExit = Directions.SOUTH;
                     yPos++;
                 }
                 else if (yPos + 1 == height && xPos + 1 == width)
@@ -71,7 +74,7 @@ namespace C2Eindopdracht.Classes
                         printLevelComponent(xPos, yPos, lastExit, 2);
                         Debug.WriteLine("=======");
                     }
-                    list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), Side.EAST);
+                    list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), Directions.EAST, xPos, yPos);
                     return true;
                 }
                 else
@@ -83,13 +86,13 @@ namespace C2Eindopdracht.Classes
                         printLevelComponent(xPos, yPos, lastExit, randomDirection);
                     }
 
-                    Side exit;
+                    Directions exit;
                     if (randomDirection == 1 && yPos > 0)
                     {
-                        if (lastExit != Side.SOUTH && !list[yPos-1][xPos].isFilled)
+                        if (lastExit != Directions.SOUTH && !list[yPos-1][xPos].isFilled)
                         {
-                            exit = Side.NORTH;
-                            list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit);
+                            exit = Directions.NORTH;
+                            list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit, xPos, yPos);
                             lastExit = exit;
                             yPos--;
                             count = 0;
@@ -98,10 +101,10 @@ namespace C2Eindopdracht.Classes
                     }
                     else if (randomDirection == 2 && xPos < width-1)
                     {
-                        if (lastExit != Side.WEST && !list[yPos][xPos+1].isFilled)
+                        if (lastExit != Directions.WEST && !list[yPos][xPos+1].isFilled)
                         {
-                            exit = Side.EAST;
-                            list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit);
+                            exit = Directions.EAST;
+                            list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit, xPos, yPos);
                             lastExit = exit;
                             xPos++;
                             count = 0;
@@ -110,10 +113,10 @@ namespace C2Eindopdracht.Classes
                     }
                     else if (randomDirection == 3 && yPos < height-1)
                     {
-                        if (lastExit != Side.NORTH && !list[yPos+1][xPos].isFilled)
+                        if (lastExit != Directions.NORTH && !list[yPos+1][xPos].isFilled)
                         {
-                            exit = Side.SOUTH;
-                            list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit);
+                            exit = Directions.SOUTH;
+                            list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit, xPos, yPos);
                             lastExit = exit;
                             yPos++;
                             count = 0;
@@ -122,10 +125,10 @@ namespace C2Eindopdracht.Classes
                     }
                     else if (randomDirection == 4 && xPos > 0)
                     {
-                        if (lastExit != Side.EAST && !list[yPos][xPos-1].isFilled)
+                        if (lastExit != Directions.EAST && !list[yPos][xPos-1].isFilled)
                         {
-                            exit = Side.WEST;
-                            list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit);
+                            exit = Directions.WEST;
+                            list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit, xPos, yPos);
                             lastExit = exit;
                             xPos--;
                             count = 0;
@@ -145,7 +148,7 @@ namespace C2Eindopdracht.Classes
                 list.Add(new List<LevelComponent>());
                 for(int j = 0; j < width; j++)
                 {
-                    list[i].Add(new LevelComponent(Side.NONE, Side.NONE));
+                    list[i].Add(new LevelComponent(Directions.NONE, Directions.NONE));
                 }
             }
             return list;
@@ -157,21 +160,26 @@ namespace C2Eindopdracht.Classes
             {
                 for (int j = 0; j < width; j++)
                 {
-                    list[i][j] = new LevelComponent(Side.NONE, Side.NONE);
+                    list[i][j] = new LevelComponent(Directions.NONE, Directions.NONE);
                 }
             }
         }
 
-        private LevelComponent setSelectedListPos(LevelComponent levelComponent, Side entrance, Side exit)
+        private LevelComponent setSelectedListPos(LevelComponent levelComponent, Directions entrance, Directions exit, int xPos, int yPos)
         {
             levelComponent.exit = exit;
             levelComponent.entrance = entrance;
             levelComponent.isFilled = true;
 
+            Vector2 position = levelComponent.position;
+            position.X = xPos * 500;
+            position.Y = yPos * 500;
+            levelComponent.position = position;
+
             return levelComponent;
         }
 
-        private void printLevelComponent(int xPos, int yPos, Side entrance, int randomDirection)
+        private void printLevelComponent(int xPos, int yPos, Directions entrance, int randomDirection)
         {
             Debug.WriteLine("=======");
             Debug.WriteLine("xPos: " + xPos);
@@ -180,19 +188,19 @@ namespace C2Eindopdracht.Classes
 
             if (randomDirection == 1)
             {
-                Debug.WriteLine("Exit: " + Side.NORTH);
+                Debug.WriteLine("Exit: " + Directions.NORTH);
             }
             else if (randomDirection == 2)
             {
-                Debug.WriteLine("Exit: " + Side.EAST);
+                Debug.WriteLine("Exit: " + Directions.EAST);
             }
             else if (randomDirection == 3)
             {
-                Debug.WriteLine("Exit: " + Side.SOUTH);
+                Debug.WriteLine("Exit: " + Directions.SOUTH);
             }
             else if (randomDirection == 4)
             {
-                Debug.WriteLine("Exit: " + Side.WEST);
+                Debug.WriteLine("Exit: " + Directions.WEST);
             }
         }
 
@@ -213,19 +221,19 @@ namespace C2Eindopdracht.Classes
 
                             if(x == 2 && y == 1)
                             {
-                                Debug.Write(getStringLevelComponentOpening(list[i][j], Side.NORTH, y));
+                                Debug.Write(getStringLevelComponentOpening(list[i][j], Directions.NORTH, y));
                             }
                             else if (x == 1 && y == 2)
                             {
-                                Debug.Write(getStringLevelComponentOpening(list[i][j], Side.WEST, y));
+                                Debug.Write(getStringLevelComponentOpening(list[i][j], Directions.WEST, y));
                             }
                             else if (x == 3 && y == 2)
                             {
-                                Debug.Write(getStringLevelComponentOpening(list[i][j], Side.EAST, y));
+                                Debug.Write(getStringLevelComponentOpening(list[i][j], Directions.EAST, y));
                             }
                             else if (x == 2 && y == 3)
                             {
-                                Debug.Write(getStringLevelComponentOpening(list[i][j], Side.SOUTH, y));
+                                Debug.Write(getStringLevelComponentOpening(list[i][j], Directions.SOUTH, y));
                             }
                             else if (x == 2 && y == 2)
                             {
@@ -247,9 +255,9 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        private string getStringLevelComponentOpening(LevelComponent levelComponent, Side side, int yHeight)
+        private string getStringLevelComponentOpening(LevelComponent levelComponent, Directions side, int yHeight)
         {
-            Side setSide = Side.NONE;
+            Directions setSide = Directions.NONE;
             if(levelComponent.exit == side)
             {
                 setSide = side;
@@ -260,17 +268,17 @@ namespace C2Eindopdracht.Classes
                 setSide = getOppositeSide(side);
             }
 
-            if(setSide != Side.NONE)
+            if(setSide != Directions.NONE)
             {
-                if (setSide == Side.NORTH)
+                if (setSide == Directions.NORTH)
                 {
                     return "^ ";
                 }
-                else if (setSide == Side.EAST)
+                else if (setSide == Directions.EAST)
                 {
                     return "> ";
                 }
-                else if (setSide == Side.SOUTH)
+                else if (setSide == Directions.SOUTH)
                 {
                     return "v ";
                 }
@@ -293,25 +301,25 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        private Side getOppositeSide(Side side)
+        private Directions getOppositeSide(Directions side)
         {
-            if (side == Side.NORTH)
+            if (side == Directions.NORTH)
             {
-                return Side.SOUTH;
+                return Directions.SOUTH;
             }
-            else if (side == Side.EAST)
+            else if (side == Directions.EAST)
             {
-                return Side.WEST;
+                return Directions.WEST;
             }
-            else if (side == Side.SOUTH)
+            else if (side == Directions.SOUTH)
             {
-                return Side.NORTH;
+                return Directions.NORTH;
             }
-            else if (side == Side.WEST)
+            else if (side == Directions.WEST)
             {
-                return Side.EAST;
+                return Directions.EAST;
             }
-            return Side.NORTH;
+            return Directions.NORTH;
         }
 
         private bool hasFreeNeighbours(int x, int y)
@@ -376,6 +384,17 @@ namespace C2Eindopdracht.Classes
             else
             {
                 return true;
+            }
+        }
+
+        private void assignColliders()
+        {
+            foreach(List<LevelComponent> rowList in list)
+            {
+                foreach(LevelComponent levelComponent in rowList)
+                {
+                    levelComponent.assignColliders();
+                }
             }
         }
     }

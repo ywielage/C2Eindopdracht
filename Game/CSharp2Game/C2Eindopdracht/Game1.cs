@@ -16,7 +16,6 @@ namespace C2Eindopdracht
         private Character character;
         private Texture2D characterTexture;
         private Texture2D blankTexture;
-        private List<Rectangle> floors;
         private Level level;
         
 
@@ -32,13 +31,10 @@ namespace C2Eindopdracht
         {
             // TODO: Add your initialization logic here
             camera = new Camera();
-            character = new Character(_graphics.PreferredBackBufferWidth / 2, 0, .3f);
-            
-            floors = new List<Rectangle>();
-            floors.Add(new Rectangle(new Point(0, _graphics.PreferredBackBufferHeight - 20), new Point(_graphics.PreferredBackBufferWidth, 20)));
-            floors.Add(new Rectangle(new Point(200, _graphics.PreferredBackBufferHeight - 60), new Point(100, 20)));
+            character = new Character(0, 220, .3f);
             
             level = new Level(5, 5, false);
+            level.drawLevelInDebug();
 
             base.Initialize();
         }
@@ -60,7 +56,7 @@ namespace C2Eindopdracht
             // TODO: Add your update logic here
             var keyboardState = SmartKeyboard.GetState();
 
-            character.checkCollisions(floors);
+            character.checkCollisions(level.list);
 
             if (keyboardState.IsKeyDown(Keys.A))
             {
@@ -91,23 +87,11 @@ namespace C2Eindopdracht
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.DeepSkyBlue);
-
-            
             camera.Pos = character.getPosition();
-            // cam.Zoom = 2.0f // Example of Zoom in
-            // cam.Zoom = 0.5f // Example of Zoom out
-
-            //// if using XNA 4.0
-            _spriteBatch.Begin(SpriteSortMode.BackToFront,
-                                    BlendState.AlphaBlend,
-                                    null,
-                                    null,
-                                    null,
-                                    null,
-                                    camera.get_transformation(GraphicsDevice));
+            camera.Zoom = .2f;
 
             // TODO: Add your drawing code here
-            //_spriteBatch.Begin();
+            _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
             _spriteBatch.Draw(
                 characterTexture,
                 character.getPosition(),
@@ -123,13 +107,19 @@ namespace C2Eindopdracht
                 );
             }
 
-            foreach (Rectangle floor in floors)
+            foreach (List<LevelComponent> rowList in level.list)
             {
-                _spriteBatch.Draw(
-                    blankTexture,
-                    floor,
-                    Color.DarkGreen
-                );
+                foreach (LevelComponent levelComponent in rowList)
+                {
+                    foreach(Rectangle wall in levelComponent.colliders)
+                    {
+                        _spriteBatch.Draw(
+                           blankTexture,
+                           wall,
+                           Color.DarkSlateGray
+                       );
+                    }
+                }
             }
 
             _spriteBatch.End();
