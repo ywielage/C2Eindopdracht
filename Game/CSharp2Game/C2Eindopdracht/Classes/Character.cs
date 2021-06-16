@@ -28,7 +28,7 @@ namespace C2Eindopdracht.Classes
             this.hitBox = new Rectangle(xPos, yPos, 18, 30);
             this.attacks = new List<Attack>();
             this.gravity = gravity;
-            this.xSpeed = 100f;
+            this.xSpeed = 200f;
             this.ySpeed = 0;
             this.face = Face.RIGHT;
             this.grounded = false;

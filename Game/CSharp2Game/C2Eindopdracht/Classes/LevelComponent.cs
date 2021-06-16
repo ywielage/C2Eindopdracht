@@ -47,6 +47,10 @@ namespace C2Eindopdracht.Classes
             {
                 colliders = LevelComponentPresets.getPresetEastSouthPreset((int)position.X, (int)position.Y);
             }
+            else
+            {
+                colliders = LevelComponentPresets.getPresetEmptyPreset((int)position.X, (int)position.Y);
+            }
         }
     }
 

@@ -33,7 +33,8 @@ namespace C2Eindopdracht
             camera = new Camera();
             character = new Character(0, 220, .3f);
             
-            level = new Level(5, 5, false);
+            level = new Level(5, 5);
+            level.init(false);
             level.drawLevelInDebug();
 
             base.Initialize();

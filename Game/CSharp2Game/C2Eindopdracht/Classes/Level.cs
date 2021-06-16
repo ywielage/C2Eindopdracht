@@ -14,14 +14,18 @@ namespace C2Eindopdracht.Classes
         private int height;
         public List<List<LevelComponent>> list { get; set; }
         
-        public Level(int width, int height, bool debug)
+        public Level(int width, int height)
         {
             this.width = width;
             this.height = height;
-            list = initList(this.width, this.height);
+        }
+
+        public void init(bool debug)
+        {
+            list = initList(width, height);
 
             int resetCount = 0;
-            while(true)
+            while (true)
             {
                 if (createPath(width, height, debug))
                 {
@@ -35,6 +39,7 @@ namespace C2Eindopdracht.Classes
                 }
             }
 
+            setPositionOfEmptyLevelComponents();
             assignColliders();
         }
 
@@ -161,6 +166,31 @@ namespace C2Eindopdracht.Classes
                 for (int j = 0; j < width; j++)
                 {
                     list[i][j] = new LevelComponent(Directions.NONE, Directions.NONE);
+                }
+            }
+        }
+
+        private void assignColliders()
+        {
+            foreach (List<LevelComponent> rowList in list)
+            {
+                foreach (LevelComponent levelComponent in rowList)
+                {
+                    levelComponent.assignColliders();
+                }
+            }
+        }
+
+        private void setPositionOfEmptyLevelComponents()
+        {
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    if (!list[i][j].isFilled)
+                    {
+                        list[i][j].position = new Vector2(j * 500, i * 500);
+                    }
                 }
             }
         }
@@ -384,17 +414,6 @@ namespace C2Eindopdracht.Classes
             else
             {
                 return true;
-            }
-        }
-
-        private void assignColliders()
-        {
-            foreach(List<LevelComponent> rowList in list)
-            {
-                foreach(LevelComponent levelComponent in rowList)
-                {
-                    levelComponent.assignColliders();
-                }
             }
         }
     }

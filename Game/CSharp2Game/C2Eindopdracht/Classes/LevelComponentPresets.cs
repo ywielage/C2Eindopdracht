@@ -17,7 +17,7 @@ namespace C2Eindopdracht.Classes
             return colliders;
         }
 
-        internal static List<Rectangle> getPresetNorthSouthPreset(int xPos, int yPos)
+        public static List<Rectangle> getPresetNorthSouthPreset(int xPos, int yPos)
         {
             List<Rectangle> colliders = new List<Rectangle>();
 
@@ -27,7 +27,7 @@ namespace C2Eindopdracht.Classes
             return colliders;
         }
 
-        internal static List<Rectangle> getPresetWestSouthPreset(int xPos, int yPos)
+        public static List<Rectangle> getPresetWestSouthPreset(int xPos, int yPos)
         {
             List<Rectangle> colliders = new List<Rectangle>();
 
@@ -38,7 +38,7 @@ namespace C2Eindopdracht.Classes
             return colliders;
         }
 
-        internal static List<Rectangle> getPresetNorthEastPreset(int xPos, int yPos)
+        public static List<Rectangle> getPresetNorthEastPreset(int xPos, int yPos)
         {
             List<Rectangle> colliders = new List<Rectangle>();
 
@@ -49,7 +49,7 @@ namespace C2Eindopdracht.Classes
             return colliders;
         }
 
-        internal static List<Rectangle> getPresetWestNorthPreset(int xPos, int yPos)
+        public static List<Rectangle> getPresetWestNorthPreset(int xPos, int yPos)
         {
             List<Rectangle> colliders = new List<Rectangle>();
 
@@ -58,9 +58,9 @@ namespace C2Eindopdracht.Classes
             colliders.Add(new Rectangle(xPos, yPos + 300, 500, 200));
 
             return colliders;
-        }   
+        }
 
-        internal static List<Rectangle> getPresetEastSouthPreset(int xPos, int yPos)
+        public static List<Rectangle> getPresetEastSouthPreset(int xPos, int yPos)
         {
             List<Rectangle> colliders = new List<Rectangle>();
 
@@ -70,5 +70,14 @@ namespace C2Eindopdracht.Classes
 
             return colliders;
         }
+        public static List<Rectangle> getPresetEmptyPreset(int xPos, int yPos)
+        {
+            List<Rectangle> colliders = new List<Rectangle>();
+
+            colliders.Add(new Rectangle(xPos, yPos, 500, 500));
+
+            return colliders;
+        }
+
     }
 }
