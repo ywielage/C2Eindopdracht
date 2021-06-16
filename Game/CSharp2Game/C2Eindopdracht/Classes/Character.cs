@@ -65,49 +65,49 @@ namespace C2Eindopdracht.Classes
             this.hitBox = hitbox;
         }
 
-        public void checkCollisions(List<Rectangle> floors)
+        public void checkCollisions(List<List<LevelComponent>> walls)
         {
             int touchingGrounds = 0;
-            int i = 0;
 
-            //Debug.WriteLine("====================================");
-            foreach (Rectangle floor in floors)
+            foreach (List<LevelComponent> rowList in walls)
             {
-                if (floor.Left < hitBox.Right && floor.Right > hitBox.Left)
+                foreach (LevelComponent levelComponent in rowList)
                 {
-                    if (floor.Top - hitBox.Bottom == 0)
+                    foreach (Rectangle wall in levelComponent.colliders)
                     {
-                        touchingGrounds++;
-                    }
-                    else if (hitBox.Top - floor.Bottom < 1 && hitBox.Top - floor.Bottom > -1)
-                    {
-                        ySpeed = 0;
-                    }
-                    else if (floor.Top - hitBox.Bottom < 2 && floor.Top - hitBox.Bottom > -8)
-                    {
-                        touchingGrounds++;
-                        position.Y = floor.Top - hitBox.Height;
+                        if (wall.Left < hitBox.Right && wall.Right > hitBox.Left)
+                        {
+                            if (wall.Top - hitBox.Bottom == 0)
+                            {
+                                touchingGrounds++;
+                            }
+                            else if (hitBox.Top - wall.Bottom < 1 && hitBox.Top - wall.Bottom > -1)
+                            {
+                                ySpeed = 0;
+                            }
+                            else if (wall.Top - hitBox.Bottom < 2 && wall.Top - hitBox.Bottom > -8)
+                            {
+                                touchingGrounds++;
+                                position.Y = wall.Top - hitBox.Height;
+                            }
+                        }
+                        else if (wall.Left == hitBox.Right)
+                        {
+                            if ((wall.Top < hitBox.Bottom && wall.Bottom > hitBox.Bottom) || (wall.Top < hitBox.Top && wall.Bottom > hitBox.Top) || (wall.Top > hitBox.Top && wall.Bottom < hitBox.Bottom))
+                            {
+                                position.X = wall.Left - 1 - hitBox.Width;
+                            }
+
+                        }
+                        else if (wall.Right == hitBox.Left)
+                        {
+                            if ((wall.Top < hitBox.Bottom && wall.Bottom > hitBox.Bottom) || (wall.Top < hitBox.Top && wall.Bottom > hitBox.Top) || (wall.Top > hitBox.Top && wall.Bottom < hitBox.Bottom))
+                            {
+                                position.X = wall.Right + 2;
+                            }
+                        }
                     }
                 }
-                else if (floor.Left == hitBox.Right)
-                {
-                    if((floor.Top < hitBox.Bottom && floor.Bottom > hitBox.Bottom) || (floor.Top < hitBox.Top && floor.Bottom > hitBox.Top) || (floor.Top > hitBox.Top && floor.Bottom < hitBox.Bottom))
-                    {
-                        position.X = floor.Left - 1 - hitBox.Width;
-                    }
-                    
-                }
-                else if (floor.Right == hitBox.Left)
-                {
-                    if ((floor.Top < hitBox.Bottom && floor.Bottom > hitBox.Bottom) || (floor.Top < hitBox.Top && floor.Bottom > hitBox.Top) || (floor.Top > hitBox.Top && floor.Bottom < hitBox.Bottom))
-                    {
-                        position.X = floor.Right + 2;
-                    }
-                }
-                //Debug.WriteLine(i + ": Floor top " + floor.Top + " | Hiatbox bottom " + hitBox.Bottom);
-                //Debug.WriteLine(i + ": Floor left " + floor.Left + " | Hitbox right " + hitBox.Right);
-                //Debug.WriteLine(i + ": Floor right " + floor.Right + " | Hitbox left " + hitBox.Left);
-                i++;
             }
 
             if (touchingGrounds >= 1)
@@ -125,7 +125,10 @@ namespace C2Eindopdracht.Classes
             }
             else
             {
-                ySpeed += gravity;
+                if(ySpeed < 10)
+                {
+                    ySpeed += gravity;
+                }
                 position.Y += ySpeed;
             }
         }
