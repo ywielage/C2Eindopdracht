@@ -15,6 +15,7 @@ namespace C2Eindopdracht
         private Player player;
         private List<Enemy> enemies;
         private Level level;
+        private bool renderHitboxes;
 
         private Texture2D blankTexture;
 
@@ -32,8 +33,9 @@ namespace C2Eindopdracht
             camera = new Camera();
             player = new Player(50, 180, .3f, 200f);
             enemies.Add(new LightEnemy(50, 220, .3f, 200f));
+            renderHitboxes = false;
             
-            level = new Level(2, 2);
+            level = new Level(5, 5);
             level.init(false);
             level.drawLevelInDebug();
 
@@ -93,66 +95,70 @@ namespace C2Eindopdracht
         {
             GraphicsDevice.Clear(Color.DeepSkyBlue);
             camera.Pos = player.getPosition();
-            camera.Zoom = 1f;
+            camera.Zoom = 3f;
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
-            _spriteBatch.Draw(
-                Player.tileSet,
-                player.getPosition(),
-                Color.White
-            );
-
-            foreach (Attack attack in player.attacks)
-            {
-                _spriteBatch.Draw(
-                    blankTexture,
-                    attack.hitbox,
-                    Color.Red
-                );
-            }
-
-            foreach (List<LevelComponent> rowList in level.list)
-            {
-                foreach (LevelComponent levelComponent in rowList)
+            if(renderHitboxes)
+			{
+                foreach (Attack attack in player.attacks)
                 {
-                    if(levelComponent.tileMap != null)
-					{
-                        for (int i = 0; i < levelComponent.tileMap.tiles.Count; i++)
+                    _spriteBatch.Draw(
+                        blankTexture,
+                        attack.hitbox,
+                        Color.Red
+                    );
+                }
+                foreach (List<LevelComponent> rowList in level.list)
+                {
+                    foreach (LevelComponent levelComponent in rowList)
+                    {
+                        foreach (Rectangle wall in levelComponent.colliders)
                         {
-                            for (int j = 0; j < levelComponent.tileMap.tiles[i].Count; j++)
-                            {
-                                if (levelComponent.tileMap.tiles[i][j] != 0)
-                                {
-                                    _spriteBatch.Draw(
-                                        LevelComponent.tileSet,
-                                        new Vector2(levelComponent.position.X + (j * 25), levelComponent.position.Y + (i * 25)),
-                                        levelComponent.getTileTextureOffset(levelComponent.tileMap.tiles[i][j]),
-                                        Color.DarkSlateGray
-                                    );
-                                }
-
-                            }
+                            _spriteBatch.Draw(
+                                blankTexture,
+                                wall,
+                                Color.Red
+                            );
                         }
                     }
-                    
                 }
             }
+            else
+			{
+                _spriteBatch.Draw(
+                    Player.tileSet,
+                    player.getPosition(),
+                    Color.White
+                );
 
-            /*foreach (List<LevelComponent> rowList in level.list)
-            {
-                foreach (LevelComponent levelComponent in rowList)
+                foreach (List<LevelComponent> rowList in level.list)
                 {
-                    foreach(Rectangle wall in levelComponent.colliders)
-					{
-                        _spriteBatch.Draw(
-                            blankTexture,
-                            wall,
-                            Color.Red
-                        );
-					}
+                    foreach (LevelComponent levelComponent in rowList)
+                    {
+                        if (levelComponent.tileMap != null)
+                        {
+                            for (int i = 0; i < levelComponent.tileMap.tiles.Count; i++)
+                            {
+                                for (int j = 0; j < levelComponent.tileMap.tiles[i].Count; j++)
+                                {
+                                    if (levelComponent.tileMap.tiles[i][j] != 0)
+                                    {
+                                        _spriteBatch.Draw(
+                                            LevelComponent.tileSet,
+                                            new Vector2(levelComponent.position.X + (j * 25), levelComponent.position.Y + (i * 25)),
+                                            levelComponent.getTileTextureOffset(levelComponent.tileMap.tiles[i][j]),
+                                            Color.DarkSlateGray
+                                        );
+                                    }
+
+                                }
+                            }
+                        }
+
+                    }
                 }
-            }*/
+            }
 
             _spriteBatch.End();
 

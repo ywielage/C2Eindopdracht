@@ -17,8 +17,8 @@ namespace C2Eindopdracht.Classes
         }
         public void setTileMapsFromJson()
         {
-            
-            using (StreamReader r = new StreamReader(@"c:/tileMaps.json"))
+            string path = Path.Combine(Environment.CurrentDirectory, @"../../../Content", "tileMaps.json");
+            using (StreamReader r = new StreamReader(path))
             {
                 string json = r.ReadToEnd();
                 this.tileMaps = JsonConvert.DeserializeObject<List<TileMap>>(json);
