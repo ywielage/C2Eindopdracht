@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,6 +13,7 @@ namespace C2Eindopdracht.Classes
     {
         private int width;
         private int height;
+        public static Texture2D tileSet {get; set;}
         public List<List<LevelComponent>> list { get; set; }
         
         public Level(int width, int height)

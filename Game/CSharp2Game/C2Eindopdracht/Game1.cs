@@ -11,28 +11,27 @@ namespace C2Eindopdracht
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-
         private Camera camera;
-        private Character character;
-        private Texture2D characterTexture;
-        private Texture2D enemyTexture;
-        private Texture2D blankTexture;
+        private Player player;
+        private List<Enemy> enemies;
         private Level level;
-        
+
+        private Texture2D blankTexture;
 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            
+            enemies = new List<Enemy>();
         }
 
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
             camera = new Camera();
-            character = new Character(50, 220, .3f);
+            player = new Player(50, 220, .3f, 200f);
+            enemies.Add(new LightEnemy(50, 220, .3f, 200f));
             
             level = new Level(5, 5);
             level.init(false);
@@ -46,7 +45,11 @@ namespace C2Eindopdracht
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            characterTexture = Content.Load<Texture2D>("character1");
+            Level.tileSet = Content.Load<Texture2D>("");
+            Player.tileSet = Content.Load<Texture2D>("character1");
+            LightEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");
+            HeavyEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");
+
             blankTexture = Content.Load<Texture2D>("blankTexture");
         }
 
@@ -58,30 +61,30 @@ namespace C2Eindopdracht
             // TODO: Add your update logic here
             var keyboardState = SmartKeyboard.GetState();
 
-            character.checkCollisions(level.list);
+            player.checkCollisions(level.list);
 
             if (keyboardState.IsKeyDown(Keys.A))
             {
-                character.moveLeft(gameTime);
+                player.moveLeft(gameTime);
             }
 
             if (keyboardState.IsKeyDown(Keys.D))
             {
-                character.moveRight(gameTime);
+                player.moveRight(gameTime);
             }
 
             if (SmartKeyboard.HasBeenPressed(Keys.Space))
             {
-                character.jump(-6f, 3f);
+                player.jump(-6f, 3f);
             }
 
-            if (SmartKeyboard.HasBeenPressed(Keys.J) && character.canAttack)
+            if (SmartKeyboard.HasBeenPressed(Keys.J) && player.canAttack)
             {
-                character.attack(1, new Cooldown(.5f), .2f, new Rectangle((int)character.getPosition().X, (int)character.getPosition().Y, 25, 25), 5);                
+                player.attack(1, new Cooldown(.5f), .2f, new Rectangle((int)player.getPosition().X, (int)player.getPosition().Y, 25, 25), 5);                
             }
 
-            character.updateAttacks(gameTime);
-            character.alignHitboxToPosition();
+            player.updateAttacks(gameTime);
+            player.alignHitboxToPosition();
 
             //character.printCharacterValues();
         }
@@ -89,18 +92,18 @@ namespace C2Eindopdracht
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.DeepSkyBlue);
-            camera.Pos = character.getPosition();
+            camera.Pos = player.getPosition();
             camera.Zoom = .8f;
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
             _spriteBatch.Draw(
-                characterTexture,
-                character.getPosition(),
+                Player.tileSet,
+                player.getPosition(),
                 Color.White
             );
 
-            foreach (Attack attack in character.attacks)
+            foreach (Attack attack in player.attacks)
             {
                 _spriteBatch.Draw(
                     blankTexture,

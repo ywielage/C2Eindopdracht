@@ -4,13 +4,15 @@ using Microsoft.Xna.Framework;
 using System.Text;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace C2Eindopdracht.Classes
 {
-    class Character
+    class Player
     {
         private Vector2 position;
         private Rectangle hitBox;
+        public static Texture2D tileSet { get; set; }
         public List<Attack> attacks { get; set; }
         public float gravity { get; set; }
         public float xSpeed { get; set; }
@@ -22,13 +24,13 @@ namespace C2Eindopdracht.Classes
         public bool canAttack { get; set; }
         public Cooldown attackCooldown { get; set; }
 
-        public Character(int xPos, int yPos, float gravity)
+        public Player(int xPos, int yPos, float gravity, float xSpeed)
         {
             this.position = new Vector2(xPos, yPos);
             this.hitBox = new Rectangle(xPos, yPos, 18, 30);
             this.attacks = new List<Attack>();
             this.gravity = gravity;
-            this.xSpeed = 200f;
+            this.xSpeed = xSpeed;
             this.ySpeed = 0;
             this.face = Face.RIGHT;
             this.grounded = false;
