@@ -4,13 +4,15 @@ using Microsoft.Xna.Framework;
 using System.Text;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace C2Eindopdracht.Classes
 {
-    class Character
+    class Player
     {
         private Vector2 position;
         private Rectangle hitBox;
+        public static Texture2D tileSet { get; set; }
         public List<Attack> attacks { get; set; }
         public float gravity { get; set; }
         public float xSpeed { get; set; }
@@ -22,13 +24,13 @@ namespace C2Eindopdracht.Classes
         public bool canAttack { get; set; }
         public Cooldown attackCooldown { get; set; }
 
-        public Character(int xPos, int yPos, float gravity)
+        public Player(int xPos, int yPos, float gravity, float xSpeed)
         {
             this.position = new Vector2(xPos, yPos);
             this.hitBox = new Rectangle(xPos, yPos, 18, 30);
             this.attacks = new List<Attack>();
             this.gravity = gravity;
-            this.xSpeed = 100f;
+            this.xSpeed = xSpeed;
             this.ySpeed = 0;
             this.face = Face.RIGHT;
             this.grounded = false;
@@ -81,29 +83,25 @@ namespace C2Eindopdracht.Classes
                             {
                                 touchingGrounds++;
                             }
-                            else if (hitBox.Top - wall.Bottom < 1 && hitBox.Top - wall.Bottom > -1)
+                            else if (hitBox.Top - wall.Bottom < 1 && hitBox.Top - wall.Bottom > - 10)
                             {
                                 ySpeed = 0;
                             }
-                            else if (wall.Top - hitBox.Bottom < 2 && wall.Top - hitBox.Bottom > -8)
+                            else if (wall.Top - hitBox.Bottom < 1 && wall.Top - hitBox.Bottom > - 11)
                             {
                                 touchingGrounds++;
                                 position.Y = wall.Top - hitBox.Height;
                             }
                         }
-                        else if (wall.Left == hitBox.Right)
+                        if (wall.Top < hitBox.Bottom && wall.Bottom > hitBox.Top)
                         {
-                            if ((wall.Top < hitBox.Bottom && wall.Bottom > hitBox.Bottom) || (wall.Top < hitBox.Top && wall.Bottom > hitBox.Top) || (wall.Top > hitBox.Top && wall.Bottom < hitBox.Bottom))
-                            {
-                                position.X = wall.Left - 1 - hitBox.Width;
-                            }
-
-                        }
-                        else if (wall.Right == hitBox.Left)
-                        {
-                            if ((wall.Top < hitBox.Bottom && wall.Bottom > hitBox.Bottom) || (wall.Top < hitBox.Top && wall.Bottom > hitBox.Top) || (wall.Top > hitBox.Top && wall.Bottom < hitBox.Bottom))
+                            if (hitBox.Left - wall.Right < 1 && hitBox.Left - wall.Right > -5)
                             {
                                 position.X = wall.Right + 2;
+                            }
+                            if (wall.Left - hitBox.Right < 1 && wall.Left - hitBox.Right > -5)
+                            {
+                                position.X = wall.Left - hitBox.Width - 2;
                             }
                         }
                     }

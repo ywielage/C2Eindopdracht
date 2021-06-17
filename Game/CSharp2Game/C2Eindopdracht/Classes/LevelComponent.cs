@@ -25,27 +25,31 @@ namespace C2Eindopdracht.Classes
         {
             if((entrance == Directions.WEST || exit == Directions.WEST) && (entrance == Directions.EAST || exit == Directions.EAST))
             {
-                colliders = LevelComponentPresets.getPresetWestEastPreset((int) position.X, (int) position.Y);
+                colliders = LevelComponentPresets.getPresetWestEast((int) position.X, (int) position.Y);
             }
             else if ((entrance == Directions.NORTH || exit == Directions.NORTH) && (entrance == Directions.SOUTH || exit == Directions.SOUTH))
             {
-                colliders = LevelComponentPresets.getPresetNorthSouthPreset((int)position.X, (int)position.Y);
+                colliders = LevelComponentPresets.getPresetNorthSouth((int)position.X, (int)position.Y);
             }
             else if ((entrance == Directions.WEST || exit == Directions.WEST) && (entrance == Directions.SOUTH || exit == Directions.SOUTH))
             {
-                colliders = LevelComponentPresets.getPresetWestSouthPreset((int)position.X, (int)position.Y);
+                colliders = LevelComponentPresets.getPresetWestSouth((int)position.X, (int)position.Y);
             }
             else if ((entrance == Directions.NORTH || exit == Directions.NORTH) && (entrance == Directions.EAST || exit == Directions.EAST))
             {
-                colliders = LevelComponentPresets.getPresetNorthEastPreset((int)position.X, (int)position.Y);
+                colliders = LevelComponentPresets.getPresetNorthEast((int)position.X, (int)position.Y);
             }
             else if ((entrance == Directions.WEST || exit == Directions.WEST) && (entrance == Directions.NORTH || exit == Directions.NORTH))
             {
-                colliders = LevelComponentPresets.getPresetWestNorthPreset((int)position.X, (int)position.Y);
+                colliders = LevelComponentPresets.getPresetWestNorth((int)position.X, (int)position.Y);
             }
             else if ((entrance == Directions.EAST || exit == Directions.EAST) && (entrance == Directions.SOUTH || exit == Directions.SOUTH))
             {
-                colliders = LevelComponentPresets.getPresetEastSouthPreset((int)position.X, (int)position.Y);
+                colliders = LevelComponentPresets.getPresetEastSouth((int)position.X, (int)position.Y);
+            }
+            else
+            {
+                colliders = LevelComponentPresets.getPresetEmpty((int)position.X, (int)position.Y);
             }
         }
     }
