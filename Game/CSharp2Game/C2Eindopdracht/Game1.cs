@@ -45,7 +45,7 @@ namespace C2Eindopdracht
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            Level.tileSet = Content.Load<Texture2D>("");
+            Level.tileSet = Content.Load<Texture2D>("ball");
             Player.tileSet = Content.Load<Texture2D>("character1");
             LightEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");
             HeavyEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");

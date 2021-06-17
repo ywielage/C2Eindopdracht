@@ -10,7 +10,6 @@ namespace C2Eindopdracht.Classes
     {
         private Vector2 position;
         private Rectangle hitBox;
-        public Texture2D enemyTexture { get; set; }
         public List<Attack> attacks { get; set; }
         public float gravity { get; set; }
         public float xSpeed { get; set; }
