@@ -33,10 +33,7 @@ namespace C2Eindopdracht.Classes
             {
                 return fittingTileMaps[random.Next(1, fittingTileMaps.Count + 1) - 1];
             }
-            else
-			{
-                return null;
-            }            
+            return null;
         }
 
         private List<TileMap> getFittingTileMaps(Directions entrance, Directions exit)
@@ -49,6 +46,10 @@ namespace C2Eindopdracht.Classes
                     fittingTileMaps.Add(tileMap);
                 }
             }
+            if(fittingTileMaps.Count == 0)
+			{
+                fittingTileMaps.Add(this.tileMaps[0]);
+			}
             return fittingTileMaps;
         }
     }

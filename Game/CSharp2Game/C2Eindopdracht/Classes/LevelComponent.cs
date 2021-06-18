@@ -27,25 +27,18 @@ namespace C2Eindopdracht.Classes
 
         public void assignTileMap(TileMapLoader tileMapLoader)
         {
-            TileMap tileMap = tileMapLoader.getTileMap(entrance, exit);
-            if (tileMap != null)
-            {
-                this.tileMap = tileMap;
-            }
+            this.tileMap = tileMapLoader.getTileMap(entrance, exit);
         }
 
         public void assignColliders()
         {
-            if(tileMap != null)
-			{
-                for (int i = 0; i < tileMap.tiles.Count; i++)
+            for (int i = 0; i < tileMap.tiles.Count; i++)
+            {
+                for (int j = 0; j < tileMap.tiles[i].Count; j++)
                 {
-                    for (int j = 0; j < tileMap.tiles[i].Count; j++)
+                    if (tileMap.tiles[i][j] != 0)
                     {
-                        if (tileMap.tiles[i][j] != 0)
-                        {
-                            colliders.Add(new Rectangle(position.X + (j * 24), position.Y + (i * 24), 25, 25));
-                        }
+                        colliders.Add(new Rectangle(position.X + (j * 24), position.Y + (i * 24), 25, 25));
                     }
                 }
             }

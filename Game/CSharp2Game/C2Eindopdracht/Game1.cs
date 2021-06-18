@@ -152,26 +152,21 @@ namespace C2Eindopdracht
                 {
                     foreach (LevelComponent levelComponent in rowList)
                     {
-                        if (levelComponent.tileMap != null)
+                        for (int i = 0; i < levelComponent.tileMap.tiles.Count; i++)
                         {
-                            for (int i = 0; i < levelComponent.tileMap.tiles.Count; i++)
+                            for (int j = 0; j < levelComponent.tileMap.tiles[i].Count; j++)
                             {
-                                for (int j = 0; j < levelComponent.tileMap.tiles[i].Count; j++)
+                                if (levelComponent.tileMap.tiles[i][j] != 0)
                                 {
-                                    if (levelComponent.tileMap.tiles[i][j] != 0)
-                                    {
-                                        _spriteBatch.Draw(
-                                            LevelComponent.tileSet,
-                                            new Vector2(levelComponent.position.X + (j * 24), levelComponent.position.Y + (i * 24)),
-                                            levelComponent.getTileTextureOffset(levelComponent.tileMap.tiles[i][j]),
-                                            Color.DarkSlateGray
-                                        );
-                                    }
-
+                                    _spriteBatch.Draw(
+                                        LevelComponent.tileSet,
+                                        new Vector2(levelComponent.position.X + (j * 24), levelComponent.position.Y + (i * 24)),
+                                        levelComponent.getTileTextureOffset(levelComponent.tileMap.tiles[i][j]),
+                                        Color.DarkSlateGray
+                                    );
                                 }
                             }
                         }
-
                     }
                 }
             }
