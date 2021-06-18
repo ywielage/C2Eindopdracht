@@ -15,6 +15,7 @@ namespace C2Eindopdracht
         private Player player;
         private List<Enemy> enemies;
         private Level level;
+        private bool renderHitboxes;
 
         private Texture2D blankTexture;
 
@@ -23,15 +24,16 @@ namespace C2Eindopdracht
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            enemies = new List<Enemy>();
         }
 
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            enemies = new List<Enemy>();
             camera = new Camera();
-            player = new Player(50, 220, .3f, 200f);
+            player = new Player(50, 180, .3f, 200f);
             enemies.Add(new LightEnemy(50, 220, .3f, 200f));
+            renderHitboxes = false;
             
             level = new Level(5, 5);
             level.init(false);
@@ -45,7 +47,7 @@ namespace C2Eindopdracht
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            Level.tileSet = Content.Load<Texture2D>("ball");
+            LevelComponent.tileSet = Content.Load<Texture2D>("tileset-map");
             Player.tileSet = Content.Load<Texture2D>("character1");
             LightEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");
             HeavyEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");
@@ -93,36 +95,67 @@ namespace C2Eindopdracht
         {
             GraphicsDevice.Clear(Color.DeepSkyBlue);
             camera.Pos = player.getPosition();
-            camera.Zoom = .8f;
+            camera.Zoom = 3f;
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
-            _spriteBatch.Draw(
-                Player.tileSet,
-                player.getPosition(),
-                Color.White
-            );
-
-            foreach (Attack attack in player.attacks)
-            {
-                _spriteBatch.Draw(
-                    blankTexture,
-                    attack.hitbox,
-                    Color.Red
-                );
-            }
-
-            foreach (List<LevelComponent> rowList in level.list)
-            {
-                foreach (LevelComponent levelComponent in rowList)
+            if(renderHitboxes)
+			{
+                foreach (Attack attack in player.attacks)
                 {
-                    foreach(Rectangle wall in levelComponent.colliders)
+                    _spriteBatch.Draw(
+                        blankTexture,
+                        attack.hitbox,
+                        Color.Red
+                    );
+                }
+                foreach (List<LevelComponent> rowList in level.list)
+                {
+                    foreach (LevelComponent levelComponent in rowList)
                     {
-                        _spriteBatch.Draw(
-                           blankTexture,
-                           wall,
-                           Color.DarkSlateGray
-                       );
+                        foreach (Rectangle wall in levelComponent.colliders)
+                        {
+                            _spriteBatch.Draw(
+                                blankTexture,
+                                wall,
+                                Color.Red
+                            );
+                        }
+                    }
+                }
+            }
+            else
+			{
+                _spriteBatch.Draw(
+                    Player.tileSet,
+                    player.getPosition(),
+                    Color.White
+                );
+
+                foreach (List<LevelComponent> rowList in level.list)
+                {
+                    foreach (LevelComponent levelComponent in rowList)
+                    {
+                        if (levelComponent.tileMap != null)
+                        {
+                            for (int i = 0; i < levelComponent.tileMap.tiles.Count; i++)
+                            {
+                                for (int j = 0; j < levelComponent.tileMap.tiles[i].Count; j++)
+                                {
+                                    if (levelComponent.tileMap.tiles[i][j] != 0)
+                                    {
+                                        _spriteBatch.Draw(
+                                            LevelComponent.tileSet,
+                                            new Vector2(levelComponent.position.X + (j * 25), levelComponent.position.Y + (i * 25)),
+                                            levelComponent.getTileTextureOffset(levelComponent.tileMap.tiles[i][j]),
+                                            Color.DarkSlateGray
+                                        );
+                                    }
+
+                                }
+                            }
+                        }
+
                     }
                 }
             }
