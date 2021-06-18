@@ -96,7 +96,7 @@ namespace C2Eindopdracht
         {
             GraphicsDevice.Clear(Color.DeepSkyBlue);
             camera.Pos = player.getPosition();
-            camera.Zoom = .3f;
+            camera.Zoom = 1.5f;
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
