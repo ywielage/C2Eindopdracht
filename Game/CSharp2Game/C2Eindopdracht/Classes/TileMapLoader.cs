@@ -27,14 +27,29 @@ namespace C2Eindopdracht.Classes
 
         public TileMap getTileMap(Directions entrance, Directions exit)
         {
+            Random random = new Random();
+            List<TileMap> fittingTileMaps = getFittingTileMaps(entrance, exit);
+            if (fittingTileMaps.Count != 0)
+            {
+                return fittingTileMaps[random.Next(1, fittingTileMaps.Count + 1) - 1];
+            }
+            else
+			{
+                return null;
+            }            
+        }
+
+        private List<TileMap> getFittingTileMaps(Directions entrance, Directions exit)
+		{
+            List<TileMap> fittingTileMaps = new List<TileMap>();
             foreach (TileMap tileMap in this.tileMaps)
             {
                 if ((entrance == tileMap.openingOne || entrance == tileMap.openingTwo) && (exit == tileMap.openingOne || exit == tileMap.openingTwo))
                 {
-                    return tileMap;
+                    fittingTileMaps.Add(tileMap);
                 }
             }
-            return null;
+            return fittingTileMaps;
         }
     }
 }

@@ -198,7 +198,7 @@ namespace C2Eindopdracht.Classes
                 {
                     if (!list[i][j].isFilled)
                     {
-                        list[i][j].position = new Point(j * 400, i * 400);
+                        list[i][j].position = new Point(j * 384, i * 384);
                     }
                 }
             }
@@ -210,9 +210,9 @@ namespace C2Eindopdracht.Classes
             levelComponent.entrance = entrance;
             levelComponent.isFilled = true;
 
-            Microsoft.Xna.Framework.Point position = levelComponent.position;
-            position.X = xPos * 400;
-            position.Y = yPos * 400;
+            Point position = levelComponent.position;
+            position.X = xPos * 384;
+            position.Y = yPos * 384;
             levelComponent.position = position;
 
             return levelComponent;

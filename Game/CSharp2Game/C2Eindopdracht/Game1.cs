@@ -31,7 +31,7 @@ namespace C2Eindopdracht
             // TODO: Add your initialization logic here
             enemies = new List<Enemy>();
             camera = new Camera();
-            player = new Player(50, 180, .3f, 200f);
+            player = new Player(20, 170, .3f, 200f);
             enemies.Add(new LightEnemy(50, 220, .3f, 200f));
             renderHitboxes = false;
             
@@ -82,7 +82,7 @@ namespace C2Eindopdracht
 
             if (SmartKeyboard.HasBeenPressed(Keys.J) && player.canAttack)
             {
-                player.attack(1, new Cooldown(.5f), .2f, new Rectangle((int)player.getPosition().X, (int)player.getPosition().Y, 25, 25), 5);                
+                player.attack(1, new Cooldown(.5f), .2f, new Rectangle((int)player.getPosition().X, (int)player.getPosition().Y, 24, 24), 5);                
             }
 
             player.updateAttacks(gameTime);
@@ -95,12 +95,18 @@ namespace C2Eindopdracht
         {
             GraphicsDevice.Clear(Color.DeepSkyBlue);
             camera.Pos = player.getPosition();
-            camera.Zoom = 3f;
+            camera.Zoom = 1f;
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
             if(renderHitboxes)
 			{
+                _spriteBatch.Draw(
+                    blankTexture,
+                    player.getHitbox(),
+                    Color.Green
+                );
+
                 foreach (Attack attack in player.attacks)
                 {
                     _spriteBatch.Draw(
@@ -109,6 +115,16 @@ namespace C2Eindopdracht
                         Color.Red
                     );
                 }
+
+                foreach (Enemy enemy in enemies)
+				{
+                    _spriteBatch.Draw(
+                        blankTexture,
+                        enemy.getHitbox(),
+                        Color.Yellow
+                    );
+                }
+
                 foreach (List<LevelComponent> rowList in level.list)
                 {
                     foreach (LevelComponent levelComponent in rowList)
@@ -118,7 +134,7 @@ namespace C2Eindopdracht
                             _spriteBatch.Draw(
                                 blankTexture,
                                 wall,
-                                Color.Red
+                                Color.DimGray
                             );
                         }
                     }
@@ -146,7 +162,7 @@ namespace C2Eindopdracht
                                     {
                                         _spriteBatch.Draw(
                                             LevelComponent.tileSet,
-                                            new Vector2(levelComponent.position.X + (j * 25), levelComponent.position.Y + (i * 25)),
+                                            new Vector2(levelComponent.position.X + (j * 24), levelComponent.position.Y + (i * 24)),
                                             levelComponent.getTileTextureOffset(levelComponent.tileMap.tiles[i][j]),
                                             Color.DarkSlateGray
                                         );

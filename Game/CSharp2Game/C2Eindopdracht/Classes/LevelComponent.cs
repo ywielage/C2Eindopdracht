@@ -44,13 +44,8 @@ namespace C2Eindopdracht.Classes
                     {
                         if (tileMap.tiles[i][j] != 0)
                         {
-                            colliders.Add(new Rectangle(position.X + (j * 25), position.Y + (i * 25), 25, 25));
+                            colliders.Add(new Rectangle(position.X + (j * 24), position.Y + (i * 24), 25, 25));
                         }
-                        else
-						{
-                            Debug.WriteLine("This one is empty");
-						}
-
                     }
                 }
             }
