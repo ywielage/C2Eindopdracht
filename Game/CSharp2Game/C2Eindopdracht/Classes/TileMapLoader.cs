@@ -31,7 +31,7 @@ namespace C2Eindopdracht.Classes
             List<TileMap> fittingTileMaps = getFittingTileMaps(entrance, exit);
             if (fittingTileMaps.Count != 0)
             {
-                return fittingTileMaps[random.Next(1, fittingTileMaps.Count + 1) - 1];
+                return fittingTileMaps[random.Next(0, fittingTileMaps.Count)];
             }
             return null;
         }

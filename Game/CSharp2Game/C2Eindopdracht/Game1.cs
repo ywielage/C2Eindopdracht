@@ -17,6 +17,7 @@ namespace C2Eindopdracht
         private Level level;
         private bool renderHitboxes;
 
+        //Texture mainly for drawing hitboxes
         private Texture2D blankTexture;
 
         public Game1()
@@ -47,7 +48,7 @@ namespace C2Eindopdracht
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            LevelComponent.tileSet = Content.Load<Texture2D>("tileset-map");
+            LevelComponent.tileSet = Content.Load<Texture2D>("tileset-map-squared");
             Player.tileSet = Content.Load<Texture2D>("character1");
             LightEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");
             HeavyEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");
@@ -95,7 +96,7 @@ namespace C2Eindopdracht
         {
             GraphicsDevice.Clear(Color.DeepSkyBlue);
             camera.Pos = player.getPosition();
-            camera.Zoom = 1f;
+            camera.Zoom = .3f;
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
