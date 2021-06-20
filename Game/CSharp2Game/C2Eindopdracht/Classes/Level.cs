@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Text;
 
 namespace C2Eindopdracht.Classes
@@ -13,13 +12,19 @@ namespace C2Eindopdracht.Classes
     {
         private int width;
         private int height;
-        public static Texture2D tileSet {get; set;}
+        private TileMapLoader tileMapLoader;
         public List<List<LevelComponent>> list { get; set; }
         
         public Level(int width, int height)
         {
+            if(width < 2 || height < 2)
+			{
+                return;
+            }
             this.width = width;
             this.height = height;
+
+            tileMapLoader = new TileMapLoader();
         }
 
         public void init(bool debug)
@@ -42,7 +47,8 @@ namespace C2Eindopdracht.Classes
             }
 
             setPositionOfEmptyLevelComponents();
-            assignColliders();
+            tileMapLoader.setTileMapsFromJson();
+            assignComponentTileMapAndColliders(tileMapLoader);
         }
 
         private bool createPath(int width, int height, bool debug)
@@ -172,12 +178,13 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        private void assignColliders()
+        private void assignComponentTileMapAndColliders(TileMapLoader tileMapLoader)
         {
             foreach (List<LevelComponent> rowList in list)
             {
                 foreach (LevelComponent levelComponent in rowList)
                 {
+                    levelComponent.assignTileMap(tileMapLoader);
                     levelComponent.assignColliders();
                 }
             }
@@ -191,7 +198,7 @@ namespace C2Eindopdracht.Classes
                 {
                     if (!list[i][j].isFilled)
                     {
-                        list[i][j].position = new Vector2(j * 500, i * 500);
+                        list[i][j].position = new Point(j * 384, i * 384);
                     }
                 }
             }
@@ -203,9 +210,9 @@ namespace C2Eindopdracht.Classes
             levelComponent.entrance = entrance;
             levelComponent.isFilled = true;
 
-            Vector2 position = levelComponent.position;
-            position.X = xPos * 500;
-            position.Y = yPos * 500;
+            Point position = levelComponent.position;
+            position.X = xPos * 384;
+            position.Y = yPos * 384;
             levelComponent.position = position;
 
             return levelComponent;
