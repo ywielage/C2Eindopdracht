@@ -10,12 +10,16 @@ namespace C2Eindopdracht.Classes
 {
     class Level
     {
-        private int width;
-        private int height;
-        private TileMapLoader tileMapLoader;
+        public int width { get; set; }
+        public int height { get; set; }
+        public int levelComponentSize { get; set; }
+        public int tileSize { get; set; }
+        public TileMapLoader tileMapLoader { get; set; }
+        public EnemySpawner enemySpawner { get; set; }
+        public List<Enemy> enemies { get; set; }
         public List<List<LevelComponent>> list { get; set; }
         
-        public Level(int width, int height)
+        public Level(int width, int height, int enemyAmount)
         {
             if(width < 2 || height < 2)
 			{
@@ -23,8 +27,12 @@ namespace C2Eindopdracht.Classes
             }
             this.width = width;
             this.height = height;
+            this.levelComponentSize = 384;
+            this.tileSize = 24;
 
             tileMapLoader = new TileMapLoader();
+            enemySpawner = new EnemySpawner(enemyAmount);
+            enemies = new List<Enemy>();
         }
 
         public void init(bool debug)
@@ -49,6 +57,7 @@ namespace C2Eindopdracht.Classes
             setPositionOfEmptyLevelComponents();
             tileMapLoader.setTileMapsFromJson();
             assignComponentTileMapAndColliders(tileMapLoader);
+            enemies = enemySpawner.spawnEnemies(width, height, levelComponentSize, tileSize, list);
         }
 
         private bool createPath(int width, int height, bool debug)
@@ -185,7 +194,7 @@ namespace C2Eindopdracht.Classes
                 foreach (LevelComponent levelComponent in rowList)
                 {
                     levelComponent.assignTileMap(tileMapLoader);
-                    levelComponent.assignColliders();
+                    levelComponent.assignColliders(tileSize);
                 }
             }
         }
@@ -198,7 +207,7 @@ namespace C2Eindopdracht.Classes
                 {
                     if (!list[i][j].isFilled)
                     {
-                        list[i][j].position = new Point(j * 384, i * 384);
+                        list[i][j].position = new Point(j * levelComponentSize, i * levelComponentSize);
                     }
                 }
             }
@@ -211,8 +220,8 @@ namespace C2Eindopdracht.Classes
             levelComponent.isFilled = true;
 
             Point position = levelComponent.position;
-            position.X = xPos * 384;
-            position.Y = yPos * 384;
+            position.X = xPos * levelComponentSize;
+            position.Y = yPos * levelComponentSize;
             levelComponent.position = position;
 
             return levelComponent;

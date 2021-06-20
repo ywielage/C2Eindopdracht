@@ -2,36 +2,42 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace C2Eindopdracht.Classes
 {
-    class Enemy
+    abstract class Enemy
     {
-        private Vector2 position;
-        private Rectangle hitBox;
+        protected Vector2 position;
+        protected Rectangle hitBox;
+        public abstract int hp { get; set; }
         public List<Attack> attacks { get; set; }
         public float gravity { get; set; }
-        public float xSpeed { get; set; }
+        public abstract float xSpeed { get; set; }
         public float ySpeed { get; set; }
         public Face face { get; set; }
         public bool grounded { get; set; }
         public bool canAttack { get; set; }
         public Cooldown attackCooldown { get; set; }
         public Aggression aggression { get; set; }
+        public bool isAlive { get; set; }
+        public abstract int attackRange { get; set; }
 
-        public Enemy(int xPos, int yPos, float gravity, float xSpeed)
+        public Enemy(int xPos, int yPos, int width, int height)
         {
             this.position = new Vector2(xPos, yPos);
-            this.hitBox = new Rectangle(xPos, yPos, 18, 30);
+            this.hitBox = new Rectangle(xPos, yPos, width, height);
+            this.hp = hp;
             this.attacks = new List<Attack>();
             this.gravity = gravity;
-            this.xSpeed = xSpeed;
             this.ySpeed = 0;
             this.face = Face.RIGHT;
             this.grounded = false;
             this.canAttack = true;
             this.attackCooldown = new Cooldown(0);
+            this.aggression = Aggression.NEUTRAL;
+            this.isAlive = true;
         }
 
         public Vector2 getPosition()
@@ -54,14 +60,23 @@ namespace C2Eindopdracht.Classes
             this.hitBox = hitBox;
         }
 
-        public void alignHitboxToPosition()
+        public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, Player player)
+        {
+            checkCollisions(levelComponents, player);
+            updateAttacks(gameTime);
+            alignHitboxToPosition();
+            decideMovement(gameTime, player);
+            //printEnemyValues();
+        }
+
+        private void alignHitboxToPosition()
         {
             Rectangle hitbox = this.hitBox;
             hitbox.Location = position.ToPoint();
             this.hitBox = hitbox;
         }
 
-        public void checkCollisions(List<List<LevelComponent>> walls)
+        private void checkCollisions(List<List<LevelComponent>> walls, Player player)
         {
             int touchingGrounds = 0;
 
@@ -101,6 +116,19 @@ namespace C2Eindopdracht.Classes
                     }
                 }
             }
+            
+            foreach (Attack attack in attacks)
+            {
+                if (attack.getHitbox().Intersects(player.getHitbox()) && attack.playerHit == false)
+                {
+                    player.hp -= 1;
+                    attack.hitPlayer();
+                    if(player.hp == 0)
+					{
+                        player.gameOver();
+					}
+                }
+            }
 
             if (touchingGrounds >= 1)
             {
@@ -124,7 +152,7 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        public void updateAttacks(GameTime gameTime)
+        private void updateAttacks(GameTime gameTime)
         {
             for (int i = 0; i < attacks.Count; i++)
             {
@@ -132,6 +160,12 @@ namespace C2Eindopdracht.Classes
                 {
                     canAttack = false;
                     attackCooldown = new Cooldown(attacks[i].cooldown.duration);
+                }
+                if (attacks[i] is Projectile)
+                {
+                    Projectile projectile = (Projectile)attacks[i];
+                    projectile.move(gameTime);
+                    attacks[i] = projectile;
                 }
                 if (attacks[i].cooldown.elapsedTime >= attacks[i].activeTime)
                 {
@@ -156,7 +190,9 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        public void moveLeft(GameTime gameTime)
+        public abstract void decideMovement(GameTime gameTime, Player player);
+
+        protected void moveLeft(GameTime gameTime)
         {
             if (attackCooldown.elapsedTime >= attackCooldown.duration)
             {
@@ -165,7 +201,7 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        public void moveRight(GameTime gameTime)
+        protected void moveRight(GameTime gameTime)
         {
             if (attackCooldown.elapsedTime >= attackCooldown.duration)
             {
@@ -173,9 +209,33 @@ namespace C2Eindopdracht.Classes
                 face = Face.RIGHT;
             }
         }
+
+        protected void jump(float jumpSpeed, float jumpStartHeight)
+        {
+            if (attackCooldown.elapsedTime >= attackCooldown.duration)
+            {
+                if (grounded)
+                {
+                    ySpeed = 0 - jumpSpeed;
+                    position.Y -= jumpStartHeight;
+                }
+            }
+        }
+
+        public abstract Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet);
+
+        public void printEnemyValues()
+        {
+            Debug.WriteLine("=============================");
+            Debug.WriteLine("Enemy Pos:\tX " + position.X + ",\tY " + position.Y);
+            Debug.WriteLine("Hitbox Pos:\t\tX " + hitBox.X + ",\tY " + hitBox.Y);
+            Debug.WriteLine("Speed:\t\t\tX " + xSpeed + ",\tY" + ySpeed);
+            Debug.WriteLine("Grounded: " + grounded);
+            Debug.WriteLine("Double jump available: " + grounded);
+        } 
     }
 
-    enum Aggression 
+    enum Aggression
     {
         FRIENDLY,
         NEUTRAL,

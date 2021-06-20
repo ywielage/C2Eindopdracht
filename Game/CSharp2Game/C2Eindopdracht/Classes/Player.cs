@@ -12,6 +12,7 @@ namespace C2Eindopdracht.Classes
     {
         private Vector2 position;
         private Rectangle hitBox;
+        public int hp { get; set; }
         public static Texture2D tileSet { get; set; }
         public List<Attack> attacks { get; set; }
         public float gravity { get; set; }
@@ -24,10 +25,11 @@ namespace C2Eindopdracht.Classes
         public bool canAttack { get; set; }
         public Cooldown attackCooldown { get; set; }
 
-        public Player(int xPos, int yPos, float gravity, float xSpeed)
+        public Player(int xPos, int yPos, int hp, float gravity, float xSpeed)
         {
             this.position = new Vector2(xPos, yPos);
             this.hitBox = new Rectangle(xPos, yPos, 18, 30);
+            this.hp = hp;
             this.attacks = new List<Attack>();
             this.gravity = gravity;
             this.xSpeed = xSpeed;
@@ -60,14 +62,23 @@ namespace C2Eindopdracht.Classes
             this.hitBox = hitBox;
         }
 
-        public void alignHitboxToPosition()
+        public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, List<Enemy> enemies)
+		{
+            checkCollisions(levelComponents, enemies);
+            checkKeyPresses(gameTime);
+            updateAttacks(gameTime);
+			alignHitboxToPosition();
+            //printPlayerValues();
+        }
+
+        private void alignHitboxToPosition()
         {
             Rectangle hitbox = this.hitBox;
             hitbox.Location = position.ToPoint();
             this.hitBox = hitbox;
         }
 
-        public void checkCollisions(List<List<LevelComponent>> walls)
+        private void checkCollisions(List<List<LevelComponent>> walls, List<Enemy> enemies)
         {
             int touchingGrounds = 0;
 
@@ -108,6 +119,32 @@ namespace C2Eindopdracht.Classes
                 }
             }
 
+            foreach(Enemy enemy in enemies)
+			{
+                foreach(Attack attack in attacks)
+				{
+                    if(attack.getHitbox().Intersects(enemy.getHitbox()) && !attack.enemiesHit.Contains(enemy))
+					{
+                        enemy.hp -= 1;
+                        attack.hitEnemy(enemy);
+                        if (enemy.hp == 0)
+                        {
+                            enemy.isAlive = false;
+                        }
+                    }
+				}
+			}
+
+            List<Enemy> deadEnemies = new List<Enemy>();
+            foreach(Enemy enemy in enemies)
+			{
+                if(!enemy.isAlive)
+				{
+                    deadEnemies.Add(enemy);
+				}
+			}
+            enemies.RemoveAll(enemy => deadEnemies.Contains(enemy));
+
             if (touchingGrounds >= 1)
             {
                 grounded = true;
@@ -131,7 +168,31 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        public void updateAttacks(GameTime gameTime)
+        private void checkKeyPresses(GameTime gameTime)
+		{
+            var keyboardState = SmartKeyboard.GetState();
+            if (keyboardState.IsKeyDown(Keys.A))
+            {
+                moveLeft(gameTime);
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D))
+            {
+                moveRight(gameTime);
+            }
+
+            if (SmartKeyboard.HasBeenPressed(Keys.Space))
+            {
+                jump(6f, 3f);
+            }
+
+            if (SmartKeyboard.HasBeenPressed(Keys.J) && canAttack)
+            {
+                attack(1, new Cooldown(.5f), .2f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5);
+            }
+        }
+
+        private void updateAttacks(GameTime gameTime)
         {
             for (int i = 0; i < attacks.Count; i++)
             {
@@ -163,7 +224,7 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        public void moveLeft(GameTime gameTime)
+        private void moveLeft(GameTime gameTime)
         {
             if(attackCooldown.elapsedTime >= attackCooldown.duration)
             {
@@ -172,7 +233,7 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        public void moveRight(GameTime gameTime)
+        private void moveRight(GameTime gameTime)
         {
             if (attackCooldown.elapsedTime >= attackCooldown.duration)
             {
@@ -181,13 +242,13 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        public void jump(float jumpSpeed, float jumpStartHeight)
+        private void jump(float jumpSpeed, float jumpStartHeight)
         {
             if (attackCooldown.elapsedTime >= attackCooldown.duration)
             {
                 if (grounded)
                 {
-                    ySpeed = jumpSpeed;
+                    ySpeed = 0 - jumpSpeed;
                     position.Y -= jumpStartHeight;
                     doubleJumpAvailable = true;
                 }
@@ -195,7 +256,7 @@ namespace C2Eindopdracht.Classes
                 {
                     if (doubleJumpAvailable)
                     {
-                        ySpeed = jumpSpeed;
+                        ySpeed = 0 - jumpSpeed;
                         position.Y -= jumpStartHeight;
                         doubleJumpAvailable = false;
                     }
@@ -203,7 +264,7 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        public void attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet)
+        private void attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet)
         {
             if (face == Face.LEFT) 
             {
@@ -216,10 +277,15 @@ namespace C2Eindopdracht.Classes
             attacks.Add(new Attack(damage, cooldown, duration, hitbox));
         }
 
-        public void printCharacterValues()
+        public void gameOver()
+		{
+            Debug.WriteLine("Game Over");
+        }
+
+        public void printPlayerValues()
         {
             Debug.WriteLine("=============================");
-            Debug.WriteLine("Character Pos:\tX " + position.X + ",\tY " + position.Y);
+            Debug.WriteLine("Player Pos:\tX " + position.X + ",\tY " + position.Y);
             Debug.WriteLine("Hitbox Pos:\t\tX " + hitBox.X + ",\tY " + hitBox.Y);
             Debug.WriteLine("Speed:\t\t\tX " + xSpeed + ",\tY" + ySpeed);
             Debug.WriteLine("Grounded: " + grounded);

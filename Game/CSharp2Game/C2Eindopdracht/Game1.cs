@@ -13,7 +13,6 @@ namespace C2Eindopdracht
         private SpriteBatch _spriteBatch;
         private Camera camera;
         private Player player;
-        private List<Enemy> enemies;
         private Level level;
         private bool renderHitboxes;
 
@@ -30,13 +29,13 @@ namespace C2Eindopdracht
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            enemies = new List<Enemy>();
-            camera = new Camera();
-            player = new Player(20, 170, .3f, 200f);
-            enemies.Add(new LightEnemy(50, 220, .3f, 200f));
-            renderHitboxes = false;
             
-            level = new Level(5, 5);
+            camera = new Camera();
+            player = new Player(20, 170, 3, .3f, 200f);
+            
+            renderHitboxes = true;
+            
+            level = new Level(5, 5, 20);
             level.init(false);
             level.drawLevelInDebug();
 
@@ -50,8 +49,8 @@ namespace C2Eindopdracht
             // TODO: use this.Content to load your game content here
             LevelComponent.tileSet = Content.Load<Texture2D>("tileset-map-squared");
             Player.tileSet = Content.Load<Texture2D>("character1");
-            LightEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");
-            HeavyEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");
+            MageEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");
+            FighterEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");
 
             blankTexture = Content.Load<Texture2D>("blankTexture");
         }
@@ -62,34 +61,12 @@ namespace C2Eindopdracht
                 Exit();
 
             // TODO: Add your update logic here
-            var keyboardState = SmartKeyboard.GetState();
+            player.update(gameTime, level.list, level.enemies);
 
-            player.checkCollisions(level.list);
-
-            if (keyboardState.IsKeyDown(Keys.A))
-            {
-                player.moveLeft(gameTime);
-            }
-
-            if (keyboardState.IsKeyDown(Keys.D))
-            {
-                player.moveRight(gameTime);
-            }
-
-            if (SmartKeyboard.HasBeenPressed(Keys.Space))
-            {
-                player.jump(-6f, 3f);
-            }
-
-            if (SmartKeyboard.HasBeenPressed(Keys.J) && player.canAttack)
-            {
-                player.attack(1, new Cooldown(.5f), .2f, new Rectangle((int)player.getPosition().X, (int)player.getPosition().Y, 24, 24), 5);                
-            }
-
-            player.updateAttacks(gameTime);
-            player.alignHitboxToPosition();
-
-            //character.printCharacterValues();
+            foreach(Enemy enemy in level.enemies)
+			{
+                enemy.update(gameTime, level.list, player);
+			}
         }
 
         protected override void Draw(GameTime gameTime)
@@ -100,24 +77,29 @@ namespace C2Eindopdracht
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
-            if(renderHitboxes)
+
+
+            if (renderHitboxes)
 			{
+                //Draw player hitbox
                 _spriteBatch.Draw(
                     blankTexture,
                     player.getHitbox(),
                     Color.Green
                 );
 
+                //Draw player attack hitboxes
                 foreach (Attack attack in player.attacks)
                 {
                     _spriteBatch.Draw(
                         blankTexture,
-                        attack.hitbox,
+                        attack.getHitbox(),
                         Color.Red
                     );
                 }
 
-                foreach (Enemy enemy in enemies)
+                //Draw enemy hitboxes
+                foreach (Enemy enemy in level.enemies)
 				{
                     _spriteBatch.Draw(
                         blankTexture,
@@ -126,6 +108,20 @@ namespace C2Eindopdracht
                     );
                 }
 
+                //Draw enemy attack hitboxes
+                foreach (Enemy enemy in level.enemies)
+                {
+                    foreach (Attack attack in enemy.attacks)
+                    {
+                        _spriteBatch.Draw(
+                            blankTexture,
+                            attack.getHitbox(),
+                            Color.Orange
+                        );
+                    }
+                }
+
+                //Draw tile hitboxes
                 foreach (List<LevelComponent> rowList in level.list)
                 {
                     foreach (LevelComponent levelComponent in rowList)
@@ -143,12 +139,36 @@ namespace C2Eindopdracht
             }
             else
 			{
+                //Draw player
                 _spriteBatch.Draw(
                     Player.tileSet,
                     player.getPosition(),
                     Color.White
                 );
 
+                //Draw all enemies
+                foreach(Enemy enemy in level.enemies)
+				{
+                    if(enemy is FighterEnemy)
+					{
+                        _spriteBatch.Draw(
+                            FighterEnemy.tileSet,
+                            enemy.getPosition(),
+                            Color.White
+                        );
+                    }
+                    else if(enemy is MageEnemy)
+					{
+                        _spriteBatch.Draw(
+                           MageEnemy.tileSet,
+                           enemy.getPosition(),
+                           Color.White
+                       );
+                    }
+                    
+                }
+
+                //Draw every tile of every levelcomponent
                 foreach (List<LevelComponent> rowList in level.list)
                 {
                     foreach (LevelComponent levelComponent in rowList)
@@ -162,7 +182,7 @@ namespace C2Eindopdracht
                                     _spriteBatch.Draw(
                                         LevelComponent.tileSet,
                                         new Vector2(levelComponent.position.X + (j * 24), levelComponent.position.Y + (i * 24)),
-                                        levelComponent.getTileTextureOffset(levelComponent.tileMap.tiles[i][j]),
+                                        levelComponent.getTileTextureOffset(levelComponent.tileMap.tiles[i][j], level.tileSize),
                                         Color.DarkSlateGray
                                     );
                                 }

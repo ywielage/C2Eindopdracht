@@ -9,17 +9,41 @@ namespace C2Eindopdracht.Classes
 {
     class Attack
     {
+        protected Rectangle hitbox;
         public int damage { get; set; }
         public Cooldown cooldown { get; set; }
         public float activeTime { get; set; }
-        public Rectangle hitbox { get; set; }
+        public bool playerHit { get; set; }
+        public List<Enemy> enemiesHit { get; set; }
 
-        public Attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox)
+        public Attack(int damage, Cooldown cooldown, float activeTime, Rectangle hitbox)
         {
             this.damage = damage;
             this.cooldown = cooldown;
-            this.activeTime = duration;
+            this.activeTime = activeTime;
             this.hitbox = hitbox;
+            this.enemiesHit = new List<Enemy>();
+            this.playerHit = false;
         }
+
+        public Rectangle getHitbox()
+        {
+            return this.hitbox;
+        }
+
+        public void setHitbox(Rectangle hitBox)
+        {
+            this.hitbox = hitBox;
+        }
+
+        public void hitEnemy(Enemy enemy)
+		{
+            enemiesHit.Add(enemy);
+		}
+
+        public void hitPlayer()
+		{
+            playerHit = true;
+		}
     }
 }
