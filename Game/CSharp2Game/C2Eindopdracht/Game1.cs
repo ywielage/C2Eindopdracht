@@ -14,6 +14,8 @@ namespace C2Eindopdracht
         private Camera camera;
         private Player player;
         private Level level;
+        private UI ui;
+        private SpriteFont Arial16;
         private bool renderHitboxes;
 
         //Texture mainly for drawing hitboxes
@@ -31,12 +33,18 @@ namespace C2Eindopdracht
             // TODO: Add your initialization logic here
             
             camera = new Camera();
+            camera.Zoom = 1.5f;
+            
             player = new Player(20, 170, 20, .3f, 200f);
+            
             renderHitboxes = false;
             
             level = new Level(5, 5, 20);
             level.init(false);
             level.drawLevelInDebug();
+
+            ui = new UI(new Vector2(player.getPosition().X - _graphics.PreferredBackBufferWidth / 2, player.getPosition().Y - _graphics.PreferredBackBufferHeight / 2));
+            ui.addUIElement("Enemies alive", level.enemies.Count, new Vector2(5, 5));
 
             base.Initialize();
         }
@@ -48,9 +56,10 @@ namespace C2Eindopdracht
             // TODO: use this.Content to load your game content here
             LevelComponent.tileSet = Content.Load<Texture2D>("tileset-map-squared");
             Player.tileSet = Content.Load<Texture2D>("character1");
-            MageEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");
-            FighterEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");
+            MageEnemy.tileSet = Content.Load<Texture2D>("enemyMage");
+            FighterEnemy.tileSet = Content.Load<Texture2D>("enemyFighter");
             Projectile.tileSet = Content.Load<Texture2D>("fireball");
+            Arial16 = Content.Load<SpriteFont>("fonts/Arial16");
 
             blankTexture = Content.Load<Texture2D>("blankTexture");
         }
@@ -64,23 +73,38 @@ namespace C2Eindopdracht
                 renderHitboxes = !renderHitboxes;
 
             // TODO: Add your update logic here
-            player.update(gameTime, level.list, level.enemies);
+            player.update(gameTime, level.list, level.enemies, ui.getUIElementByLabel("Enemies alive"));
 
             foreach(Enemy enemy in level.enemies)
 			{
                 enemy.update(gameTime, level.list, player);
 			}
 
+            ui.updatePosition(new Vector2(player.getPosition().X - _graphics.PreferredBackBufferWidth / (2 * camera.Zoom), player.getPosition().Y - _graphics.PreferredBackBufferHeight / (2 * camera.Zoom)));
+            camera.Pos = player.getPosition();
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.DarkSlateGray);
-            camera.Pos = player.getPosition();
-            camera.Zoom = 1.5f;
 
             // TODO: Add your drawing code here
-            _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
+            _spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
+
+            foreach(UIElement element in ui.elements)
+			{
+                _spriteBatch.DrawString(
+                    Arial16,
+                    element.label + ": " + element.value,
+                    element.position,
+                    Color.White,
+                    0f,
+                    new Vector2(0,0),
+                    1f,
+                    SpriteEffects.None,
+                    .1f
+               );
+            } 
 
             if (renderHitboxes)
 			{

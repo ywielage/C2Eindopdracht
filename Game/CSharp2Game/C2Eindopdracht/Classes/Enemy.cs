@@ -21,7 +21,7 @@ namespace C2Eindopdracht.Classes
         public bool grounded { get; set; }
         public bool canAttack { get; set; }
         public Cooldown attackCooldown { get; set; }
-        public Aggression aggression { get; set; }
+        public abstract Aggression aggression { get; set; }
         public bool isAlive { get; set; }
         public Cooldown knockback { get; set; }
         public abstract int attackRange { get; set; }
@@ -39,7 +39,6 @@ namespace C2Eindopdracht.Classes
             this.canAttack = true;
             this.knockback = null;
             this.attackCooldown = new Cooldown(0);
-            this.aggression = Aggression.NEUTRAL;
             this.isAlive = true;
             this.healthBar = new HealthBar(new Rectangle(xPos, yPos, 20, 10), 20, Color.Purple, 0, -15);
         }

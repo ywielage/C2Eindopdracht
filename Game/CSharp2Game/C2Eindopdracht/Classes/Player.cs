@@ -49,7 +49,7 @@ namespace C2Eindopdracht.Classes
             this.isAlive = true;
             this.knockback = null;
             this.attackCooldown = new Cooldown(0);
-            this.healthBar = new HealthBar(new Rectangle(xPos, yPos, 50, 10), 50, Color.LightGreen, -15, -15);
+            this.healthBar = new HealthBar(new Rectangle(xPos, yPos, 50, 10), 50, Color.Gold, -17, -15);
         }
         
         public Vector2 getPosition()
@@ -72,9 +72,9 @@ namespace C2Eindopdracht.Classes
             this.hitBox = hitBox;
         }
 
-        public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, List<Enemy> enemies)
+        public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, List<Enemy> enemies, UIElement enemyCounter)
 		{
-            checkCollisions(levelComponents, enemies);
+            checkCollisions(levelComponents, enemies, enemyCounter);
             if(knockback != null)
             {
                 updateKnockBack(gameTime);
@@ -103,7 +103,7 @@ namespace C2Eindopdracht.Classes
             this.healthBar.setBar(new Rectangle(new Point((int)position.X + healthBar.xOffset, (int)position.Y + healthBar.yOffset), new Point(healthBarWidth, healthBarHeight)));
         }
 
-        private void checkCollisions(List<List<LevelComponent>> walls, List<Enemy> enemies)
+        private void checkCollisions(List<List<LevelComponent>> walls, List<Enemy> enemies, UIElement enemyCounter)
         {
             int touchingGrounds = 0;
 
@@ -163,6 +163,7 @@ namespace C2Eindopdracht.Classes
                         if (enemy.currHp <= 0)
                         {
                             enemy.isAlive = false;
+                            enemyCounter.value--;
                         }
                     }
 				}
@@ -263,7 +264,7 @@ namespace C2Eindopdracht.Classes
                 moveRight(gameTime);
             }
 
-            if (SmartKeyboard.HasBeenPressed(Keys.Space))
+            if (SmartKeyboard.HasBeenPressed(Keys.Space) || SmartKeyboard.HasBeenPressed(Keys.W))
             {
                 jump(6f, 3f);
             }

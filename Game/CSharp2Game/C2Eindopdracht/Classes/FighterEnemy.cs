@@ -12,6 +12,7 @@ namespace C2Eindopdracht.Classes
         public override int maxHp { get; set; }
         public override int currHp { get; set; }
 		public override float xSpeed { get; set; }
+        public override Aggression aggression { get; set; }
 		public override int attackRange { get; set; }
         public static Texture2D tileSet { get; set; }
         public FighterEnemy(int xPos, int yPos, int width, int height) : base(xPos, yPos, width, height)
@@ -20,6 +21,7 @@ namespace C2Eindopdracht.Classes
             currHp = 5;
             xSpeed = 100f;
             gravity = .3f;
+            aggression = Aggression.AGGRESSIVE;
             attackRange = 20;
         }
 
@@ -42,7 +44,7 @@ namespace C2Eindopdracht.Classes
                 playerHitbox.Y - hitBox.Y < attackRange && playerHitbox.Y - hitBox.Y > -attackRange && 
                 canAttack)
             {
-                attacks.Add(attack(1, new Cooldown(.5f), .2f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5));
+                attacks.Add(attack(1, new Cooldown(.5f), .4f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5));
             }
         }
 
