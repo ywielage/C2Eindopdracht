@@ -152,7 +152,7 @@ namespace C2Eindopdracht.Classes
                     attack.hitPlayer();
                     if(player.currHp <= 0)
 					{
-                        player.gameOver();
+                        player.isAlive = false;
 					}
                 }
             }

@@ -61,9 +61,7 @@ namespace C2Eindopdracht
                 Exit();
 
             if(SmartKeyboard.HasBeenPressed(Keys.Tab))
-			{
                 renderHitboxes = !renderHitboxes;
-			}
 
             // TODO: Add your update logic here
             player.update(gameTime, level.list, level.enemies);
@@ -72,17 +70,17 @@ namespace C2Eindopdracht
 			{
                 enemy.update(gameTime, level.list, player);
 			}
+
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DeepSkyBlue);
+            GraphicsDevice.Clear(Color.DarkSlateGray);
             camera.Pos = player.getPosition();
             camera.Zoom = 1.5f;
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
-
 
             if (renderHitboxes)
 			{

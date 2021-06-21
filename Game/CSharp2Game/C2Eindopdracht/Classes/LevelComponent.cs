@@ -82,7 +82,7 @@ namespace C2Eindopdracht.Classes
                     return new Rectangle(90, 90, tileSize + 1, tileSize + 1);
 
                 default:
-                    return null;
+                    return new Rectangle(30, 90, tileSize + 1, tileSize + 1);
             }
         }
     }

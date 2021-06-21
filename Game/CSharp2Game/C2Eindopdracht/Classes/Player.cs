@@ -25,6 +25,7 @@ namespace C2Eindopdracht.Classes
         public bool canDoubleJump { get; set; }
         public bool canAttack { get; set; }
         public bool shieldActive { get; set; }
+        public bool isAlive { get; set; }
         public Cooldown knockback { get; set; }
         public Cooldown attackCooldown { get; set; }
         public HealthBar healthBar { get; set; }
@@ -45,6 +46,7 @@ namespace C2Eindopdracht.Classes
             this.canDoubleJump = true;
             this.canAttack = true;
             this.shieldActive = false;
+            this.isAlive = true;
             this.knockback = null;
             this.attackCooldown = new Cooldown(0);
             this.healthBar = new HealthBar(new Rectangle(xPos, yPos, 50, 10), 50, Color.LightGreen, -15, -15);
@@ -77,7 +79,7 @@ namespace C2Eindopdracht.Classes
             {
                 updateKnockBack(gameTime);
             }
-            else
+            else if (knockback == null && isAlive)
             {
                 checkKeyPresses(gameTime);
             }
@@ -332,11 +334,6 @@ namespace C2Eindopdracht.Classes
                 hitbox.X += hitboxXOffSet;
             }
             attacks.Add(new Attack(damage, cooldown, duration, hitbox));
-        }
-
-        public void gameOver()
-		{
-            Debug.WriteLine("Game Over");
         }
 
         public void printPlayerValues()
