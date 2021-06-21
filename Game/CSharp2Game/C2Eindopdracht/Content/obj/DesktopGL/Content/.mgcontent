@@ -8,10 +8,12 @@
     <File>C:/Users/larsk/source/repos/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/blankTexture.png</File>
     <File>C:/Users/larsk/source/repos/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/character1.png</File>
     <File>C:/Users/larsk/source/repos/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/enemy1wit.png</File>
+    <File>C:/Users/larsk/source/repos/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/fireball.png</File>
     <File>C:/Users/larsk/source/repos/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/tileset-map.png</File>
     <File>C:/Users/larsk/source/repos/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/tileset-map-squared.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

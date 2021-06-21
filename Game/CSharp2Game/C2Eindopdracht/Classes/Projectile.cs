@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,8 +8,9 @@ namespace C2Eindopdracht.Classes
 {
 	class Projectile : Attack
 	{
-		private float xSpeed;
-		private Face face;
+		public float xSpeed { get; set; }
+		public Face face { get; set; }
+		public static Texture2D tileSet { get; set; }
 		public Projectile(int damage, Cooldown cooldown, float activeTime, Rectangle hitbox, float xSpeed, Face face) : base(damage, cooldown, activeTime, hitbox)
 		{
 			this.xSpeed = xSpeed;

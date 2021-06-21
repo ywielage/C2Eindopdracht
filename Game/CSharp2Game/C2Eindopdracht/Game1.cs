@@ -31,8 +31,7 @@ namespace C2Eindopdracht
             // TODO: Add your initialization logic here
             
             camera = new Camera();
-            player = new Player(20, 170, 3, .3f, 200f);
-            
+            player = new Player(20, 170, 20, .3f, 200f);
             renderHitboxes = true;
             
             level = new Level(5, 5, 20);
@@ -51,6 +50,7 @@ namespace C2Eindopdracht
             Player.tileSet = Content.Load<Texture2D>("character1");
             MageEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");
             FighterEnemy.tileSet = Content.Load<Texture2D>("enemy1wit");
+            Projectile.tileSet = Content.Load<Texture2D>("fireball");
 
             blankTexture = Content.Load<Texture2D>("blankTexture");
         }
@@ -114,7 +114,7 @@ namespace C2Eindopdracht
                         Color.Yellow
                     );
 
-                    //Draw player healthbar
+                    //Draw enemy healthbar
                     _spriteBatch.Draw(
                         blankTexture,
                         enemy.healthBar.getBar(),
@@ -164,10 +164,10 @@ namespace C2Eindopdracht
                     player.healthBar.color
                 );
 
-                //Draw all enemies
                 foreach (Enemy enemy in level.enemies)
 				{
-                    if(enemy is FighterEnemy)
+                    //Draw enemy
+                    if (enemy is FighterEnemy)
 					{
                         _spriteBatch.Draw(
                             FighterEnemy.tileSet,
@@ -183,7 +183,40 @@ namespace C2Eindopdracht
                            Color.White
                        );
                     }
-                    
+
+                    //Draw enemy healthbar
+                    _spriteBatch.Draw(
+                        blankTexture,
+                        enemy.healthBar.getBar(),
+                        enemy.healthBar.color
+                    );
+
+                    //Draw projectiles
+                    foreach (Attack attack in enemy.attacks)
+                    {
+                        if(attack is Projectile)
+                        {
+                            Projectile projectileAttack = (Projectile)attack;
+                            if(projectileAttack.face == Face.LEFT)
+                            {
+                                _spriteBatch.Draw(
+                                    Projectile.tileSet,
+                                    new Vector2(attack.getHitbox().X, attack.getHitbox().Y),
+                                    new Rectangle(0, 0, 20, 15),
+                                    Color.White
+                                );
+                            }
+                            else if (projectileAttack.face == Face.RIGHT)
+                            {
+                                _spriteBatch.Draw(
+                                    Projectile.tileSet,
+                                    new Vector2(attack.getHitbox().X, attack.getHitbox().Y),
+                                    new Rectangle(20, 0, 20, 15),
+                                    Color.White
+                                );
+                            }
+                        }
+                    }
                 }
 
                 //Draw every tile of every levelcomponent
