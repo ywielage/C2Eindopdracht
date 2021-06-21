@@ -82,11 +82,23 @@ namespace C2Eindopdracht
             if (renderHitboxes)
 			{
                 //Draw player hitbox
-                _spriteBatch.Draw(
-                    blankTexture,
-                    player.getHitbox(),
-                    Color.Green
-                );                
+                if(player.shieldActive)
+                {
+                    _spriteBatch.Draw(
+                        blankTexture,
+                        player.getHitbox(),
+                        Color.GreenYellow
+                    );
+                }
+                else
+                {
+                    _spriteBatch.Draw(
+                        blankTexture,
+                        player.getHitbox(),
+                        Color.Green
+                    );
+                }
+                                
 
                 //Draw player healthbar
                 _spriteBatch.Draw(

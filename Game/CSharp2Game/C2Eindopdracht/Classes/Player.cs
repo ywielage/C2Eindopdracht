@@ -24,6 +24,7 @@ namespace C2Eindopdracht.Classes
         public bool doubleJumpAvailable { get; set; }
         public bool canDoubleJump { get; set; }
         public bool canAttack { get; set; }
+        public bool shieldActive { get; set; }
         public Cooldown knockback { get; set; }
         public Cooldown attackCooldown { get; set; }
         public HealthBar healthBar { get; set; }
@@ -43,6 +44,7 @@ namespace C2Eindopdracht.Classes
             this.doubleJumpAvailable = false;
             this.canDoubleJump = true;
             this.canAttack = true;
+            this.shieldActive = false;
             this.knockback = null;
             this.attackCooldown = new Cooldown(0);
             this.healthBar = new HealthBar(new Rectangle(xPos, yPos, 50, 10), 50, Color.LightGreen, -15, -15);
@@ -267,6 +269,15 @@ namespace C2Eindopdracht.Classes
             if (SmartKeyboard.HasBeenPressed(Keys.J) && canAttack)
             {
                 attack(1, new Cooldown(.5f), .2f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5);
+            }
+
+            if (keyboardState.IsKeyDown(Keys.K) && canAttack)
+            {
+                shieldActive = true;
+            }
+            else if(keyboardState.IsKeyUp(Keys.K))
+            {
+                shieldActive = false;
             }
         }
 

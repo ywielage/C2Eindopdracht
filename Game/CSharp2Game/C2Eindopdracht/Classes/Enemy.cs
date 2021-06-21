@@ -138,11 +138,11 @@ namespace C2Eindopdracht.Classes
             
             foreach (Attack attack in attacks)
             {
-                if (attack.getHitbox().Intersects(player.getHitbox()) && attack.playerHit == false)
+                if (attack.getHitbox().Intersects(player.getHitbox()) && attack.playerHit == false && !player.shieldActive)
                 {
                     player.currHp -= 1;
                     player.healthBar.updateHealthBar(player.maxHp, player.currHp);
-                    player.knockback = new Cooldown(.5f);
+                    player.knockback = new Cooldown(.2f);
                     if(position.X < player.getPosition().X)
                     {
                         player.xSpeed = 0 - player.xSpeed;
