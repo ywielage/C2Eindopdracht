@@ -9,13 +9,15 @@ namespace C2Eindopdracht.Classes
 {
     class MageEnemy : Enemy
     {
-        public override int hp { get; set; }
+        public override int maxHp { get; set; }
+        public override int currHp { get; set; }
         public override float xSpeed { get; set; }
         public override int attackRange { get; set; }
         public static Texture2D tileSet { get; set; }
         public MageEnemy(int xPos, int yPos, int width, int height) : base(xPos, yPos, width, height)
         {
-            hp = 5;
+            maxHp = 5;
+            currHp = 5;
             xSpeed = 80f;
             gravity = .3f;
             attackRange = 100;

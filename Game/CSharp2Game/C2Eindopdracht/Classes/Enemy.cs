@@ -11,7 +11,8 @@ namespace C2Eindopdracht.Classes
     {
         protected Vector2 position;
         protected Rectangle hitBox;
-        public abstract int hp { get; set; }
+        public abstract int maxHp { get; set; }
+        public abstract int currHp { get; set; }
         public List<Attack> attacks { get; set; }
         public float gravity { get; set; }
         public abstract float xSpeed { get; set; }
@@ -23,12 +24,12 @@ namespace C2Eindopdracht.Classes
         public Aggression aggression { get; set; }
         public bool isAlive { get; set; }
         public abstract int attackRange { get; set; }
+        public HealthBar healthBar { get; set; }
 
         public Enemy(int xPos, int yPos, int width, int height)
         {
             this.position = new Vector2(xPos, yPos);
             this.hitBox = new Rectangle(xPos, yPos, width, height);
-            this.hp = hp;
             this.attacks = new List<Attack>();
             this.gravity = gravity;
             this.ySpeed = 0;
@@ -38,6 +39,7 @@ namespace C2Eindopdracht.Classes
             this.attackCooldown = new Cooldown(0);
             this.aggression = Aggression.NEUTRAL;
             this.isAlive = true;
+            this.healthBar = new HealthBar(new Rectangle(xPos, yPos, 50, 10), 50, Color.Purple, -15, -15);
         }
 
         public Vector2 getPosition()
@@ -63,9 +65,10 @@ namespace C2Eindopdracht.Classes
         public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, Player player)
         {
             checkCollisions(levelComponents, player);
+            decideMovement(gameTime, player);
             updateAttacks(gameTime);
             alignHitboxToPosition();
-            decideMovement(gameTime, player);
+            alignHealthBarToPosition();
             //printEnemyValues();
         }
 
@@ -74,6 +77,13 @@ namespace C2Eindopdracht.Classes
             Rectangle hitbox = this.hitBox;
             hitbox.Location = position.ToPoint();
             this.hitBox = hitbox;
+        }
+
+        private void alignHealthBarToPosition()
+        {
+            int healthBarHeight = this.healthBar.getBar().Height;
+            int healthBarWidth = this.healthBar.getBar().Width;
+            this.healthBar.setBar(new Rectangle(new Point((int)position.X + healthBar.xOffset, (int)position.Y + healthBar.yOffset), new Point(healthBarWidth, healthBarHeight)));
         }
 
         private void checkCollisions(List<List<LevelComponent>> walls, Player player)
@@ -121,9 +131,10 @@ namespace C2Eindopdracht.Classes
             {
                 if (attack.getHitbox().Intersects(player.getHitbox()) && attack.playerHit == false)
                 {
-                    player.hp -= 1;
+                    player.currHp -= 1;
+                    player.healthBar.updateHealthBar(player.maxHp, player.currHp);
                     attack.hitPlayer();
-                    if(player.hp == 0)
+                    if(player.currHp == 0)
 					{
                         player.gameOver();
 					}

@@ -86,6 +86,13 @@ namespace C2Eindopdracht
                     blankTexture,
                     player.getHitbox(),
                     Color.Green
+                );                
+
+                //Draw player healthbar
+                _spriteBatch.Draw(
+                    blankTexture,
+                    player.healthBar.getBar(),
+                    player.healthBar.color
                 );
 
                 //Draw player attack hitboxes
@@ -98,19 +105,23 @@ namespace C2Eindopdracht
                     );
                 }
 
-                //Draw enemy hitboxes
                 foreach (Enemy enemy in level.enemies)
 				{
+                    //Draw enemy hitboxes
                     _spriteBatch.Draw(
                         blankTexture,
                         enemy.getHitbox(),
                         Color.Yellow
                     );
-                }
 
-                //Draw enemy attack hitboxes
-                foreach (Enemy enemy in level.enemies)
-                {
+                    //Draw player healthbar
+                    _spriteBatch.Draw(
+                        blankTexture,
+                        enemy.healthBar.getBar(),
+                        enemy.healthBar.color
+                    );
+
+                    //Draw enemy attack hitboxes
                     foreach (Attack attack in enemy.attacks)
                     {
                         _spriteBatch.Draw(
@@ -146,8 +157,15 @@ namespace C2Eindopdracht
                     Color.White
                 );
 
+                //Draw player healthbar
+                _spriteBatch.Draw(
+                    blankTexture,
+                    player.healthBar.getBar(),
+                    player.healthBar.color
+                );
+
                 //Draw all enemies
-                foreach(Enemy enemy in level.enemies)
+                foreach (Enemy enemy in level.enemies)
 				{
                     if(enemy is FighterEnemy)
 					{

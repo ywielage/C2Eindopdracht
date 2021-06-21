@@ -12,7 +12,8 @@ namespace C2Eindopdracht.Classes
     {
         private Vector2 position;
         private Rectangle hitBox;
-        public int hp { get; set; }
+        public int maxHp { get; set; }
+        public int currHp { get; set; }
         public static Texture2D tileSet { get; set; }
         public List<Attack> attacks { get; set; }
         public float gravity { get; set; }
@@ -24,12 +25,14 @@ namespace C2Eindopdracht.Classes
         public bool canDoubleJump { get; set; }
         public bool canAttack { get; set; }
         public Cooldown attackCooldown { get; set; }
+        public HealthBar healthBar { get; set; }
 
         public Player(int xPos, int yPos, int hp, float gravity, float xSpeed)
         {
             this.position = new Vector2(xPos, yPos);
             this.hitBox = new Rectangle(xPos, yPos, 18, 30);
-            this.hp = hp;
+            this.maxHp = hp;
+            this.currHp = hp;
             this.attacks = new List<Attack>();
             this.gravity = gravity;
             this.xSpeed = xSpeed;
@@ -40,6 +43,7 @@ namespace C2Eindopdracht.Classes
             this.canDoubleJump = true;
             this.canAttack = true;
             this.attackCooldown = new Cooldown(0);
+            this.healthBar = new HealthBar(new Rectangle(xPos, yPos, 50, 10), 50, Color.LightGreen, -15, -15);
         }
         
         public Vector2 getPosition()
@@ -68,6 +72,7 @@ namespace C2Eindopdracht.Classes
             checkKeyPresses(gameTime);
             updateAttacks(gameTime);
 			alignHitboxToPosition();
+            alignHealthBarToPosition();
             //printPlayerValues();
         }
 
@@ -76,6 +81,13 @@ namespace C2Eindopdracht.Classes
             Rectangle hitbox = this.hitBox;
             hitbox.Location = position.ToPoint();
             this.hitBox = hitbox;
+        }
+
+        private void alignHealthBarToPosition()
+        {
+            int healthBarHeight = this.healthBar.getBar().Height;
+            int healthBarWidth = this.healthBar.getBar().Width;
+            this.healthBar.setBar(new Rectangle(new Point((int)position.X + healthBar.xOffset, (int)position.Y + healthBar.yOffset), new Point(healthBarWidth, healthBarHeight)));
         }
 
         private void checkCollisions(List<List<LevelComponent>> walls, List<Enemy> enemies)
@@ -125,9 +137,10 @@ namespace C2Eindopdracht.Classes
 				{
                     if(attack.getHitbox().Intersects(enemy.getHitbox()) && !attack.enemiesHit.Contains(enemy))
 					{
-                        enemy.hp -= 1;
+                        enemy.currHp -= 1;
+                        enemy.healthBar.updateHealthBar(enemy.maxHp, enemy.currHp);
                         attack.hitEnemy(enemy);
-                        if (enemy.hp == 0)
+                        if (enemy.currHp == 0)
                         {
                             enemy.isAlive = false;
                         }
