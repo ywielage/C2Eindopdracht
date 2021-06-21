@@ -24,6 +24,7 @@ namespace C2Eindopdracht.Classes
         public bool doubleJumpAvailable { get; set; }
         public bool canDoubleJump { get; set; }
         public bool canAttack { get; set; }
+        public Cooldown knockback { get; set; }
         public Cooldown attackCooldown { get; set; }
         public HealthBar healthBar { get; set; }
 
@@ -42,6 +43,7 @@ namespace C2Eindopdracht.Classes
             this.doubleJumpAvailable = false;
             this.canDoubleJump = true;
             this.canAttack = true;
+            this.knockback = null;
             this.attackCooldown = new Cooldown(0);
             this.healthBar = new HealthBar(new Rectangle(xPos, yPos, 50, 10), 50, Color.LightGreen, -15, -15);
         }
@@ -69,7 +71,14 @@ namespace C2Eindopdracht.Classes
         public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, List<Enemy> enemies)
 		{
             checkCollisions(levelComponents, enemies);
-            checkKeyPresses(gameTime);
+            if(knockback != null)
+            {
+                updateKnockBack(gameTime);
+            }
+            else
+            {
+                checkKeyPresses(gameTime);
+            }
             updateAttacks(gameTime);
 			alignHitboxToPosition();
             alignHealthBarToPosition();
@@ -139,6 +148,13 @@ namespace C2Eindopdracht.Classes
 					{
                         enemy.currHp -= 1;
                         enemy.healthBar.updateHealthBar(enemy.maxHp, enemy.currHp);
+                        enemy.knockback = new Cooldown(.5f);
+                        if (position.X < enemy.getPosition().X)
+                        {
+                            enemy.xSpeed = 0 - enemy.xSpeed;
+                        }
+                        enemy.ySpeed = -5f;
+                        enemy.setPosition(new Vector2(enemy.getPosition().X, enemy.getPosition().Y - 5f));
                         attack.hitEnemy(enemy);
                         if (enemy.currHp == 0)
                         {
@@ -181,29 +197,7 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        private void checkKeyPresses(GameTime gameTime)
-		{
-            var keyboardState = SmartKeyboard.GetState();
-            if (keyboardState.IsKeyDown(Keys.A))
-            {
-                moveLeft(gameTime);
-            }
-
-            if (keyboardState.IsKeyDown(Keys.D))
-            {
-                moveRight(gameTime);
-            }
-
-            if (SmartKeyboard.HasBeenPressed(Keys.Space))
-            {
-                jump(6f, 3f);
-            }
-
-            if (SmartKeyboard.HasBeenPressed(Keys.J) && canAttack)
-            {
-                attack(1, new Cooldown(.5f), .2f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5);
-            }
-        }
+        
 
         private void updateAttacks(GameTime gameTime)
         {
@@ -234,6 +228,45 @@ namespace C2Eindopdracht.Classes
                 {
                     attackCooldown.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 }
+            }
+        }
+
+        private void updateKnockBack(GameTime gameTime)
+        {
+            knockback.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            position.X -= xSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (knockback.duration <= knockback.elapsedTime)
+            {
+                knockback = null;
+                if(xSpeed < 0)
+                {
+                    xSpeed = xSpeed - xSpeed * 2;
+                }
+            }
+        }
+
+        private void checkKeyPresses(GameTime gameTime)
+        {
+            var keyboardState = SmartKeyboard.GetState();
+            if (keyboardState.IsKeyDown(Keys.A))
+            {
+                moveLeft(gameTime);
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D))
+            {
+                moveRight(gameTime);
+            }
+
+            if (SmartKeyboard.HasBeenPressed(Keys.Space))
+            {
+                jump(6f, 3f);
+            }
+
+            if (SmartKeyboard.HasBeenPressed(Keys.J) && canAttack)
+            {
+                attack(1, new Cooldown(.5f), .2f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5);
             }
         }
 

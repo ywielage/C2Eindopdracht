@@ -23,6 +23,7 @@ namespace C2Eindopdracht.Classes
         public Cooldown attackCooldown { get; set; }
         public Aggression aggression { get; set; }
         public bool isAlive { get; set; }
+        public Cooldown knockback { get; set; }
         public abstract int attackRange { get; set; }
         public HealthBar healthBar { get; set; }
 
@@ -36,10 +37,11 @@ namespace C2Eindopdracht.Classes
             this.face = Face.RIGHT;
             this.grounded = false;
             this.canAttack = true;
+            this.knockback = null;
             this.attackCooldown = new Cooldown(0);
             this.aggression = Aggression.NEUTRAL;
             this.isAlive = true;
-            this.healthBar = new HealthBar(new Rectangle(xPos, yPos, 50, 10), 50, Color.Purple, -15, -15);
+            this.healthBar = new HealthBar(new Rectangle(xPos, yPos, 20, 10), 20, Color.Purple, 0, -15);
         }
 
         public Vector2 getPosition()
@@ -65,7 +67,14 @@ namespace C2Eindopdracht.Classes
         public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, Player player)
         {
             checkCollisions(levelComponents, player);
-            decideMovement(gameTime, player);
+            if (knockback != null)
+            {
+                updateKnockBack(gameTime);
+            }
+            else
+            {
+                decideMovement(gameTime, player);
+            }
             updateAttacks(gameTime);
             alignHitboxToPosition();
             alignHealthBarToPosition();
@@ -133,6 +142,13 @@ namespace C2Eindopdracht.Classes
                 {
                     player.currHp -= 1;
                     player.healthBar.updateHealthBar(player.maxHp, player.currHp);
+                    player.knockback = new Cooldown(.5f);
+                    if(position.X < player.getPosition().X)
+                    {
+                        player.xSpeed = 0 - player.xSpeed;
+                    }
+                    player.ySpeed = -5f;
+                    player.setPosition(new Vector2(player.getPosition().X, player.getPosition().Y - 5f));
                     attack.hitPlayer();
                     if(player.currHp == 0)
 					{
@@ -197,6 +213,21 @@ namespace C2Eindopdracht.Classes
                 else
                 {
                     attackCooldown.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                }
+            }
+        }
+
+        private void updateKnockBack(GameTime gameTime)
+        {
+            knockback.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            position.X -= xSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (knockback.duration <= knockback.elapsedTime)
+            {
+                knockback = null;
+                if (xSpeed < 0)
+                {
+                    xSpeed = xSpeed - xSpeed * 2;
                 }
             }
         }

@@ -16,8 +16,8 @@ namespace C2Eindopdracht.Classes
         public static Texture2D tileSet { get; set; }
         public MageEnemy(int xPos, int yPos, int width, int height) : base(xPos, yPos, width, height)
         {
-            maxHp = 5;
-            currHp = 5;
+            maxHp = 3;
+            currHp = 3;
             xSpeed = 80f;
             gravity = .3f;
             attackRange = 100;
@@ -42,7 +42,7 @@ namespace C2Eindopdracht.Classes
                 playerHitbox.Y - hitBox.Y < attackRange && playerHitbox.Y - hitBox.Y > -attackRange && 
                 canAttack)
             {
-                attacks.Add(attack(1, new Cooldown(.8f), .8f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5));
+                attacks.Add(attack(1, new Cooldown(.8f), .8f, new Rectangle((int)position.X, (int)position.Y, 20, 15), 5));
             }
         }
 
