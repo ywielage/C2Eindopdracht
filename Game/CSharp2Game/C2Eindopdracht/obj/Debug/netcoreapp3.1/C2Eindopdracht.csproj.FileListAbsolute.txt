@@ -92,3 +92,4 @@ C:\Users\larsk\source\repos\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\obj\D
 C:\Users\larsk\source\repos\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\obj\Debug\netcoreapp3.1\C2Eindopdracht.pdb
 C:\Users\larsk\source\repos\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\obj\Debug\netcoreapp3.1\C2Eindopdracht.genruntimeconfig.cache
 C:\Users\larsk\source\repos\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\fireball.xnb
+C:\Users\larsk\OneDrive\Documenten\Stenden\Jaar 2\Periode 4\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\fireball.xnb

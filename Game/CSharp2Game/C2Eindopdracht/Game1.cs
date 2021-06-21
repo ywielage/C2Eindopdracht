@@ -32,7 +32,7 @@ namespace C2Eindopdracht
             
             camera = new Camera();
             player = new Player(20, 170, 20, .3f, 200f);
-            renderHitboxes = true;
+            renderHitboxes = false;
             
             level = new Level(5, 5, 20);
             level.init(false);
@@ -59,6 +59,11 @@ namespace C2Eindopdracht
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            if(SmartKeyboard.HasBeenPressed(Keys.Tab))
+			{
+                renderHitboxes = !renderHitboxes;
+			}
 
             // TODO: Add your update logic here
             player.update(gameTime, level.list, level.enemies);
@@ -98,7 +103,6 @@ namespace C2Eindopdracht
                         Color.Green
                     );
                 }
-                                
 
                 //Draw player healthbar
                 _spriteBatch.Draw(
