@@ -158,7 +158,7 @@ namespace C2Eindopdracht.Classes
                         enemy.ySpeed = -5f;
                         enemy.setPosition(new Vector2(enemy.getPosition().X, enemy.getPosition().Y - 5f));
                         attack.hitEnemy(enemy);
-                        if (enemy.currHp == 0)
+                        if (enemy.currHp <= 0)
                         {
                             enemy.isAlive = false;
                         }

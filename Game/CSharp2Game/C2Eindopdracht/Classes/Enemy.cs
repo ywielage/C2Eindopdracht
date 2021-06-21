@@ -150,7 +150,7 @@ namespace C2Eindopdracht.Classes
                     player.ySpeed = -5f;
                     player.setPosition(new Vector2(player.getPosition().X, player.getPosition().Y - 5f));
                     attack.hitPlayer();
-                    if(player.currHp == 0)
+                    if(player.currHp <= 0)
 					{
                         player.gameOver();
 					}
