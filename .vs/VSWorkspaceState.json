@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Game",
+    "\\Game\\CSharp2Game",
+    "\\Game\\CSharp2Game\\C2Eindopdracht"
   ],
+  "SelectedNode": "\\Game\\CSharp2Game\\C2Eindopdracht\\Game1.cs",
   "PreviewInSolutionExplorer": false
 }
