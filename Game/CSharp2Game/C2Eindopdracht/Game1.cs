@@ -33,7 +33,7 @@ namespace C2Eindopdracht
             // TODO: Add your initialization logic here
             
             camera = new Camera();
-            camera.Zoom = 1.5f;
+            camera.Zoom = 1.2f;
             
             player = new Player(20, 170, 20, .3f, 200f);
             
@@ -72,6 +72,9 @@ namespace C2Eindopdracht
             if(SmartKeyboard.HasBeenPressed(Keys.Tab))
                 renderHitboxes = !renderHitboxes;
 
+            if(SmartKeyboard.HasBeenPressed(Keys.F))
+                _graphics.ToggleFullScreen();
+
             // TODO: Add your update logic here
             player.update(gameTime, level.list, level.enemies, ui.getUIElementByLabel("Enemies alive"));
 
@@ -91,6 +94,7 @@ namespace C2Eindopdracht
             // TODO: Add your drawing code here
             _spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
 
+            //Draw every sprite element
             foreach(UIElement element in ui.elements)
 			{
                 _spriteBatch.DrawString(
