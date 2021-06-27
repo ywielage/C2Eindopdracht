@@ -37,6 +37,10 @@ namespace C2Eindopdracht.Classes
             enemies = new List<Enemy>();
         }
 
+        /// <summary>
+        /// Initialize the level and assign the tilemaps and colliders
+        /// </summary>
+        /// <param name="debug">Debug mode to see which levelcomponent at that time</param>
         public void init(bool debug)
         {
             
@@ -63,6 +67,13 @@ namespace C2Eindopdracht.Classes
             enemies = enemySpawner.spawnEnemies(width, height, levelComponentSize, tileSize, list);
         }
 
+        /// <summary>
+        /// Create the level based on the width and height given.
+        /// </summary>
+        /// <param name="width">The amount of levelcomponents the level is wide</param>
+        /// <param name="height">The amount of levelcomponents the level is high</param>
+        /// <param name="debug">Debug mode to see which levelcomponent at that time</param>
+        /// <returns></returns>
         private bool createPath(int width, int height, bool debug)
         {
             int xPos = 1;
@@ -164,6 +175,12 @@ namespace C2Eindopdracht.Classes
             }
         }
 
+        /// <summary>
+        /// Iniitialize every levelcomponent so there is an empty level
+        /// </summary>
+        /// <param name="width">The amount of levelcomponents the level is wide</param>
+        /// <param name="height">The amount of levelcomponents the level is high</param>
+        /// <returns></returns>
         private List<List<LevelComponent>> initList(int width, int height)
         {
             List<List<LevelComponent>> list = new List<List<LevelComponent>>();
@@ -179,6 +196,9 @@ namespace C2Eindopdracht.Classes
             return list;
         }
 
+        /// <summary>
+        /// Reset the level to an empty level
+        /// </summary>
         private void resetList()
         {
             for(int i = 0; i < height; i++)
@@ -190,6 +210,11 @@ namespace C2Eindopdracht.Classes
             }
         }
 
+        /// <summary>
+        /// Assign the tiles to every different levelcomponent taken from the JSON file
+        /// Assign the colliders for every tile that is not empty
+        /// </summary>
+        /// <param name="tileMapLoader">The tilemap to take the tiles from</param>
         private void assignComponentTileMapAndColliders(TileMapLoader tileMapLoader)
         {
             assignEnd(tileMapLoader);
@@ -206,6 +231,10 @@ namespace C2Eindopdracht.Classes
             }
         }
 
+        /// <summary>
+        /// Assign the end levelcomponent to it's position
+        /// </summary>
+        /// <param name="tileMapLoader">The tilemap to take the tiles from</param>
         private void assignEnd(TileMapLoader tileMapLoader)
         {
             list[height - 2][width - 1].entrance = Directions.WEST;
@@ -214,6 +243,9 @@ namespace C2Eindopdracht.Classes
             list[height - 2][width - 1].assignColliders(tileSize);
         }
 
+        /// <summary>
+        /// Set the levelcomponent position of every levelcomponent that's still empty
+        /// </summary>
         private void setPositionOfEmptyLevelComponents()
         {
             for (int i = 0; i < height; i++)
@@ -228,6 +260,15 @@ namespace C2Eindopdracht.Classes
             }
         }
 
+        /// <summary>
+        /// Set the current levelcomponent to the given entrance and exit
+        /// </summary>
+        /// <param name="levelComponent">The levelcomponent to set</param>
+        /// <param name="entrance">The entrance of the levelcomponent</param>
+        /// <param name="exit">The exit of the levelcomponent</param>
+        /// <param name="xPos">The horizontal position of the levelcomponent</param>
+        /// <param name="yPos">The vertical position of the levelcomponent</param>
+        /// <returns>The filled in levelcomponent</returns>
         private LevelComponent setSelectedListPos(LevelComponent levelComponent, Directions entrance, Directions exit, int xPos, int yPos)
         {
             levelComponent.exit = exit;
@@ -242,6 +283,13 @@ namespace C2Eindopdracht.Classes
             return levelComponent;
         }
 
+        /// <summary>
+        /// Print the current levelcomponent to debug
+        /// </summary>
+        /// <param name="xPos">The horizontal position of the levelcomponent</param>
+        /// <param name="yPos">The vertical position of the levelcomponent</param>
+        /// <param name="entrance">The entrance of the levelcomponent</param>
+        /// <param name="randomDirection">The random direction to go in 1=N, 2=E, 3=S, 4=W</param>
         private void printLevelComponent(int xPos, int yPos, Directions entrance, int randomDirection)
         {
             Debug.WriteLine("=======");
@@ -267,6 +315,9 @@ namespace C2Eindopdracht.Classes
             }
         }
 
+        /// <summary>
+        /// Draw every levelcomponent in a grid in debug
+        /// </summary>
         public void drawLevelInDebug()
         {
             for (int i = 0; i < list.Count; i++)
@@ -318,6 +369,13 @@ namespace C2Eindopdracht.Classes
             }
         }
 
+        /// <summary>
+        /// Get the representing character for the exit/entrance
+        /// </summary>
+        /// <param name="levelComponent">The levelcomponent used</param>
+        /// <param name="side">The side the char should point to</param>
+        /// <param name="yHeight">The current vertical height</param>
+        /// <returns>A character representing an opening in drawLevelDebug</returns>
         private string getStringLevelComponentOpening(LevelComponent levelComponent, Directions side, int yHeight)
         {
             Directions setSide = Directions.NONE;
@@ -364,6 +422,11 @@ namespace C2Eindopdracht.Classes
             }
         }
 
+        /// <summary>
+        /// Get the opposite of the Direction given
+        /// </summary>
+        /// <param name="side">Direction to reverse</param>
+        /// <returns>The reversed Direction</returns>
         private Directions getOppositeSide(Directions side)
         {
             if (side == Directions.NORTH)
@@ -385,6 +448,12 @@ namespace C2Eindopdracht.Classes
             return Directions.NORTH;
         }
 
+        /// <summary>
+        /// Check if the createpath method has any free neighbours and isn't stuck in a corner
+        /// </summary>
+        /// <param name="x">Current horizontal position</param>
+        /// <param name="y">Current vertical position</param>
+        /// <returns>True if there are free neighbours to any of the four sides of the given position</returns>
         private bool hasFreeNeighbours(int x, int y)
         {
             bool north = false;
@@ -450,6 +519,13 @@ namespace C2Eindopdracht.Classes
             }
         }
 
+        /// <summary>
+        /// Check if the player hit the end of the level
+        /// </summary>
+        /// <param name="playerHitbox">The hitbox of the player</param>
+        /// <param name="ui">The UI</param>
+        /// <param name="x">The horizontal position</param>
+        /// <param name="y">The vertical position</param>
         public void checkEndTriggerHit(Rectangle playerHitbox, UI ui, float x, float y)
 		{
             if (endTrigger.Intersects(playerHitbox))

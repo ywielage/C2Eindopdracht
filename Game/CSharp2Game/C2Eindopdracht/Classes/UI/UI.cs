@@ -16,6 +16,11 @@ namespace C2Eindopdracht.Classes
 			this.elements = new List<UIElement>();
 		}
 
+		/// <summary>
+		/// Update the UI position and all of it's elements
+		/// </summary>
+		/// <param name="position">Position to update to</param>
+		/// <param name="gameTime">Gametime to see how much time has passed</param>
 		public void update(Vector2 position, GameTime gameTime)
 		{
 			this.position = position;
@@ -36,6 +41,12 @@ namespace C2Eindopdracht.Classes
 			elements.RemoveAll(element => elapsedUI.Contains(element));
 		}
 
+		/// <summary>
+		/// Add a label UI element
+		/// </summary>
+		/// <param name="label">The text of the UI element</param>
+		/// <param name="parentOffset">The offset of the topleft position of the screen</param>
+		/// <param name="activeTime">The time the UI element is active, 0 if forever</param>
 		public void addUIElement(string label, Vector2 parentOffset, float activeTime)
 		{
 			if(getUIElementByLabel(label) == null)
@@ -44,6 +55,13 @@ namespace C2Eindopdracht.Classes
 			}
 		}
 
+		/// <summary>
+		/// Add a label: value UI element
+		/// </summary>
+		/// <param name="label">The text of the UI element</param>
+		/// <param name="value">The value the UI element is holding</param>
+		/// <param name="parentOffset">The offset of the topleft position of the screen</param>
+		/// <param name="activeTime">The time the UI element is active, 0 if forever</param>
 		public void addUIElement(string label, int value, Vector2 parentOffset, float activeTime)
 		{
 			if (getUIElementByLabel(label) == null)
@@ -52,6 +70,11 @@ namespace C2Eindopdracht.Classes
 			}
 		}
 
+		/// <summary>
+		/// Get a UI element from the list from the label given
+		/// </summary>
+		/// <param name="label">A UI label text</param>
+		/// <returns>The UI element matching the given string</returns>
 		public UIElement getUIElementByLabel(string label)
 		{
 			return elements.Find(element => element.label.Equals(label));

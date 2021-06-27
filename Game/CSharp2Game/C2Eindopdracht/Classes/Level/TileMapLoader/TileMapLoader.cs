@@ -15,6 +15,10 @@ namespace C2Eindopdracht.Classes
         {
             tileMaps = new List<TileMap>();
         }
+
+        /// <summary>
+        /// Set the tileMaps from the JSON file tileMaps.json
+        /// </summary>
         public void setTileMapsFromJson()
         {
             string path = Path.Combine(Environment.CurrentDirectory, @"../../../Content", "tileMaps.json");
@@ -25,6 +29,12 @@ namespace C2Eindopdracht.Classes
             }
         }
 
+        /// <summary>
+        /// Get a tilemap for a levelcomponent
+        /// </summary>
+        /// <param name="entrance">The entrance of the levelcomponent</param>
+        /// <param name="exit">The exit of the levelcomponent</param>
+        /// <returns>A tilemap fitting the levelcomponent</returns>
         public TileMap getTileMap(Directions entrance, Directions exit)
         {
             Random random = new Random();
@@ -36,6 +46,12 @@ namespace C2Eindopdracht.Classes
             return null;
         }
 
+        /// <summary>
+        /// Get a list of fitting tilemaps
+        /// </summary>
+        /// <param name="entrance">The entrance of the levelcomponent</param>
+        /// <param name="exit">The exit of the levelcomponent</param>
+        /// <returns>A list of tilemaps fitting the levelcomponent openings</returns>
         private List<TileMap> getFittingTileMaps(Directions entrance, Directions exit)
 		{
             List<TileMap> fittingTileMaps = new List<TileMap>();
