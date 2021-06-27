@@ -18,17 +18,19 @@ namespace C2Eindopdracht.Classes
         public EnemySpawner enemySpawner { get; set; }
         public List<Enemy> enemies { get; set; }
         public List<List<LevelComponent>> list { get; set; }
+        public Rectangle endTrigger { get; set; }
         
         public Level(int width, int height, int enemyAmount)
         {
             if(width < 2 || height < 2)
 			{
-                return;
+                throw new LevelTooSmallException(width, height);
             }
             this.width = width;
             this.height = height;
             this.levelComponentSize = 384;
             this.tileSize = 24;
+            this.endTrigger = new Rectangle(levelComponentSize * width - tileSize, (levelComponentSize * height - levelComponentSize / 2) - tileSize, tileSize, tileSize * 2);
 
             tileMapLoader = new TileMapLoader();
             enemySpawner = new EnemySpawner(enemyAmount);
@@ -432,6 +434,21 @@ namespace C2Eindopdracht.Classes
             else
             {
                 return true;
+            }
+        }
+
+        public void checkEndTriggerHit(Rectangle playerHitbox, UI ui, float x, float y)
+		{
+            if (endTrigger.Intersects(playerHitbox))
+            {
+                if (enemies.Count == 0)
+                {
+                    ui.addUIElement("You've won!", new Vector2(x, y), 5f);
+                }
+                else
+                {
+                    ui.addUIElement("There are still " + enemies.Count + " enemies remaining", new Vector2(x, y), 5f);
+                }
             }
         }
     }

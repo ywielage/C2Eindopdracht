@@ -39,12 +39,15 @@ namespace C2Eindopdracht
             
             renderHitboxes = false;
             
-            level = new Level(5, 5, 20);
+            level = new Level(2, 2, 2);
             level.init(false);
             level.drawLevelInDebug();
 
             ui = new UI(new Vector2(player.getPosition().X - _graphics.PreferredBackBufferWidth / 2, player.getPosition().Y - _graphics.PreferredBackBufferHeight / 2));
-            ui.addUIElement("Enemies alive", level.enemies.Count, new Vector2(5, 5));
+            ui.addUIElement("Enemies alive", level.enemies.Count, new Vector2(5, 5), 0);
+            ui.addUIElement("To move press A and D, to jump press Space or W", new Vector2(5, 50), 5f);
+            ui.addUIElement("To attack press J, to shield press K", new Vector2(5, 70), 5f);
+            ui.addUIElement("In shield your're not able to attack but can dodge other attacks", new Vector2(5, 90), 5f);
 
             base.Initialize();
         }
@@ -76,15 +79,16 @@ namespace C2Eindopdracht
                 _graphics.ToggleFullScreen();
 
             // TODO: Add your update logic here
-            player.update(gameTime, level.list, level.enemies, ui.getUIElementByLabel("Enemies alive"));
+            player.update(gameTime, level.list, level.enemies, (UIElementLabelValue)ui.getUIElementByLabel("Enemies alive"));
 
             foreach(Enemy enemy in level.enemies)
 			{
                 enemy.update(gameTime, level.list, player);
 			}
 
-            ui.updatePosition(new Vector2(player.getPosition().X - _graphics.PreferredBackBufferWidth / (2 * camera.Zoom), player.getPosition().Y - _graphics.PreferredBackBufferHeight / (2 * camera.Zoom)));
+            ui.update(new Vector2(player.getPosition().X - _graphics.PreferredBackBufferWidth / (2 * camera.Zoom), player.getPosition().Y - _graphics.PreferredBackBufferHeight / (2 * camera.Zoom)), gameTime);
             camera.Pos = player.getPosition();
+            level.checkEndTriggerHit(player.getHitbox(), ui, 5, 50);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -97,23 +101,49 @@ namespace C2Eindopdracht
             //Draw every sprite element
             foreach(UIElement element in ui.elements)
 			{
-                _spriteBatch.DrawString(
-                    Arial16,
-                    element.label + ": " + element.value,
-                    element.position,
-                    Color.White,
-                    0f,
-                    new Vector2(0,0),
-                    1f,
-                    SpriteEffects.None,
-                    .1f
-               );
+                if(element is UIElementLabelValue)
+				{
+                    UIElementLabelValue labelValue = (UIElementLabelValue) element;
+                    _spriteBatch.DrawString(
+                        Arial16,
+                        labelValue.label + ": " + labelValue.value,
+                        element.position,
+                        Color.White,
+                        0f,
+                        new Vector2(0, 0),
+                        1f,
+                        SpriteEffects.None,
+                        .1f
+                    );
+                }
+                else if (element is UIElementLabel)
+				{
+                    _spriteBatch.DrawString(
+                        Arial16,
+                        element.label,
+                        element.position,
+                        Color.White,
+                        0f,
+                        new Vector2(0, 0),
+                        1f,
+                        SpriteEffects.None,
+                        .1f
+                    );
+                }
+                
             } 
 
             if (renderHitboxes)
 			{
+                //Draw endtrigger
+                _spriteBatch.Draw(
+                    blankTexture,
+                    level.endTrigger,
+                    Color.Green
+                );
+
                 //Draw player hitbox
-                if(player.shieldActive)
+                if (player.shieldActive)
                 {
                     _spriteBatch.Draw(
                         blankTexture,

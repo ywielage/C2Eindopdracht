@@ -16,18 +16,40 @@ namespace C2Eindopdracht.Classes
 			this.elements = new List<UIElement>();
 		}
 
-		public void updatePosition(Vector2 position)
+		public void update(Vector2 position, GameTime gameTime)
 		{
 			this.position = position;
-			foreach(UIElement element in elements)
+			List<UIElement> elapsedUI = new List<UIElement>();
+
+			foreach (UIElement element in elements)
 			{
 				element.position = position + element.parentOffset;
+				if (element.activeTime != null)
+				{
+					element.activeTime.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+					if (element.activeTime.elapsedTime >= element.activeTime.duration)
+					{
+						elapsedUI.Add(element);
+					}
+				}
+			}
+			elements.RemoveAll(element => elapsedUI.Contains(element));
+		}
+
+		public void addUIElement(string label, Vector2 parentOffset, float activeTime)
+		{
+			if(getUIElementByLabel(label) == null)
+			{
+				elements.Add(new UIElementLabel(label, parentOffset, this.position, activeTime));
 			}
 		}
 
-		public void addUIElement(string label, int value, Vector2 parentOffset)
+		public void addUIElement(string label, int value, Vector2 parentOffset, float activeTime)
 		{
-			elements.Add(new UIElement(label, value, parentOffset, this.position));
+			if (getUIElementByLabel(label) == null)
+			{
+				elements.Add(new UIElementLabelValue(label, value, parentOffset, this.position, activeTime));
+			}
 		}
 
 		public UIElement getUIElementByLabel(string label)

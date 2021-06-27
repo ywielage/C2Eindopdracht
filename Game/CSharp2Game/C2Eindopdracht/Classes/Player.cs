@@ -72,7 +72,7 @@ namespace C2Eindopdracht.Classes
             this.hitBox = hitBox;
         }
 
-        public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, List<Enemy> enemies, UIElement enemyCounter)
+        public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, List<Enemy> enemies, UIElementLabelValue enemyCounter)
 		{
             checkCollisions(levelComponents, enemies, enemyCounter);
             if(knockback != null)
@@ -103,7 +103,7 @@ namespace C2Eindopdracht.Classes
             this.healthBar.setBar(new Rectangle(new Point((int)position.X + healthBar.xOffset, (int)position.Y + healthBar.yOffset), new Point(healthBarWidth, healthBarHeight)));
         }
 
-        private void checkCollisions(List<List<LevelComponent>> walls, List<Enemy> enemies, UIElement enemyCounter)
+        private void checkCollisions(List<List<LevelComponent>> walls, List<Enemy> enemies, UIElementLabelValue enemyCounter)
         {
             int touchingGrounds = 0;
 
@@ -202,8 +202,6 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        
-
         private void updateAttacks(GameTime gameTime)
         {
             for (int i = 0; i < attacks.Count; i++)
@@ -269,7 +267,7 @@ namespace C2Eindopdracht.Classes
                 jump(6f, 3f);
             }
 
-            if (SmartKeyboard.HasBeenPressed(Keys.J) && canAttack)
+            if (SmartKeyboard.HasBeenPressed(Keys.J) && canAttack && !shieldActive)
             {
                 attack(1, new Cooldown(.5f), .2f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5);
             }
