@@ -16,7 +16,7 @@ namespace C2Eindopdracht.Classes
 		/// </summary>
 		/// <param name="damage">Sets the amount of damage a projectile deals</param> 
 		/// <param name="cooldown">Sets the cooldown until the next attack</param> 
-		/// <param name="activeTime">Time the projectile is active</param> // 
+		/// <param name="activeTime">Time the projectile is active</param>
 		/// <param name="hitbox">Hitbox of projectile</param>  
 		/// <param name="xSpeed">Horizontal speed</param> 
 		/// <param name="face">Direction which the projectile is facing</param>

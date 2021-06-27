@@ -73,7 +73,7 @@ namespace C2Eindopdracht.Classes
         /// Update enemy
         /// </summary>
         /// <param name="gameTime">Timespan since start of game</param>
-        /// <param name="levelComponents">List of levelcomponents</param> Lijst van levelcomponents
+        /// <param name="levelComponents">List of levelcomponents</param>
         /// <param name="player">Player object</param> 
         /// <param name="ui">UI object</param> 
         public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, Player player, UI ui)
