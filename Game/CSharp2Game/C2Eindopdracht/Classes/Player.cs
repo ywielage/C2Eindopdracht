@@ -370,6 +370,12 @@ namespace C2Eindopdracht.Classes
             attacks.Add(new Attack(damage, cooldown, duration, hitbox));
         }
 
+        public void gameOver(UI ui)
+		{
+            isAlive = false;
+            ui.addUIElement("You've died!", new Vector2(5, 50), 0);
+        }
+
         public void printPlayerValues()
         {
             Debug.WriteLine("=============================");

@@ -41,7 +41,7 @@ namespace C2Eindopdracht.Classes
             List<TileMap> fittingTileMaps = new List<TileMap>();
             foreach (TileMap tileMap in this.tileMaps)
             {
-                if ((entrance == tileMap.openingOne || entrance == tileMap.openingTwo) && (exit == tileMap.openingOne || exit == tileMap.openingTwo))
+                if ((entrance == tileMap.openingOne || entrance == tileMap.openingTwo) && (exit == tileMap.openingOne || exit == tileMap.openingTwo) && (entrance != exit))
                 {
                     fittingTileMaps.Add(tileMap);
                 }

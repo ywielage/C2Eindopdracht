@@ -35,19 +35,19 @@ namespace C2Eindopdracht
             camera = new Camera();
             camera.Zoom = 1.2f;
             
-            player = new Player(20, 170, 20, .3f, 200f);
-            
             renderHitboxes = false;
             
             level = new Level(2, 2, 2);
-            level.init(false);
+            level.init(true);
             level.drawLevelInDebug();
+
+            player = new Player(20 + level.levelComponentSize, 170 + level.levelComponentSize, 20, .3f, 200f);
 
             ui = new UI(new Vector2(player.getPosition().X - _graphics.PreferredBackBufferWidth / 2, player.getPosition().Y - _graphics.PreferredBackBufferHeight / 2));
             ui.addUIElement("Enemies alive", level.enemies.Count, new Vector2(5, 5), 0);
-            ui.addUIElement("To move press A and D, to jump press Space or W", new Vector2(5, 50), 5f);
-            ui.addUIElement("To attack press J, to shield press K", new Vector2(5, 70), 5f);
-            ui.addUIElement("In shield your're not able to attack but can dodge other attacks", new Vector2(5, 90), 5f);
+            ui.addUIElement("To move press A and D, to jump press Space or W", new Vector2(5, 50), 10f);
+            ui.addUIElement("To attack press J, to shield press K", new Vector2(5, 70), 10f);
+            ui.addUIElement("In shield your're not able to attack but can dodge other attacks", new Vector2(5, 90), 10f);
 
             base.Initialize();
         }
@@ -83,7 +83,7 @@ namespace C2Eindopdracht
 
             foreach(Enemy enemy in level.enemies)
 			{
-                enemy.update(gameTime, level.list, player);
+                enemy.update(gameTime, level.list, player, ui);
 			}
 
             ui.update(new Vector2(player.getPosition().X - _graphics.PreferredBackBufferWidth / (2 * camera.Zoom), player.getPosition().Y - _graphics.PreferredBackBufferHeight / (2 * camera.Zoom)), gameTime);
