@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "lvL9sM6G0zbZf1dQUGuzeyIf0bIegeN1j6cFYDMgss4LKkEKNsQeI7WUKsHKa2hIQwdFvLVSiHjb9fhuBHldrQ==",
+  "dgSpecHash": "25wDFI4Tn8gwwprqW4s2S67GGaGFra6pXiqAYy3rE9OVL5Ipf4pi5H27iRQ2PhYXi7tsXZJ63lWDhx0s/hxC+w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\larsk\\OneDrive\\Documenten\\Stenden\\Jaar 2\\Periode 4\\C2Eindopdracht\\Game\\CSharp2Game\\C2Eindopdracht\\C2Eindopdracht.csproj",
+  "projectFilePath": "C:\\Users\\hp\\StudioProjects\\C2Eindopdracht\\Game\\CSharp2Game\\C2Eindopdracht\\C2Eindopdracht.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\larsk\\.nuget\\packages\\monogame.content.builder.task\\3.8.0.1641\\monogame.content.builder.task.3.8.0.1641.nupkg.sha512",
-    "C:\\Users\\larsk\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.0.1641\\monogame.framework.desktopgl.3.8.0.1641.nupkg.sha512",
-    "C:\\Users\\larsk\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+    "C:\\Users\\hp\\.nuget\\packages\\monogame.content.builder.task\\3.8.0.1641\\monogame.content.builder.task.3.8.0.1641.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.0.1641\\monogame.framework.desktopgl.3.8.0.1641.nupkg.sha512",
+    "C:\\Users\\hp\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
   ],
   "logs": []
 }
