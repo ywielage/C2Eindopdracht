@@ -95,84 +95,12 @@ namespace C2Eindopdracht
             _spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
 
             //Draw every sprite element
-            foreach(UIElement element in ui.elements)
-			{
-                _spriteBatch.DrawString(
-                    Arial16,
-                    element.label + ": " + element.value,
-                    element.position,
-                    Color.White,
-                    0f,
-                    new Vector2(0,0),
-                    1f,
-                    SpriteEffects.None,
-                    .1f
-               );
-            } 
+            drawSpriteElements();
 
             if (renderHitboxes)
-			{
+            {
                 //Draw player hitbox
-                if(player.shieldActive)
-                {
-                    _spriteBatch.Draw(
-                        blankTexture,
-                        player.getHitbox(),
-                        Color.GreenYellow
-                    );
-                }
-                else
-                {
-                    _spriteBatch.Draw(
-                        blankTexture,
-                        player.getHitbox(),
-                        Color.Green
-                    );
-                }
-
-                //Draw player healthbar
-                _spriteBatch.Draw(
-                    blankTexture,
-                    player.healthBar.getBar(),
-                    player.healthBar.color
-                );
-
-                //Draw player attack hitboxes
-                foreach (Attack attack in player.attacks)
-                {
-                    _spriteBatch.Draw(
-                        blankTexture,
-                        attack.getHitbox(),
-                        Color.Red
-                    );
-                }
-
-                foreach (Enemy enemy in level.enemies)
-				{
-                    //Draw enemy hitboxes
-                    _spriteBatch.Draw(
-                        blankTexture,
-                        enemy.getHitbox(),
-                        Color.Yellow
-                    );
-
-                    //Draw enemy healthbar
-                    _spriteBatch.Draw(
-                        blankTexture,
-                        enemy.healthBar.getBar(),
-                        enemy.healthBar.color
-                    );
-
-                    //Draw enemy attack hitboxes
-                    foreach (Attack attack in enemy.attacks)
-                    {
-                        _spriteBatch.Draw(
-                            blankTexture,
-                            attack.getHitbox(),
-                            Color.Orange
-                        );
-                    }
-                }
+                drawPlayer();
 
                 //Draw tile hitboxes
                 foreach (List<LevelComponent> rowList in level.list)
@@ -191,7 +119,7 @@ namespace C2Eindopdracht
                 }
             }
             else
-			{
+            {
                 //Draw player
                 _spriteBatch.Draw(
                     Player.tileSet,
@@ -207,18 +135,18 @@ namespace C2Eindopdracht
                 );
 
                 foreach (Enemy enemy in level.enemies)
-				{
+                {
                     //Draw enemy
                     if (enemy is FighterEnemy)
-					{
+                    {
                         _spriteBatch.Draw(
                             FighterEnemy.tileSet,
                             enemy.getPosition(),
                             Color.White
                         );
                     }
-                    else if(enemy is MageEnemy)
-					{
+                    else if (enemy is MageEnemy)
+                    {
                         _spriteBatch.Draw(
                            MageEnemy.tileSet,
                            enemy.getPosition(),
@@ -236,10 +164,10 @@ namespace C2Eindopdracht
                     //Draw projectiles
                     foreach (Attack attack in enemy.attacks)
                     {
-                        if(attack is Projectile)
+                        if (attack is Projectile)
                         {
                             Projectile projectileAttack = (Projectile)attack;
-                            if(projectileAttack.face == Face.LEFT)
+                            if (projectileAttack.face == Face.LEFT)
                             {
                                 _spriteBatch.Draw(
                                     Projectile.tileSet,
@@ -288,6 +216,88 @@ namespace C2Eindopdracht
             _spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void drawPlayer()
+        {
+            if (player.shieldActive)
+            {
+                _spriteBatch.Draw(
+                    blankTexture,
+                    player.getHitbox(),
+                    Color.GreenYellow
+                );
+            }
+            else
+            {
+                _spriteBatch.Draw(
+                    blankTexture,
+                    player.getHitbox(),
+                    Color.Green
+                );
+            }
+
+            //Draw player healthbar
+            _spriteBatch.Draw(
+                blankTexture,
+                player.healthBar.getBar(),
+                player.healthBar.color
+            );
+
+            //Draw player attack hitboxes
+            foreach (Attack attack in player.attacks)
+            {
+                _spriteBatch.Draw(
+                    blankTexture,
+                    attack.getHitbox(),
+                    Color.Red
+                );
+            }
+
+            foreach (Enemy enemy in level.enemies)
+            {
+                //Draw enemy hitboxes
+                _spriteBatch.Draw(
+                    blankTexture,
+                    enemy.getHitbox(),
+                    Color.Yellow
+                );
+
+                //Draw enemy healthbar
+                _spriteBatch.Draw(
+                    blankTexture,
+                    enemy.healthBar.getBar(),
+                    enemy.healthBar.color
+                );
+
+                //Draw enemy attack hitboxes
+                foreach (Attack attack in enemy.attacks)
+                {
+                    _spriteBatch.Draw(
+                        blankTexture,
+                        attack.getHitbox(),
+                        Color.Orange
+                    );
+                }
+            }
+        }
+
+        private void drawSpriteElements()
+        {
+            foreach (UIElement element in ui.elements)
+            {
+                _spriteBatch.DrawString(
+                    Arial16,
+                    element.label + ": " + element.value,
+                    element.position,
+                    Color.White,
+                    0f,
+                    new Vector2(0, 0),
+                    1f,
+                    SpriteEffects.None,
+                    .1f
+               );
+            }
         }
     }
 }

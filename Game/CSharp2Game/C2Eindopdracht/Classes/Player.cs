@@ -34,7 +34,7 @@ namespace C2Eindopdracht.Classes
         private int shieldTime { get; set; }
 
         private int maxShieldTime { get; set; }
-        private int shieldCD { get; set; }
+        private int shieldRefill { get; set; }
 
         public Player(int xPos, int yPos, int hp, float gravity, float xSpeed)
         {
@@ -58,7 +58,7 @@ namespace C2Eindopdracht.Classes
             this.healthBar = new HealthBar(new Rectangle(xPos, yPos, 50, 10), 50, Color.Gold, -17, -15);
 
             this.maxShieldTime = 120;
-            this.shieldCD = 30;
+            this.shieldRefill = 10;
         }
         
         public Vector2 getPosition()
@@ -128,33 +128,7 @@ namespace C2Eindopdracht.Classes
                 {
                     foreach (Rectangle wall in levelComponent.colliders)
                     {
-                        if (wall.Left < hitBox.Right && wall.Right > hitBox.Left)
-                        {
-                            if (wall.Top - hitBox.Bottom == 0)
-                            {
-                                touchingGrounds++;
-                            }
-                            else if (hitBox.Top - wall.Bottom < 1 && hitBox.Top - wall.Bottom > - 10)
-                            {
-                                ySpeed = 0;
-                            }
-                            else if (wall.Top - hitBox.Bottom < 1 && wall.Top - hitBox.Bottom > - 11)
-                            {
-                                touchingGrounds++;
-                                position.Y = wall.Top - hitBox.Height;
-                            }
-                        }
-                        if (wall.Top < hitBox.Bottom && wall.Bottom > hitBox.Top)
-                        {
-                            if (hitBox.Left - wall.Right < 1 && hitBox.Left - wall.Right > -5)
-                            {
-                                position.X = wall.Right + 2;
-                            }
-                            if (wall.Left - hitBox.Right < 1 && wall.Left - hitBox.Right > -5)
-                            {
-                                position.X = wall.Left - hitBox.Width - 2;
-                            }
-                        }
+                        touchingGrounds = NewMethod(touchingGrounds, wall);
                     }
                 }
             }
@@ -162,27 +136,10 @@ namespace C2Eindopdracht.Classes
             foreach(Enemy enemy in enemies)
 			{
                 foreach(Attack attack in attacks)
-				{
-                    if(attack.getHitbox().Intersects(enemy.getHitbox()) && !attack.enemiesHit.Contains(enemy))
-					{
-                        enemy.currHp -= 1;
-                        enemy.healthBar.updateHealthBar(enemy.maxHp, enemy.currHp);
-                        enemy.knockback = new Cooldown(.5f);
-                        if (position.X < enemy.getPosition().X)
-                        {
-                            enemy.xSpeed = 0 - enemy.xSpeed;
-                        }
-                        enemy.ySpeed = -5f;
-                        enemy.setPosition(new Vector2(enemy.getPosition().X, enemy.getPosition().Y - 5f));
-                        attack.hitEnemy(enemy);
-                        if (enemy.currHp <= 0)
-                        {
-                            enemy.isAlive = false;
-                            enemyCounter.value--;
-                        }
-                    }
-				}
-			}
+                {
+                    setEnemyLogic(enemyCounter, enemy, attack);
+                }
+            }
 
             List<Enemy> deadEnemies = new List<Enemy>();
             foreach(Enemy enemy in enemies)
@@ -217,7 +174,61 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        
+        private void setEnemyLogic(UIElement enemyCounter, Enemy enemy, Attack attack)
+        {
+            if (attack.getHitbox().Intersects(enemy.getHitbox()) && !attack.enemiesHit.Contains(enemy))
+            {
+                enemy.currHp -= 1;
+                enemy.healthBar.updateHealthBar(enemy.maxHp, enemy.currHp);
+                enemy.knockback = new Cooldown(.5f);
+                if (position.X < enemy.getPosition().X)
+                {
+                    enemy.xSpeed = 0 - enemy.xSpeed;
+                }
+                enemy.ySpeed = -5f;
+                enemy.setPosition(new Vector2(enemy.getPosition().X, enemy.getPosition().Y - 5f));
+                attack.hitEnemy(enemy);
+                if (enemy.currHp <= 0)
+                {
+                    enemy.isAlive = false;
+                    enemyCounter.value--;
+                }
+            }
+        }
+
+        private int NewMethod(int touchingGrounds, Rectangle wall)
+        {
+            if (wall.Left < hitBox.Right && wall.Right > hitBox.Left)
+            {
+                if (wall.Top - hitBox.Bottom == 0)
+                {
+                    touchingGrounds++;
+                }
+                else if (hitBox.Top - wall.Bottom < 1 && hitBox.Top - wall.Bottom > -10)
+                {
+                    ySpeed = 0;
+                }
+                else if (wall.Top - hitBox.Bottom < 1 && wall.Top - hitBox.Bottom > -11)
+                {
+                    touchingGrounds++;
+                    position.Y = wall.Top - hitBox.Height;
+                }
+            }
+            if (wall.Top < hitBox.Bottom && wall.Bottom > hitBox.Top)
+            {
+                if (hitBox.Left - wall.Right < 1 && hitBox.Left - wall.Right > -5)
+                {
+                    position.X = wall.Right + 2;
+                }
+                if (wall.Left - hitBox.Right < 1 && wall.Left - hitBox.Right > -5)
+                {
+                    position.X = wall.Left - hitBox.Width - 2;
+                }
+            }
+
+            return touchingGrounds;
+        }
+
 
         private void updateAttacks(GameTime gameTime)
         {
@@ -297,7 +308,7 @@ namespace C2Eindopdracht.Classes
             else if(shieldTime >= maxShieldTime)
             {
                 shieldActive = false;
-                shieldTime = shieldTime - shieldCD;
+                shieldTime = shieldTime - shieldRefill;
             }
             else if(keyboardState.IsKeyUp(Keys.K))
             {
