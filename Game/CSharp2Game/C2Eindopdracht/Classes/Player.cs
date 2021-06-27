@@ -35,6 +35,7 @@ namespace C2Eindopdracht.Classes
 
         private int maxShieldTime { get; set; }
         private int shieldRefill { get; set; }
+        private bool shieldUsed { get; set; }
 
         public Player(int xPos, int yPos, int hp, float gravity, float xSpeed)
         {
@@ -58,9 +59,10 @@ namespace C2Eindopdracht.Classes
             this.healthBar = new HealthBar(new Rectangle(xPos, yPos, 50, 10), 50, Color.Gold, -17, -15);
 
             this.maxShieldTime = 120;
-            this.shieldRefill = 10;
+            this.shieldRefill = 1;
+            this.shieldUsed = false;
         }
-        
+          
         public Vector2 getPosition()
         {
             return this.position;
@@ -300,15 +302,22 @@ namespace C2Eindopdracht.Classes
                 attack(1, new Cooldown(.5f), .2f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5);
             }
 
-            if (keyboardState.IsKeyDown(Keys.K) && canAttack && shieldTime < maxShieldTime)
+            if (keyboardState.IsKeyDown(Keys.K) && canAttack && shieldTime <= maxShieldTime && shieldUsed == false)
             {
                 shieldActive = true;
                 shieldTime++;
+                if(shieldTime == maxShieldTime) {
+                    shieldUsed = true;
+                }
             }
-            else if(shieldTime >= maxShieldTime)
+            else if(shieldUsed == true)
             {
                 shieldActive = false;
                 shieldTime = shieldTime - shieldRefill;
+                if (shieldTime == 0)
+                {
+                    shieldUsed = false;
+                }
             }
             else if(keyboardState.IsKeyUp(Keys.K))
             {
