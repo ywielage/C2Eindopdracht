@@ -13,6 +13,14 @@ namespace C2Eindopdracht.Classes
         public int xOffset { get; set; }
         public int yOffset { get; set; }
 
+        /// <summary>
+        /// Cosntructor voor Healthbar van units
+        /// </summary>
+        /// <param name="bar"></param>  Bar rectangle
+        /// <param name="fullWidth"></param> Wijdte bar
+        /// <param name="color"></param> Kleur bar
+        /// <param name="xOffset"></param> Horizontale offset bar
+        /// <param name="yOffset"></param> Verticale offset bar
         public HealthBar(Rectangle bar, int fullWidth, Color color, int xOffset, int yOffset)
         {
             this.bar = bar;
@@ -32,6 +40,11 @@ namespace C2Eindopdracht.Classes
             this.bar = bar;
         }
 
+        /// <summary>
+        /// Verander waarden van healthbar
+        /// </summary>
+        /// <param name="maxHp"></param> Maximale hp van healthbar
+        /// <param name="currHp"></param> Huidige hp 
         public void updateHealthBar(int maxHp, int currHp)
         {
             float percentHealthBar = (float)currHp / (float)maxHp;
