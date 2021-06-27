@@ -37,8 +37,8 @@ namespace C2Eindopdracht
             
             renderHitboxes = false;
             
-            level = new Level(2, 2, 2);
-            level.init(true);
+            level = new Level(5, 5, 20);
+            level.init(false);
             level.drawLevelInDebug();
 
             player = new Player(20 + level.levelComponentSize, 170 + level.levelComponentSize, 20, .3f, 200f);
@@ -47,7 +47,9 @@ namespace C2Eindopdracht
             ui.addUIElement("Enemies alive", level.enemies.Count, new Vector2(5, 5), 0);
             ui.addUIElement("To move press A and D, to jump press Space or W", new Vector2(5, 50), 10f);
             ui.addUIElement("To attack press J, to shield press K", new Vector2(5, 70), 10f);
-            ui.addUIElement("In shield your're not able to attack but can dodge other attacks", new Vector2(5, 90), 10f);
+            ui.addUIElement("In shield you're not able to attack but can dodge enemy attacks", new Vector2(5, 90), 10f);
+            ui.addUIElement("You can toggle the render mode by pressing Tab", new Vector2(5, 130), 10f);
+            ui.addUIElement("You can toggle fullscreen by pressing F", new Vector2(5, 150), 10f);
 
             base.Initialize();
         }
