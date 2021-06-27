@@ -4,15 +4,15 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/hp/StudioProjects/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/ball.png</File>
-    <File>C:/Users/hp/StudioProjects/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/blankTexture.png</File>
-    <File>C:/Users/hp/StudioProjects/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/character1.png</File>
-    <File>C:/Users/hp/StudioProjects/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/enemy1wit.png</File>
-    <File>C:/Users/hp/StudioProjects/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/enemyMage.png</File>
-    <File>C:/Users/hp/StudioProjects/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/fireball.png</File>
-    <File>C:/Users/hp/StudioProjects/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/fonts/Arial16.spritefont</File>
-    <File>C:/Users/hp/StudioProjects/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/tileset-map.png</File>
-    <File>C:/Users/hp/StudioProjects/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/tileset-map-squared.png</File>
+    <File>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/ball.png</File>
+    <File>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/blankTexture.png</File>
+    <File>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/character1.png</File>
+    <File>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/enemy1wit.png</File>
+    <File>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/enemyMage.png</File>
+    <File>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/fireball.png</File>
+    <File>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/fonts/Arial16.spritefont</File>
+    <File>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/tileset-map.png</File>
+    <File>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/tileset-map-squared.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />
