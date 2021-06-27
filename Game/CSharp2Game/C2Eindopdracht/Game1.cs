@@ -33,11 +33,12 @@ namespace C2Eindopdracht
             // TODO: Add your initialization logic here
             
             camera = new Camera();
-            camera.Zoom = 1.2f;
+            camera.Zoom = 1.1f;
             
             renderHitboxes = false;
             
-            level = new Level(5, 5, 20);
+            //Level with (levelcomponents wide, levelcomponents high, amount of enemies)
+            level = new Level(4, 4, 8);
             level.init(false);
             level.drawLevelInDebug();
 
@@ -45,7 +46,7 @@ namespace C2Eindopdracht
 
             ui = new UI(new Vector2(player.getPosition().X - _graphics.PreferredBackBufferWidth / 2, player.getPosition().Y - _graphics.PreferredBackBufferHeight / 2));
             ui.addUIElement("Enemies alive", level.enemies.Count, new Vector2(5, 5), 0);
-            ui.addUIElement("To move press A and D, to jump press Space or W", new Vector2(5, 50), 10f);
+            ui.addUIElement("To move press A and D, to jump press Space or W, you can walljump too!", new Vector2(5, 50), 10f);
             ui.addUIElement("To attack press J, to shield press K", new Vector2(5, 70), 10f);
             ui.addUIElement("In shield you're not able to attack but can dodge enemy attacks", new Vector2(5, 90), 10f);
             ui.addUIElement("You can toggle the render mode by pressing Tab", new Vector2(5, 130), 10f);
