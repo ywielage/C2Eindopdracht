@@ -30,6 +30,8 @@ namespace C2Eindopdracht.Classes
         public Cooldown attackCooldown { get; set; }
         public HealthBar healthBar { get; set; }
 
+        private int shieldTime { get; set; }
+
         public Player(int xPos, int yPos, int hp, float gravity, float xSpeed)
         {
             this.position = new Vector2(xPos, yPos);
@@ -274,9 +276,15 @@ namespace C2Eindopdracht.Classes
                 attack(1, new Cooldown(.5f), .2f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5);
             }
 
-            if (keyboardState.IsKeyDown(Keys.K) && canAttack)
+            if (keyboardState.IsKeyDown(Keys.K) && canAttack && shieldTime < 120)
             {
                 shieldActive = true;
+                shieldTime++;
+            }
+            else if(shieldTime >= 120)
+            {
+                shieldActive = false;
+                shieldTime = shieldTime - 30;
             }
             else if(keyboardState.IsKeyUp(Keys.K))
             {
