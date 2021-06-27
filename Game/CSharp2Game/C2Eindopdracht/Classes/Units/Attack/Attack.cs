@@ -15,7 +15,13 @@ namespace C2Eindopdracht.Classes
         public float activeTime { get; set; }
         public bool playerHit { get; set; }
         public List<Enemy> enemiesHit { get; set; }
-
+        /// <summary>
+        /// Logica voor aanvallen
+        /// </summary>
+        /// <param name="damage"></param> Schade aanval
+        /// <param name="cooldown"></param> Tijdsduur tot mogelijkheid volgende aanval
+        /// <param name="activeTime"></param> // Tijd actief
+        /// <param name="hitbox"></param> // Hitbox van aanval
         public Attack(int damage, Cooldown cooldown, float activeTime, Rectangle hitbox)
         {
             this.damage = damage;
