@@ -123,7 +123,7 @@ namespace C2Eindopdracht.Classes
                 {
                     foreach (Rectangle wall in levelComponent.colliders)
                     {
-                        touchingGrounds = NewMethod(touchingGrounds, wall);
+                        touchingGrounds = countTouchingGrounds(touchingGrounds, wall);
                     }
                 }
             }
@@ -169,7 +169,7 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        private void setEnemyLogic(UIElement enemyCounter, Enemy enemy, Attack attack)
+        private void setEnemyLogic(UIElementLabelValue enemyCounter, Enemy enemy, Attack attack)
         {
             if (attack.getHitbox().Intersects(enemy.getHitbox()) && !attack.enemiesHit.Contains(enemy))
             {
@@ -191,7 +191,7 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        private int NewMethod(int touchingGrounds, Rectangle wall)
+        private int countTouchingGrounds(int touchingGrounds, Rectangle wall)
         {
             if (wall.Left < hitBox.Right && wall.Right > hitBox.Left)
             {

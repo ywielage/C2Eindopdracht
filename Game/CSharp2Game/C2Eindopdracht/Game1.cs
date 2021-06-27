@@ -291,17 +291,35 @@ namespace C2Eindopdracht
         {
             foreach (UIElement element in ui.elements)
             {
-                _spriteBatch.DrawString(
-                    Arial16,
-                    element.label + ": " + element.value,
-                    element.position,
-                    Color.White,
-                    0f,
-                    new Vector2(0, 0),
-                    1f,
-                    SpriteEffects.None,
-                    .1f
-               );
+                if(element is UIElementLabelValue)
+				{
+                    UIElementLabelValue labelValue = (UIElementLabelValue)element;
+                    _spriteBatch.DrawString(
+                        Arial16,
+                        labelValue.label + ": " + labelValue.value,
+                        element.position,
+                        Color.White,
+                        0f,
+                        new Vector2(0, 0),
+                        1f,
+                        SpriteEffects.None,
+                        .1f
+                    );
+                }
+                else if(element is UIElementLabel)
+				{
+                    _spriteBatch.DrawString(
+                        Arial16,
+                        element.label,
+                        element.position,
+                        Color.White,
+                        0f,
+                        new Vector2(0, 0),
+                        1f,
+                        SpriteEffects.None,
+                        .1f
+                    );
+                }
             }
         }
     }
