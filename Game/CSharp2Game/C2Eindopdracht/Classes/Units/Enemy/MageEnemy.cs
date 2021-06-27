@@ -15,7 +15,15 @@ namespace C2Eindopdracht.Classes
         public override Aggression aggression { get; set; }
         public override int attackRange { get; set; }
         public static Texture2D tileSet { get; set; }
-        public MageEnemy(int xPos, int yPos, int width, int height) : base(xPos, yPos, width, height)
+        /// <summary>
+        /// Constructor of mage enemies
+        /// </summary>
+        /// <param name="xPos">Horizontal position</param> 
+        /// <param name="yPos">Vertical position</param> 
+        /// <param name="width">Width of mage enemy</param> 
+        /// <param name="height">Height of mage enemy</param> 
+        /// <param name="aggression">Aggression level of enemy</param> 
+        public MageEnemy(int xPos, int yPos, int  width, int height) : base(xPos, yPos, width, height)
         {
             maxHp = 3;
             currHp = 3;
@@ -25,6 +33,11 @@ namespace C2Eindopdracht.Classes
             attackRange = 100;
         }
 
+        /// <summary>
+        /// Algorithm which controls movement of enemy
+        /// </summary>
+        /// <param name="gameTime">Duration of game</param> 
+        /// <param name="player">Player object</param> 
         public override void decideMovement(GameTime gameTime, Player player)
         {
             Rectangle playerHitbox = player.getHitbox();
@@ -48,6 +61,15 @@ namespace C2Eindopdracht.Classes
             }
         }
 
+        /// <summary>
+        /// Decides when mage enemy attacks
+        /// </summary>
+        /// <param name="damage">Damage of attack</param> 
+        /// <param name="cooldown">Timespan until next attack</param> 
+        /// <param name="duration">Time attack takes</param> 
+        /// <param name="hitbox">Hitbox of attack</param> 
+        /// <param name="hitboxXOffSet">Hitbox offset of attack</param> 
+        /// <returns></returns>
         public override Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet)
 		{
             if (face == Face.LEFT)

@@ -8,7 +8,10 @@ namespace C2Eindopdracht.Classes
     {
         public float duration { get; set; }
         public float elapsedTime { get; set; }
-
+        /// <summary>
+        /// Keeps track of cooldown
+        /// </summary>
+        /// <param name="duration"></param>
         public Cooldown(float duration)
         {
             this.duration = duration;

@@ -15,6 +15,13 @@ namespace C2Eindopdracht.Classes
         public override Aggression aggression { get; set; }
 		public override int attackRange { get; set; }
         public static Texture2D tileSet { get; set; }
+        /// <summary>
+        /// Constructor of Fighter enemy
+        /// </summary>
+        /// <param name="xPos">Horizontal position</param>
+        /// <param name="yPos">Vertical position</param> 
+        /// <param name="width">Width of fighter enemy</param> 
+        /// <param name="height">Height of fighter enemy</param> 
         public FighterEnemy(int xPos, int yPos, int width, int height) : base(xPos, yPos, width, height)
         {
             maxHp = 5;
@@ -25,6 +32,11 @@ namespace C2Eindopdracht.Classes
             attackRange = 20;
         }
 
+        /// <summary>
+        /// Algorithm for behaviour enemy
+        /// </summary>
+        /// <param name="gameTime">Timespan game</param>
+        /// <param name="player">Player object</param>
         public override void decideMovement(GameTime gameTime, Player player)
         {
             Rectangle playerHitbox = player.getHitbox();
@@ -48,6 +60,15 @@ namespace C2Eindopdracht.Classes
             }
         }
 
+        /// <summary>
+        /// Attack default values
+        /// </summary>
+        /// <param name="damage">Damage amount of attack</param> 
+        /// <param name="cooldown">Timespan until next attack</param>
+        /// <param name="duration">Duration of attack</param> 
+        /// <param name="hitbox">Hitbox of attack</param> 
+        /// <param name="hitboxXOffSet">Hitbox offset of attack</param> 
+        /// <returns></returns>
         public override Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet)
         {
             if (face == Face.LEFT)

@@ -15,7 +15,13 @@ namespace C2Eindopdracht.Classes
         public float activeTime { get; set; }
         public bool playerHit { get; set; }
         public List<Enemy> enemiesHit { get; set; }
-
+        /// <summary>
+        /// Attack class, sets default values for attack
+        /// </summary>
+        /// <param name="damage">Value is the amount of damage an attack deals</param> 
+        /// <param name="cooldown">Timespan until next attack can be done</param> 
+        /// <param name="activeTime">Time attack is active</param>
+        /// <param name="hitbox">Hitbox of attack. If hitbox of attack hits unit, damage will be dealt</param> 
         public Attack(int damage, Cooldown cooldown, float activeTime, Rectangle hitbox)
         {
             this.damage = damage;

@@ -27,6 +27,13 @@ namespace C2Eindopdracht.Classes
         public abstract int attackRange { get; set; }
         public HealthBar healthBar { get; set; }
 
+        /// <summary>
+        /// Class made for enemies. 
+        /// </summary>
+        /// <param name="xPos">Horizontal Position</param> 
+        /// <param name="yPos">Vertical position</param> 
+        /// <param name="width">Width enemy</param>  
+        /// <param name="height">Height enemy</param>
         public Enemy(int xPos, int yPos, int width, int height)
         {
             this.position = new Vector2(xPos, yPos);
@@ -62,7 +69,13 @@ namespace C2Eindopdracht.Classes
         {
             this.hitBox = hitBox;
         }
-
+        /// <summary>
+        /// Update enemy
+        /// </summary>
+        /// <param name="gameTime">Timespan since start of game</param>
+        /// <param name="levelComponents">List of levelcomponents</param>
+        /// <param name="player">Player object</param> 
+        /// <param name="ui">UI object</param> 
         public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, Player player, UI ui)
         {
             checkCollisions(levelComponents, player, ui);
@@ -79,21 +92,30 @@ namespace C2Eindopdracht.Classes
             alignHealthBarToPosition();
             //printEnemyValues();
         }
-
+        /// <summary>
+        /// Adjusts hitbox to current position enemy
+        /// </summary>
         private void alignHitboxToPosition()
         {
             Rectangle hitbox = this.hitBox;
             hitbox.Location = position.ToPoint();
             this.hitBox = hitbox;
         }
-
+        /// <summary>
+        /// Adjust healthbar to current position enemy
+        /// </summary>
         private void alignHealthBarToPosition()
         {
             int healthBarHeight = this.healthBar.getBar().Height;
             int healthBarWidth = this.healthBar.getBar().Width;
             this.healthBar.setBar(new Rectangle(new Point((int)position.X + healthBar.xOffset, (int)position.Y + healthBar.yOffset), new Point(healthBarWidth, healthBarHeight)));
         }
-
+        /// <summary>
+        /// Checks for collissions between the enemy and walls
+        /// </summary>
+        /// <param name="walls">Walls of the level</param> 
+        /// <param name="player">Player object</param>
+        /// <param name="ui">UI object</param> 
         private void checkCollisions(List<List<LevelComponent>> walls, Player player, UI ui)
         {
             int touchingGrounds = 0;
@@ -177,7 +199,10 @@ namespace C2Eindopdracht.Classes
                 position.Y += ySpeed;
             }
         }
-
+        /// <summary>
+        /// Updates the attacks. Adds/removes cooldown
+        /// </summary>
+        /// <param name="gameTime">Timespan since start of game</param> 
         private void updateAttacks(GameTime gameTime)
         {
             for (int i = 0; i < attacks.Count; i++)
@@ -216,6 +241,10 @@ namespace C2Eindopdracht.Classes
             }
         }
 
+        /// <summary>
+        /// Changes knockback values
+        /// </summary>
+        /// <param name="gameTime"></param>
         private void updateKnockBack(GameTime gameTime)
         {
             knockback.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -264,7 +293,9 @@ namespace C2Eindopdracht.Classes
         }
 
         public abstract Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet);
-
+        /// <summary>
+        /// Prints values of enemy
+        /// </summary>
         public void printEnemyValues()
         {
             Debug.WriteLine("=============================");
@@ -275,7 +306,9 @@ namespace C2Eindopdracht.Classes
             Debug.WriteLine("Double jump available: " + grounded);
         } 
     }
-
+    /// <summary>
+    /// Enum which shows all possible aggression levels of enemies
+    /// </summary>
     enum Aggression
     {
         FRIENDLY,
