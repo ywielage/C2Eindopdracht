@@ -69,6 +69,7 @@ namespace C2Eindopdracht.Classes
         {
             this.hitBox = hitBox;
         }
+
         /// <summary>
         /// Update enemy
         /// </summary>
@@ -92,6 +93,7 @@ namespace C2Eindopdracht.Classes
             alignHealthBarToPosition();
             //printEnemyValues();
         }
+
         /// <summary>
         /// Adjusts hitbox to current position enemy
         /// </summary>
@@ -101,6 +103,7 @@ namespace C2Eindopdracht.Classes
             hitbox.Location = position.ToPoint();
             this.hitBox = hitbox;
         }
+
         /// <summary>
         /// Adjust healthbar to current position enemy
         /// </summary>
@@ -110,6 +113,7 @@ namespace C2Eindopdracht.Classes
             int healthBarWidth = this.healthBar.getBar().Width;
             this.healthBar.setBar(new Rectangle(new Point((int)position.X + healthBar.xOffset, (int)position.Y + healthBar.yOffset), new Point(healthBarWidth, healthBarHeight)));
         }
+
         /// <summary>
         /// Checks for collissions between the enemy and walls
         /// </summary>
@@ -199,6 +203,7 @@ namespace C2Eindopdracht.Classes
                 position.Y += ySpeed;
             }
         }
+
         /// <summary>
         /// Updates the attacks. Adds/removes cooldown
         /// </summary>
@@ -293,6 +298,7 @@ namespace C2Eindopdracht.Classes
         }
 
         public abstract Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet);
+
         /// <summary>
         /// Prints values of enemy
         /// </summary>
