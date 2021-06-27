@@ -15,6 +15,7 @@ namespace C2Eindopdracht.Classes
         public float activeTime { get; set; }
         public bool playerHit { get; set; }
         public List<Enemy> enemiesHit { get; set; }
+
         /// <summary>
         /// Attack class, sets default values for attack
         /// </summary>

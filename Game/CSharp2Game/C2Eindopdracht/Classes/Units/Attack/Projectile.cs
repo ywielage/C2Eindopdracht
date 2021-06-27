@@ -11,6 +11,7 @@ namespace C2Eindopdracht.Classes
 		public float xSpeed { get; set; } 
 		public Face face { get; set; }
 		public static Texture2D tileSet { get; set; }
+
 		/// <summary>
 		/// Constructor, sets all default values
 		/// </summary>

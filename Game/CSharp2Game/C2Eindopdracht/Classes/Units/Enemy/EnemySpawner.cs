@@ -7,6 +7,7 @@ namespace C2Eindopdracht.Classes
 	class EnemySpawner
 	{
 		public int amount { get; set; }
+
 		/// <summary>
 		/// Sets amount of enemies
 		/// </summary>

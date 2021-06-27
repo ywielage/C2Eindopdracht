@@ -15,6 +15,7 @@ namespace C2Eindopdracht.Classes
         public override Aggression aggression { get; set; }
         public override int attackRange { get; set; }
         public static Texture2D tileSet { get; set; }
+
         /// <summary>
         /// Constructor of mage enemies
         /// </summary>
