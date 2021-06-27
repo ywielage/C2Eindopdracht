@@ -16,12 +16,12 @@ namespace C2Eindopdracht.Classes
 		public override int attackRange { get; set; }
         public static Texture2D tileSet { get; set; }
         /// <summary>
-        /// Constructor voor FighterEnemy
+        /// Constructor of Fighter enemy
         /// </summary>
-        /// <param name="xPos"></param> Horizontale positie
-        /// <param name="yPos"></param> Verticale positie
-        /// <param name="width"></param> Wijdte 
-        /// <param name="height"></param> Hoogte
+        /// <param name="xPos">Horizontal position</param>
+        /// <param name="yPos">Vertical position</param> 
+        /// <param name="width">Width of fighter enemy</param> 
+        /// <param name="height">Height of fighter enemy</param> 
         public FighterEnemy(int xPos, int yPos, int width, int height) : base(xPos, yPos, width, height)
         {
             maxHp = 5;
@@ -33,10 +33,10 @@ namespace C2Eindopdracht.Classes
         }
 
         /// <summary>
-        /// Algoritme voor gedrag enemy
+        /// Algorithm for behaviour enemy
         /// </summary>
-        /// <param name="gameTime"></param>
-        /// <param name="player"></param>
+        /// <param name="gameTime">Timespan game</param>
+        /// <param name="player">Player object</param>
         public override void decideMovement(GameTime gameTime, Player player)
         {
             Rectangle playerHitbox = player.getHitbox();
@@ -61,13 +61,13 @@ namespace C2Eindopdracht.Classes
         }
 
         /// <summary>
-        /// Logica voor aanvallen enemy
+        /// Attack default values
         /// </summary>
-        /// <param name="damage"></param> Schade van aanval
-        /// <param name="cooldown"></param> Tijdsduur tot volgende aanval
-        /// <param name="duration"></param> Looptijd van aanval
-        /// <param name="hitbox"></param> Hitbox van aanval
-        /// <param name="hitboxXOffSet"></param> Hitbox offset van aanval
+        /// <param name="damage">Damage amount of attack</param> 
+        /// <param name="cooldown">Timespan until next attack</param>
+        /// <param name="duration">Duration of attack</param> 
+        /// <param name="hitbox">Hitbox of attack</param> 
+        /// <param name="hitboxXOffSet">Hitbox offset of attack</param> 
         /// <returns></returns>
         public override Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet)
         {

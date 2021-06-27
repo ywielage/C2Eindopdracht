@@ -37,13 +37,13 @@ namespace C2Eindopdracht.Classes
         private bool shieldUsed { get; set; }
 
         /// <summary>
-        /// Constructor van player, set alle waarden
+        /// Sets default values
         /// </summary>
-        /// <param name="xPos"></param> Horizontale positie
-        /// <param name="yPos"></param> Verticale positie
-        /// <param name="hp"></param> // Aantal levens
-        /// <param name="gravity"></param> Haalt speler naar de grond
-        /// <param name="xSpeed"></param> // Horizontale snelheid
+        /// <param name="xPos">Horizontal position</param> 
+        /// <param name="yPos">Vertical position</param> 
+        /// <param name="hp">Amount of lives</param>
+        /// <param name="gravity">Takes the player back to ground</param> 
+        /// <param name="xSpeed">Horizontal speed</param> 
         public Player(int xPos, int yPos, int hp, float gravity, float xSpeed)
         {
             this.position = new Vector2(xPos, yPos);
@@ -91,12 +91,12 @@ namespace C2Eindopdracht.Classes
         }
 
         /// <summary>
-        /// Update game
+        /// Updates game
         /// </summary>
-        /// <param name="gameTime"></param> Wordt gebruikt om tijd in game te meten
-        /// <param name="levelComponents"></param> // Lijst van levelcomponents klasse
-        /// <param name="enemies"></param> // Lijst van enemies
-        /// <param name="enemyCounter"></param> // Telt alle enemies
+        /// <param name="gameTime">Timespan of game</param> 
+        /// <param name="levelComponents">List of levelcomponents</param>
+        /// <param name="enemies">List of enemies</param> 
+        /// <param name="enemyCounter">Counts all enemies</param> 
         public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, List<Enemy> enemies, UIElementLabelValue enemyCounter)
 		{
             checkCollisions(levelComponents, enemies, enemyCounter);
@@ -115,7 +115,7 @@ namespace C2Eindopdracht.Classes
         }
 
         /// <summary>
-        /// Update positie hitbox bij potentiële beweging
+        /// Adjust hitbox to position player
         /// </summary>
         private void alignHitboxToPosition()
         {
@@ -125,7 +125,7 @@ namespace C2Eindopdracht.Classes
         }
 
         /// <summary>
-        /// Update positie healthbar bij potentiële beweging
+        /// Adjust healthbar to position player
         /// </summary>
         private void alignHealthBarToPosition()
         {
@@ -135,69 +135,10 @@ namespace C2Eindopdracht.Classes
         }
 
         /// <summary>
-        /// Kijkt of er gebotss wordt met muren
+        /// Checks for collission
         /// </summary>
-        /// <param name="walls"></param> Muren van het level
-        /// <param name="enemies"></param> Enemies in het level
-        /// <param name="enemyCounter"></param> // Aantal enemies
-        private void checkCollisions(List<List<LevelComponent>> walls, List<Enemy> enemies, UIElementLabelValue enemyCounter)
-        {
-            int touchingGrounds = 0;
-
-            foreach (List<LevelComponent> rowList in walls)
-            {
-                foreach (LevelComponent levelComponent in rowList)
-                {
-                    foreach (Rectangle wall in levelComponent.colliders)
-                    {
-                        touchingGrounds = countTouchingGrounds(touchingGrounds, wall);
-                    }
-                }
-            }
-
-            foreach(Enemy enemy in enemies)
-			{
-                foreach(Attack attack in attacks)
-                {
-                    setEnemyLogic(enemyCounter, enemy, attack);
-                }
-            }
-
-            List<Enemy> deadEnemies = new List<Enemy>();
-            foreach(Enemy enemy in enemies)
-			{
-                if(!enemy.isAlive)
-				{
-                    deadEnemies.Add(enemy);
-				}
-			}
-            enemies.RemoveAll(enemy => deadEnemies.Contains(enemy));
-
-            if (touchingGrounds >= 1)
-            {
-                grounded = true;
-            }
-            else
-            {
-                grounded = false;
-            }
-            if (grounded)
-            {
-                doubleJumpAvailable = true;
-                ySpeed = 0;
-            }
-            else
-            {
-                if(ySpeed < 10)
-                {
-                    ySpeed += gravity;
-                }
-                position.Y += ySpeed;
-            }
-        }
-
-        /// <summary>
-        /// Zet alle waarden voor enemy
+        /// <param name="walls">Walls of the level</param> 
+        /// <param name="enemies">Enemies in level</param
         /// </summary>
         /// <param name="enemyCounter"></param> // Aantal enemies
         /// <param name="enemy"></param> // Enemy object
@@ -225,7 +166,7 @@ namespace C2Eindopdracht.Classes
         }
 
         /// <summary>
-        /// Geeft aan waar de speler kan staan
+        /// Checks if player can stand here
         /// </summary>
         /// <param name="touchingGrounds"></param>
         /// <param name="wall"></param>
@@ -296,7 +237,7 @@ namespace C2Eindopdracht.Classes
         }
 
         /// <summary>
-        /// Verandert knockback gebaseerd op gepasseerde tijd
+        /// Adjusts knockback bases on time passed
         /// </summary>
         /// <param name="gameTime"></param>
         private void updateKnockBack(GameTime gameTime)
@@ -315,12 +256,9 @@ namespace C2Eindopdracht.Classes
         }
 
         /// <summary>
-        /// Kijkt of een knop is ingedrukt of niet
-        /// BIJ WASD beweegt karakter
-        /// BIJ J valt karakter aan
-        /// BIJ K schild het karakter zich voor damage + knockback (Shield heeft een maximale timer van 120 ticks)
+        /// Adjusts when key is pressed
         /// </summary>
-        /// <param name="gameTime"></param> // Tijd gepasseerd in game
+        /// <param name="gameTime">Timespan game</param> 
         private void checkKeyPresses(GameTime gameTime)
         {
             var keyboardState = SmartKeyboard.GetState();
@@ -367,10 +305,6 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        /// <summary>
-        /// Logica om naar links te bewegen
-        /// </summary>
-        /// <param name="gameTime"></param>
         private void moveLeft(GameTime gameTime)
         {
             if(attackCooldown.elapsedTime >= attackCooldown.duration)
@@ -380,10 +314,6 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        /// <summary>
-        /// Logica om naar rechts te bewegen
-        /// </summary>
-        /// <param name="gameTime"></param>
         private void moveRight(GameTime gameTime)
         {
             if (attackCooldown.elapsedTime >= attackCooldown.duration)
@@ -393,11 +323,6 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        /// <summary>
-        /// Logica om te springen. Reset de doublejump wanneer de grond wordt aangeraakt.
-        /// </summary>
-        /// <param name="jumpSpeed"></param>
-        /// <param name="jumpStartHeight"></param>
         private void jump(float jumpSpeed, float jumpStartHeight)
         {
             if (attackCooldown.elapsedTime >= attackCooldown.duration)
@@ -421,13 +346,13 @@ namespace C2Eindopdracht.Classes
         }
 
         /// <summary>
-        /// Logica voor aanvallen. 
+        /// Attack default values
         /// </summary>
-        /// <param name="damage"></param> Schade bij aanval 
-        /// <param name="cooldown"></param> Cooldown voor volgende aanval mogelijk is
-        /// <param name="duration"></param> Looptijd van een aanval
-        /// <param name="hitbox"></param> Hitbox van een aanval, welke overeen moet komen met hitbox van enemy om schade te doen
-        /// <param name="hitboxXOffSet"></param> // Hitbox offset van aanval
+        /// <param name="damage">Attack damage value</param>
+        /// <param name="cooldown">Cooldown until possibility next attack</param> 
+        /// <param name="duration">Duration of attack</param> 
+        /// <param name="hitbox">Hitbox of attack</param> 
+        /// <param name="hitboxXOffSet">Hitbox offset of attack</param> 
         private void attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet)
         {
             if (face == Face.LEFT) 
@@ -442,7 +367,7 @@ namespace C2Eindopdracht.Classes
         }
 
         /// <summary>
-        /// UI element voor game over.
+        /// UI element in case of Game over
         /// </summary>
         /// <param name="ui"></param>
         public void gameOver(UI ui)
@@ -452,7 +377,7 @@ namespace C2Eindopdracht.Classes
         }
 
         /// <summary>
-        /// Print waarden van player
+        /// Prints values of player
         /// </summary>
         public void printPlayerValues()
         {
@@ -465,7 +390,7 @@ namespace C2Eindopdracht.Classes
         }
     }
     /// <summary>
-    /// Richtingen
+    /// Possible directions player
     /// </summary>
     enum Face
     {

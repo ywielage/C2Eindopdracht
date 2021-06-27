@@ -7,11 +7,24 @@ namespace C2Eindopdracht.Classes
 	class EnemySpawner
 	{
 		public int amount { get; set; }
+		/// <summary>
+		/// Sets amount of enemies
+		/// </summary>
+		/// <param name="amount">Amount of enemies</param>
 		public EnemySpawner(int amount)
 		{
 			this.amount = amount;
 		}
 
+		/// <summary>
+		/// Spawn a random enemy in any of the empty spots in the level
+		/// </summary>
+		/// <param name="width"></param>
+		/// <param name="height"></param>
+		/// <param name="levelComponent"></param>
+		/// <param name="tileSize"></param>
+		/// <param name="levelComponents"></param>
+		/// <returns></returns>
 		public List<Enemy> spawnEnemies(int width, int height, int levelComponent, int tileSize, List<List<LevelComponent>> levelComponents)
 		{
 			List<Enemy> enemies = new List<Enemy>();
