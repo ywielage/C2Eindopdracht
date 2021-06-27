@@ -96,3 +96,39 @@ C:\Users\larsk\OneDrive\Documenten\Stenden\Jaar 2\Periode 4\C2Eindopdracht\Game\
 C:\Users\larsk\OneDrive\Documenten\Stenden\Jaar 2\Periode 4\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\enemyFighter.xnb
 C:\Users\larsk\OneDrive\Documenten\Stenden\Jaar 2\Periode 4\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\enemyMage.xnb
 C:\Users\larsk\OneDrive\Documenten\Stenden\Jaar 2\Periode 4\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\fonts\Arial16.xnb
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\character.xnb
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\character2.xnb
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\enemy1wit.xnb
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\ball.xnb
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\blankTexture.xnb
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\character1.xnb
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\enemyFighter.xnb
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\enemyMage.xnb
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\fireball.xnb
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\fonts\Arial16.xnb
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\tileset-map-squared.xnb
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\tileset-map.xnb
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\C2Eindopdracht.exe
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\C2Eindopdracht.deps.json
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\C2Eindopdracht.runtimeconfig.json
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\C2Eindopdracht.runtimeconfig.dev.json
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\C2Eindopdracht.dll
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\C2Eindopdracht.pdb
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\MonoGame.Framework.dll
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\runtimes\linux-x64\native\libSDL2-2.0.so.0
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\runtimes\linux-x64\native\libopenal.so.1
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\runtimes\osx\native\libSDL2-2.0.0.dylib
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\runtimes\osx\native\libopenal.1.dylib
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\SDL2.dll
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\soft_oal.dll
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\SDL2.dll
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\soft_oal.dll
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\obj\Debug\netcoreapp3.1\C2Eindopdracht.csproj.AssemblyReference.cache
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\obj\Debug\netcoreapp3.1\C2Eindopdracht.AssemblyInfoInputs.cache
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\obj\Debug\netcoreapp3.1\C2Eindopdracht.AssemblyInfo.cs
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\obj\Debug\netcoreapp3.1\C2Eindopdracht.csproj.CoreCompileInputs.cache
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\obj\Debug\netcoreapp3.1\C2Eindopdracht.csproj.CopyComplete
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\obj\Debug\netcoreapp3.1\C2Eindopdracht.dll
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\obj\Debug\netcoreapp3.1\C2Eindopdracht.pdb
+C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\obj\Debug\netcoreapp3.1\C2Eindopdracht.genruntimeconfig.cache

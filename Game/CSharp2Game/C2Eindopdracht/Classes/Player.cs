@@ -29,7 +29,6 @@ namespace C2Eindopdracht.Classes
         public Cooldown knockback { get; set; }
         public Cooldown attackCooldown { get; set; }
         public HealthBar healthBar { get; set; }
-        public ShieldBar shieldBar { get; set; }
 
         private int shieldTime { get; set; }
 
@@ -110,12 +109,6 @@ namespace C2Eindopdracht.Classes
             int healthBarHeight = this.healthBar.getBar().Height;
             int healthBarWidth = this.healthBar.getBar().Width;
             this.healthBar.setBar(new Rectangle(new Point((int)position.X + healthBar.xOffset, (int)position.Y + healthBar.yOffset), new Point(healthBarWidth, healthBarHeight)));
-        }
-        private void alignShieldBarToPosition()
-        {
-            int shieldBarHeight = this.shieldBar.getBar().Height;
-            int shieldBarWidth = this.shieldBar.getBar().Width;
-            //this.shieldBar.setBar(new Rectangle(new Point((int)position.X + shieldBar.xOffset, (int)position.Y + shieldBar.yOffset), new Point(shieldBarWidth, shieldBarHeight)));
         }
 
         private void checkCollisions(List<List<LevelComponent>> walls, List<Enemy> enemies, UIElement enemyCounter)
