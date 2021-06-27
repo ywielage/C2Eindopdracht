@@ -26,11 +26,11 @@ namespace C2Eindopdracht.Classes
 			{
                 throw new LevelTooSmallException(width, height);
             }
-            this.width = width;
-            this.height = height;
+            this.width = width + 2;
+            this.height = height + 2;
             this.levelComponentSize = 384;
             this.tileSize = 24;
-            this.endTrigger = new Rectangle(levelComponentSize * width - tileSize, (levelComponentSize * height - levelComponentSize / 2) - tileSize, tileSize, tileSize * 2);
+            this.endTrigger = new Rectangle(levelComponentSize * (width + 1) - tileSize, (levelComponentSize * (height + 1)- levelComponentSize / 2) - tileSize, tileSize, tileSize * 2);
 
             tileMapLoader = new TileMapLoader();
             enemySpawner = new EnemySpawner(enemyAmount);
@@ -39,6 +39,7 @@ namespace C2Eindopdracht.Classes
 
         public void init(bool debug)
         {
+            
             list = initList(width, height);
 
             int resetCount = 0;
@@ -64,8 +65,8 @@ namespace C2Eindopdracht.Classes
 
         private bool createPath(int width, int height, bool debug)
         {
-            int xPos = 0;
-            int yPos = 0;
+            int xPos = 1;
+            int yPos = 1;
             Directions lastExit = Directions.SOUTH;
             var random = new Random();
             int count = 0;
@@ -80,18 +81,18 @@ namespace C2Eindopdracht.Classes
                     }
                     count = 0;
                 }
-                if (xPos == 0 && yPos == 0)
+                if (xPos == 1 && yPos == 1)
                 {
                     if(debug)
                     {
                         printLevelComponent(xPos, yPos, Directions.WEST, 3);
                     }
                     
-                    list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], Directions.WEST, Directions.SOUTH, 0, 0);
+                    list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], Directions.WEST, Directions.SOUTH, 1, 1);
                     lastExit = Directions.SOUTH;
                     yPos++;
                 }
-                else if (yPos + 1 == height && xPos + 1 == width)
+                else if (yPos == height - 2 && xPos == width - 2)
                 {
                     if (debug)
                     {
@@ -111,7 +112,7 @@ namespace C2Eindopdracht.Classes
                     }
 
                     Directions exit;
-                    if (randomDirection == 1 && yPos > 0)
+                    if (randomDirection == 1 && yPos > 1)
                     {
                         if (lastExit != Directions.SOUTH && !list[yPos-1][xPos].isFilled)
                         {
@@ -123,7 +124,7 @@ namespace C2Eindopdracht.Classes
                         }
 
                     }
-                    else if (randomDirection == 2 && xPos < width-1)
+                    else if (randomDirection == 2 && xPos < width - 2)
                     {
                         if (lastExit != Directions.WEST && !list[yPos][xPos+1].isFilled)
                         {
@@ -135,7 +136,7 @@ namespace C2Eindopdracht.Classes
                         }
 
                     }
-                    else if (randomDirection == 3 && yPos < height-1)
+                    else if (randomDirection == 3 && yPos < height - 2)
                     {
                         if (lastExit != Directions.NORTH && !list[yPos+1][xPos].isFilled)
                         {
@@ -147,7 +148,7 @@ namespace C2Eindopdracht.Classes
                         }
 
                     }
-                    else if (randomDirection == 4 && xPos > 0)
+                    else if (randomDirection == 4 && xPos > 1)
                     {
                         if (lastExit != Directions.EAST && !list[yPos][xPos-1].isFilled)
                         {
@@ -191,14 +192,26 @@ namespace C2Eindopdracht.Classes
 
         private void assignComponentTileMapAndColliders(TileMapLoader tileMapLoader)
         {
+            assignEnd(tileMapLoader);
             foreach (List<LevelComponent> rowList in list)
             {
                 foreach (LevelComponent levelComponent in rowList)
                 {
-                    levelComponent.assignTileMap(tileMapLoader);
-                    levelComponent.assignColliders(tileSize);
+                    if(!(levelComponent.entrance == Directions.WEST && levelComponent.exit == Directions.NONE))
+					{
+                        levelComponent.assignTileMap(tileMapLoader);
+                        levelComponent.assignColliders(tileSize);
+                    }
                 }
             }
+        }
+
+        private void assignEnd(TileMapLoader tileMapLoader)
+        {
+            list[height - 2][width - 1].entrance = Directions.WEST;
+            list[height - 2][width - 1].exit = Directions.NONE;
+            list[height - 2][width - 1].assignTileMap(tileMapLoader);
+            list[height - 2][width - 1].assignColliders(tileSize);
         }
 
         private void setPositionOfEmptyLevelComponents()
@@ -379,7 +392,7 @@ namespace C2Eindopdracht.Classes
             bool south = false;
             bool west = false;
 
-            if(y > 0)
+            if(y > 1)
             {
                 if(list[y - 1][x].isFilled)
                 {
@@ -391,7 +404,7 @@ namespace C2Eindopdracht.Classes
                 north = true;
             }
 
-            if(x < width - 1)
+            if(x < width - 2)
             {
                 if (list[y][x + 1].isFilled)
                 {
@@ -403,7 +416,7 @@ namespace C2Eindopdracht.Classes
                 east = true;
             }
 
-            if(y < height - 1)
+            if(y < height - 2)
             {
                 if (list[y + 1][x].isFilled)
                 {
@@ -415,7 +428,7 @@ namespace C2Eindopdracht.Classes
                 south = true;
             }
 
-            if (x > 0)
+            if (x > 1)
             {
                 if (list[y][x - 1].isFilled)
                 {

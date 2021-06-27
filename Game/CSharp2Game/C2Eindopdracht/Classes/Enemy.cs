@@ -63,9 +63,9 @@ namespace C2Eindopdracht.Classes
             this.hitBox = hitBox;
         }
 
-        public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, Player player)
+        public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, Player player, UI ui)
         {
-            checkCollisions(levelComponents, player);
+            checkCollisions(levelComponents, player, ui);
             if (knockback != null)
             {
                 updateKnockBack(gameTime);
@@ -94,7 +94,7 @@ namespace C2Eindopdracht.Classes
             this.healthBar.setBar(new Rectangle(new Point((int)position.X + healthBar.xOffset, (int)position.Y + healthBar.yOffset), new Point(healthBarWidth, healthBarHeight)));
         }
 
-        private void checkCollisions(List<List<LevelComponent>> walls, Player player)
+        private void checkCollisions(List<List<LevelComponent>> walls, Player player, UI ui)
         {
             int touchingGrounds = 0;
 
@@ -151,7 +151,7 @@ namespace C2Eindopdracht.Classes
                     attack.hitPlayer();
                     if(player.currHp <= 0)
 					{
-                        player.isAlive = false;
+                        player.gameOver(ui);
 					}
                 }
             }
