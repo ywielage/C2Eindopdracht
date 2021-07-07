@@ -9,7 +9,7 @@ namespace C2Eindopdracht.Classes
 {
     class Attack
     {
-        protected Rectangle hitbox;
+        public Rectangle hitbox { get; set; }
         public int damage { get; set; }
         public Cooldown cooldown { get; set; }
         public float activeTime { get; set; }
@@ -35,26 +35,28 @@ namespace C2Eindopdracht.Classes
             this.expired = false;
         }
 
-        public Rectangle getHitbox()
-        {
-            return this.hitbox;
-        }
-
-        public void setHitbox(Rectangle hitBox)
-        {
-            this.hitbox = hitBox;
-        }
-
+        /// <summary>
+        /// Hit the enemy adding the enemy to list of enemies hit
+        /// </summary>
+        /// <param name="enemy">Enemy that got hit</param>
         public void hitEnemy(Enemy enemy)
 		{
             enemiesHit.Add(enemy);
 		}
 
+        /// <summary>
+        /// Hit the player marking the attack as hit
+        /// </summary>
         public void hitPlayer()
 		{
             playerHit = true;
 		}
 
+        /// <summary>
+        /// Update the attack, elapsing the duration
+        /// </summary>
+        /// <param name="gameTime">Holds the timestate of a Game</param>
+        /// <returns>The updated attack</returns>
         public virtual Attack update(GameTime gameTime)
 		{
             if (cooldown.elapsedTime >= activeTime)
@@ -65,7 +67,6 @@ namespace C2Eindopdracht.Classes
             {
                 cooldown.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-
             return this;
 		}
     }

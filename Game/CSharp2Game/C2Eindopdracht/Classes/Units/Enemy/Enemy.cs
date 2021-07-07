@@ -30,7 +30,7 @@ namespace C2Eindopdracht.Classes
         /// <summary>
         /// Update enemy
         /// </summary>
-        /// <param name="gameTime">Timespan since start of game</param>
+        /// <param name="gameTime">Holds the timestate of a Game</param>
         /// <param name="levelComponents">List of levelcomponents</param>
         /// <param name="player">Player object</param> 
         /// <param name="ui">UI object</param> 
@@ -52,6 +52,11 @@ namespace C2Eindopdracht.Classes
             //printValues();
         }
 
+        /// <summary>
+        /// Check if any of the player attack hitboxes collide with the enemy.
+        /// </summary>
+        /// <param name="enemies"></param>
+        /// <param name="enemyCounter"></param>
         private void checkHitboxCollisions(Player player, UI ui)
 		{
             foreach (Attack attack in attacks)
@@ -60,9 +65,14 @@ namespace C2Eindopdracht.Classes
             }
         }
 
+        /// <summary>
+        /// Strike the enemy with an attack, dealing damage
+        /// </summary>
+        /// <param name="enemyCounter">User interface element which holds the count of enemies</param>
+        /// <param name="attack">Attack to see if it collides with the enemy</param>
         public void struck(UIElementLabelValue enemyCounter, Attack attack)
         {
-            if (attack.getHitbox().Intersects(hitBox) && !attack.enemiesHit.Contains(this))
+            if (attack.hitbox.Intersects(hitbox) && !attack.enemiesHit.Contains(this))
             {
                 currHp -= 1;
                 healthBar.updateHealthBar(maxHp, currHp);
@@ -72,7 +82,7 @@ namespace C2Eindopdracht.Classes
                     xSpeed = 0 - xSpeed;
                 }
                 ySpeed = -5f;
-                setPosition(new Vector2(position.X, position.Y - 5f));
+                position = new Vector2(position.X, position.Y - 5f);
                 attack.hitEnemy(this);
                 if (currHp <= 0)
                 {
@@ -80,8 +90,13 @@ namespace C2Eindopdracht.Classes
                     enemyCounter.value--;
                 }
             }
-        }        
+        }
 
+        /// <summary>
+        /// Decide where to go or to attack based on the position of the player
+        /// </summary>
+        /// <param name="gameTime">Holds the timestate of a Game</param>
+        /// <param name="player">The player</param>
         public abstract void decideMovement(GameTime gameTime, Player player);
 
         protected override void jump(float jumpSpeed, float jumpStartHeight)
@@ -90,8 +105,10 @@ namespace C2Eindopdracht.Classes
             {
                 if (grounded)
                 {
+                    Vector2 tempPosition = position;
                     ySpeed = 0 - jumpSpeed;
-                    position.Y -= jumpStartHeight;
+                    tempPosition.Y -= jumpStartHeight;
+                    position = tempPosition;
                 }
             }
         }        

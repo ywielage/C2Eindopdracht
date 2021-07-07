@@ -20,7 +20,7 @@ namespace C2Eindopdracht.Classes
 		/// Update the UI position and all of it's elements
 		/// </summary>
 		/// <param name="position">Position to update to</param>
-		/// <param name="gameTime">Gametime to see how much time has passed</param>
+		/// <param name="gameTime">Holds the timestate of a Game</param>
 		public void update(Vector2 position, GameTime gameTime)
 		{
 			this.position = position;

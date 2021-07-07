@@ -44,9 +44,9 @@ namespace C2Eindopdracht.Classes
         }
 
         /// <summary>
-        /// Update game
+        /// Update player
         /// </summary>
-        /// <param name="gameTime">Used to measure time</param>
+        /// <param name="gameTime">Holds the timestate of a Game</param>
         /// <param name="levelComponents">List of levelcomponents</param>
         /// <param name="enemies">List of enemies</param>
         /// <param name="enemyCounter">Count of alive enemies</param>
@@ -68,6 +68,12 @@ namespace C2Eindopdracht.Classes
             //printValues();
         }        
 
+        /// <summary>
+        /// Check if any of the enemy attack hitboxes collide with the player.
+        /// Remove enemies that have died.
+        /// </summary>
+        /// <param name="enemies"></param>
+        /// <param name="enemyCounter"></param>
         private void checkHitboxCollisions(List<Enemy> enemies, UIElementLabelValue enemyCounter)
 		{
             foreach (Enemy enemy in enemies)
@@ -89,9 +95,14 @@ namespace C2Eindopdracht.Classes
             enemies.RemoveAll(enemy => deadEnemies.Contains(enemy));
         }
 
+        /// <summary>
+        /// Strike the player with an attack, dealing damage
+        /// </summary>
+        /// <param name="ui">User interface to change</param>
+        /// <param name="attack">Attack to see if it collides with the player</param>
         public void struck(UI ui, Attack attack)
         {
-            if (attack.getHitbox().Intersects(hitBox) && attack.playerHit == false && !shieldActive)
+            if (attack.hitbox.Intersects(hitbox) && attack.playerHit == false && !shieldActive)
             {
                 currHp -= 1;
                 healthBar.updateHealthBar(maxHp, currHp);
@@ -101,7 +112,7 @@ namespace C2Eindopdracht.Classes
                     xSpeed = 0 - xSpeed;
                 }
                 ySpeed = -5f;
-                setPosition(new Vector2(position.X, position.Y - 5f));
+                position = new Vector2(position.X, position.Y - 5f);
                 attack.hitPlayer();
                 if (currHp <= 0)
                 {
@@ -116,7 +127,7 @@ namespace C2Eindopdracht.Classes
         /// W or Space to jump
         /// J to attack or K to shield
         /// </summary>
-        /// <param name="gameTime">The game time</param>
+        /// <param name="gameTime">Holds the timestate of a Game</param>
         private void checkKeyPresses(GameTime gameTime)
         {
             var keyboardState = SmartKeyboard.GetState();
@@ -163,19 +174,15 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        /// <summary>
-        /// Let the player jump with a given speed
-        /// </summary>
-        /// <param name="jumpSpeed">Speed to jump with</param>
-        /// <param name="jumpStartHeight">Offset to start jump from</param>
         protected override void jump(float jumpSpeed, float jumpStartHeight)
         {
+            Vector2 tempPosition = position;
             if (attackCooldown.elapsedTime >= attackCooldown.duration)
             {
                 if (grounded)
                 {
                     ySpeed = 0 - jumpSpeed;
-                    position.Y -= jumpStartHeight;
+                    tempPosition.Y -= jumpStartHeight;
                     doubleJumpAvailable = true;
                 }
                 else
@@ -183,11 +190,12 @@ namespace C2Eindopdracht.Classes
                     if (doubleJumpAvailable)
                     {
                         ySpeed = 0 - jumpSpeed;
-                        position.Y -= jumpStartHeight;
+                        tempPosition.Y -= jumpStartHeight;
                         doubleJumpAvailable = false;
                     }
                 }
             }
+            position = tempPosition;
         }
 
         /// <summary>

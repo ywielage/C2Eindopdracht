@@ -10,7 +10,7 @@ namespace C2Eindopdracht.Classes
 {
     class MageEnemy : Enemy, ITileSet
     {
-        public static Texture2D TileSet { get; set; }
+        public static Texture2D tileSet { get; set; }
 
         /// <summary>
         /// Constructor of mage enemies
@@ -18,8 +18,7 @@ namespace C2Eindopdracht.Classes
         /// <param name="xPos">Horizontal position</param> 
         /// <param name="yPos">Vertical position</param> 
         /// <param name="width">Width of mage enemy</param> 
-        /// <param name="height">Height of mage enemy</param> 
-        /// <param name="aggression">Aggression level of enemy</param> 
+        /// <param name="height">Height of mage enemy</param>
         public MageEnemy(int xPos, int yPos, int  width, int height, int hp) : base(xPos, yPos, width, height, hp)
         {
             xSpeed = 80f;
@@ -28,43 +27,29 @@ namespace C2Eindopdracht.Classes
             attackRange = 100;
         }
 
-        /// <summary>
-        /// Algorithm which controls movement of enemy
-        /// </summary>
-        /// <param name="gameTime">Duration of game</param> 
-        /// <param name="player">Player object</param> 
         public override void decideMovement(GameTime gameTime, Player player)
         {
-            Rectangle playerHitbox = player.getHitbox();
-            if (playerHitbox.Y < hitBox.Y)
+            Rectangle playerHitbox = player.hitbox;
+            if (playerHitbox.Y < hitbox.Y)
             {
                 jump(4.5f, 3f);
             }
-            if (playerHitbox.X < hitBox.X)
+            if (playerHitbox.X < hitbox.X)
             {
                 moveLeft(gameTime);
             }
-            if (playerHitbox.X > hitBox.X)
+            if (playerHitbox.X > hitbox.X)
             {
                 moveRight(gameTime);
             }
-            if (playerHitbox.X - hitBox.X < attackRange && playerHitbox.X - hitBox.X > -attackRange && 
-                playerHitbox.Y - hitBox.Y < attackRange && playerHitbox.Y - hitBox.Y > -attackRange && 
+            if (playerHitbox.X - hitbox.X < attackRange && playerHitbox.X - hitbox.X > -attackRange && 
+                playerHitbox.Y - hitbox.Y < attackRange && playerHitbox.Y - hitbox.Y > -attackRange && 
                 canAttack)
             {
                 attacks.Add(attack(1, new Cooldown(.8f), .8f, new Rectangle((int)position.X, (int)position.Y, 20, 15), 5));
             }
         }
 
-        /// <summary>
-        /// Decides when mage enemy attacks
-        /// </summary>
-        /// <param name="damage">Damage of attack</param> 
-        /// <param name="cooldown">Timespan until next attack</param> 
-        /// <param name="duration">Time attack takes</param> 
-        /// <param name="hitbox">Hitbox of attack</param> 
-        /// <param name="hitboxXOffSet">Hitbox offset of attack</param> 
-        /// <returns></returns>
         protected override Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet)
 		{
             if (face == Face.LEFT)

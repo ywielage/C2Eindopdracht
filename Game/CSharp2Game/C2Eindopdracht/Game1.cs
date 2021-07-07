@@ -44,7 +44,7 @@ namespace C2Eindopdracht
 
             player = new Player(20 + level.levelComponentSize, 170 + level.levelComponentSize, 18, 30, 20);
 
-            ui = new UI(new Vector2(player.getPosition().X - _graphics.PreferredBackBufferWidth / 2, player.getPosition().Y - _graphics.PreferredBackBufferHeight / 2));
+            ui = new UI(new Vector2(player.position.X - _graphics.PreferredBackBufferWidth / 2, player.position.Y - _graphics.PreferredBackBufferHeight / 2));
             ui.addUIElement("Enemies alive", level.enemies.Count, new Vector2(5, 5), 0);
             ui.addUIElement("To move press A and D, to jump press Space or W, you can walljump too!", new Vector2(5, 50), 10f);
             ui.addUIElement("To attack press J, to shield press K", new Vector2(5, 70), 10f);
@@ -63,7 +63,7 @@ namespace C2Eindopdracht
             LevelComponent.tileSet = Content.Load<Texture2D>("tileset-map-squared");
             Player.tileSet = Content.Load<Texture2D>("character1");
             MageEnemy.tileSet = Content.Load<Texture2D>("enemyMage");
-            FighterEnemy.TileSet = Content.Load<Texture2D>("enemyFighter");
+            FighterEnemy.tileSet = Content.Load<Texture2D>("enemyFighter");
             Projectile.tileSet = Content.Load<Texture2D>("fireball");
             Arial16 = Content.Load<SpriteFont>("fonts/Arial16");
 
@@ -89,9 +89,9 @@ namespace C2Eindopdracht
                 enemy.update(gameTime, level.list, player, ui);
 			}
 
-            ui.update(new Vector2(player.getPosition().X - _graphics.PreferredBackBufferWidth / (2 * camera.Zoom), player.getPosition().Y - _graphics.PreferredBackBufferHeight / (2 * camera.Zoom)), gameTime);
-            camera.Pos = player.getPosition();
-            level.checkEndTriggerHit(player.getHitbox(), ui, 5, 50);
+            ui.update(new Vector2(player.position.X - _graphics.PreferredBackBufferWidth / (2 * camera.Zoom), player.position.Y - _graphics.PreferredBackBufferHeight / (2 * camera.Zoom)), gameTime);
+            camera.Pos = player.position;
+            level.checkEndTriggerHit(player.hitbox, ui, 5, 50);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -131,7 +131,7 @@ namespace C2Eindopdracht
                 //Draw player
                 _spriteBatch.Draw(
                     Player.tileSet,
-                    player.getPosition(),
+                    player.position,
                     Color.White
                 );
 
@@ -148,8 +148,8 @@ namespace C2Eindopdracht
                     if (enemy is FighterEnemy)
                     {
                         _spriteBatch.Draw(
-                            FighterEnemy.TileSet,
-                            enemy.getPosition(),
+                            FighterEnemy.tileSet,
+                            enemy.position,
                             Color.White
                         );
                     }
@@ -157,7 +157,7 @@ namespace C2Eindopdracht
                     {
                         _spriteBatch.Draw(
                            MageEnemy.tileSet,
-                           enemy.getPosition(),
+                           enemy.position,
                            Color.White
                        );
                     }
@@ -179,7 +179,7 @@ namespace C2Eindopdracht
                             {
                                 _spriteBatch.Draw(
                                     Projectile.tileSet,
-                                    new Vector2(attack.getHitbox().X, attack.getHitbox().Y),
+                                    new Vector2(attack.hitbox.X, attack.hitbox.Y),
                                     new Rectangle(0, 0, 20, 15),
                                     Color.White
                                 );
@@ -188,7 +188,7 @@ namespace C2Eindopdracht
                             {
                                 _spriteBatch.Draw(
                                     Projectile.tileSet,
-                                    new Vector2(attack.getHitbox().X, attack.getHitbox().Y),
+                                    new Vector2(attack.hitbox.X, attack.hitbox.Y),
                                     new Rectangle(20, 0, 20, 15),
                                     Color.White
                                 );
@@ -232,7 +232,7 @@ namespace C2Eindopdracht
             {
                 _spriteBatch.Draw(
                     blankTexture,
-                    player.getHitbox(),
+                    player.hitbox,
                     Color.GreenYellow
                 );
             }
@@ -240,7 +240,7 @@ namespace C2Eindopdracht
             {
                 _spriteBatch.Draw(
                     blankTexture,
-                    player.getHitbox(),
+                    player.hitbox,
                     Color.Green
                 );
             }
@@ -257,7 +257,7 @@ namespace C2Eindopdracht
             {
                 _spriteBatch.Draw(
                     blankTexture,
-                    attack.getHitbox(),
+                    attack.hitbox,
                     Color.Red
                 );
             }
@@ -267,7 +267,7 @@ namespace C2Eindopdracht
                 //Draw enemy hitboxes
                 _spriteBatch.Draw(
                     blankTexture,
-                    enemy.getHitbox(),
+                    enemy.hitbox,
                     Color.Yellow
                 );
 
@@ -283,7 +283,7 @@ namespace C2Eindopdracht
                 {
                     _spriteBatch.Draw(
                         blankTexture,
-                        attack.getHitbox(),
+                        attack.hitbox,
                         Color.Orange
                     );
                 }

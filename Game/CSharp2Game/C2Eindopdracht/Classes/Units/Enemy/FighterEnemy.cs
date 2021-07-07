@@ -10,7 +10,7 @@ namespace C2Eindopdracht.Classes
 {
     class FighterEnemy : Enemy, ITileSet
     {
-        public static Texture2D TileSet { get; set; }
+        public static Texture2D tileSet { get; set; }
 
         /// <summary>
         /// Constructor of Fighter enemy
@@ -27,28 +27,23 @@ namespace C2Eindopdracht.Classes
             attackRange = 20;
         }
 
-        /// <summary>
-        /// Algorithm for behaviour enemy
-        /// </summary>
-        /// <param name="gameTime">Timespan game</param>
-        /// <param name="player">Player object</param>
         public override void decideMovement(GameTime gameTime, Player player)
         {
-            Rectangle playerHitbox = player.getHitbox();
-            if (playerHitbox.Y < hitBox.Y)
+            Rectangle playerHitbox = player.hitbox;
+            if (playerHitbox.Y < hitbox.Y)
             {
                 jump(6f, 3f);
             }
-            if (playerHitbox.X < hitBox.X)
+            if (playerHitbox.X < hitbox.X)
             {
                 moveLeft(gameTime);
             }
-            if (playerHitbox.X > hitBox.X)
+            if (playerHitbox.X > hitbox.X)
             {
                 moveRight(gameTime);
             }
-            if (playerHitbox.X - hitBox.X < attackRange && playerHitbox.X - hitBox.X > -attackRange && 
-                playerHitbox.Y - hitBox.Y < attackRange && playerHitbox.Y - hitBox.Y > -attackRange && 
+            if (playerHitbox.X - hitbox.X < attackRange && playerHitbox.X - hitbox.X > -attackRange && 
+                playerHitbox.Y - hitbox.Y < attackRange && playerHitbox.Y - hitbox.Y > -attackRange && 
                 canAttack)
             {
                 attacks.Add(attack(1, new Cooldown(.5f), .4f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5));

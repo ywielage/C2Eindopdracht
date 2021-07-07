@@ -27,9 +27,14 @@ namespace C2Eindopdracht.Classes
 			this.face = face;
 		}
 
+		/// <summary>
+		/// Update the attack, elapsing the duration and moving it
+		/// </summary>
+		/// <param name="gameTime">Holds the timestate of a Game</param>
+		/// <returns></returns>
 		public override Attack update(GameTime gameTime)
 		{
-			this.move(gameTime);
+			move(gameTime);
 			if (cooldown.elapsedTime >= activeTime)
 			{
 				expired = true;
@@ -42,16 +47,22 @@ namespace C2Eindopdracht.Classes
 			return this;
 		}
 
+		/// <summary>
+		/// Move the attack to the direction it faces
+		/// </summary>
+		/// <param name="gameTime">Holds the timestate of a Game</param>
 		public void move(GameTime gameTime)
 		{
+			Rectangle tempHitbox = hitbox;
 			if (face == Face.LEFT)
 			{
-				hitbox.X -= (int)(xSpeed * gameTime.ElapsedGameTime.TotalSeconds);
+				tempHitbox.X -= (int)(xSpeed * gameTime.ElapsedGameTime.TotalSeconds);
 			}
 			else if(face == Face.RIGHT)
 			{
-				hitbox.X += (int)(xSpeed * gameTime.ElapsedGameTime.TotalSeconds);
+				tempHitbox.X += (int)(xSpeed * gameTime.ElapsedGameTime.TotalSeconds);
 			}
+			hitbox = tempHitbox;
 		}
 	}
 }
