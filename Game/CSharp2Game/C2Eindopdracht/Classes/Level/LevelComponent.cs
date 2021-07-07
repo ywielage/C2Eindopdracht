@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using C2Eindopdracht.Classes.Units;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace C2Eindopdracht.Classes
 {
-    class LevelComponent
+    class LevelComponent : ITileSet
     {
         public bool isFilled { get; set; }
         public Directions entrance { get; set; }

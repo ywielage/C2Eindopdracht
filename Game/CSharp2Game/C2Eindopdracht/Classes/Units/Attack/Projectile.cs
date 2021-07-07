@@ -27,6 +27,21 @@ namespace C2Eindopdracht.Classes
 			this.face = face;
 		}
 
+		public override Attack update(GameTime gameTime)
+		{
+			this.move(gameTime);
+			if (cooldown.elapsedTime >= activeTime)
+			{
+				expired = true;
+			}
+			else
+			{
+				cooldown.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+			}
+
+			return this;
+		}
+
 		public void move(GameTime gameTime)
 		{
 			if (face == Face.LEFT)

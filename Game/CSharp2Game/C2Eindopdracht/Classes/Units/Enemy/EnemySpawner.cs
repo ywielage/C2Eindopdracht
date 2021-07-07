@@ -48,11 +48,11 @@ namespace C2Eindopdracht.Classes
 					int randomEnemyType = random.Next(1, 3);
 					if(randomEnemyType == 1)
 					{
-						enemies.Add(new MageEnemy(xPos, yPos, 18, 30));
+						enemies.Add(new MageEnemy(xPos, yPos, 18, 30, 3));
 					}
 					else if(randomEnemyType == 2)
 					{
-						enemies.Add(new FighterEnemy(xPos, yPos + tileY, 18, 30));
+						enemies.Add(new FighterEnemy(xPos, yPos + tileY, 18, 30, 5));
 					}
 					amount--;
 				}

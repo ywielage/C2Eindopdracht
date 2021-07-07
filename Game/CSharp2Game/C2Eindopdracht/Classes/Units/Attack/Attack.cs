@@ -15,6 +15,7 @@ namespace C2Eindopdracht.Classes
         public float activeTime { get; set; }
         public bool playerHit { get; set; }
         public List<Enemy> enemiesHit { get; set; }
+        public bool expired { get; set; }
 
         /// <summary>
         /// Attack class, sets default values for attack
@@ -31,6 +32,7 @@ namespace C2Eindopdracht.Classes
             this.hitbox = hitbox;
             this.enemiesHit = new List<Enemy>();
             this.playerHit = false;
+            this.expired = false;
         }
 
         public Rectangle getHitbox()
@@ -51,6 +53,20 @@ namespace C2Eindopdracht.Classes
         public void hitPlayer()
 		{
             playerHit = true;
+		}
+
+        public virtual Attack update(GameTime gameTime)
+		{
+            if (cooldown.elapsedTime >= activeTime)
+            {
+                expired = true;
+            }
+            else
+            {
+                cooldown.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            return this;
 		}
     }
 }

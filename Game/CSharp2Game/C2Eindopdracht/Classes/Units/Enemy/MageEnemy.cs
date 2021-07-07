@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using C2Eindopdracht.Classes.Units;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -7,14 +8,9 @@ using System.Text;
 
 namespace C2Eindopdracht.Classes
 {
-    class MageEnemy : Enemy
+    class MageEnemy : Enemy, ITileSet
     {
-        public override int maxHp { get; set; }
-        public override int currHp { get; set; }
-        public override float xSpeed { get; set; }
-        public override Aggression aggression { get; set; }
-        public override int attackRange { get; set; }
-        public static Texture2D tileSet { get; set; }
+        public static Texture2D TileSet { get; set; }
 
         /// <summary>
         /// Constructor of mage enemies
@@ -24,10 +20,8 @@ namespace C2Eindopdracht.Classes
         /// <param name="width">Width of mage enemy</param> 
         /// <param name="height">Height of mage enemy</param> 
         /// <param name="aggression">Aggression level of enemy</param> 
-        public MageEnemy(int xPos, int yPos, int  width, int height) : base(xPos, yPos, width, height)
+        public MageEnemy(int xPos, int yPos, int  width, int height, int hp) : base(xPos, yPos, width, height, hp)
         {
-            maxHp = 3;
-            currHp = 3;
             xSpeed = 80f;
             gravity = .3f;
             aggression = Aggression.AGGRESSIVE;
@@ -71,7 +65,7 @@ namespace C2Eindopdracht.Classes
         /// <param name="hitbox">Hitbox of attack</param> 
         /// <param name="hitboxXOffSet">Hitbox offset of attack</param> 
         /// <returns></returns>
-        public override Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet)
+        protected override Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet)
 		{
             if (face == Face.LEFT)
             {
@@ -82,8 +76,6 @@ namespace C2Eindopdracht.Classes
                 hitbox.X += hitboxXOffSet;
             }
             return new Projectile(damage, cooldown, duration, hitbox, 200f, face);
-        }
-
-        
+        } 
     }
 }

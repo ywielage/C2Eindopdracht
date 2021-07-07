@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using C2Eindopdracht.Classes.Units;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -7,25 +8,10 @@ using System.Text;
 
 namespace C2Eindopdracht.Classes
 {
-    abstract class Enemy
+    abstract class Enemy : Unit
     {
-        protected Vector2 position;
-        protected Rectangle hitBox;
-        public abstract int maxHp { get; set; }
-        public abstract int currHp { get; set; }
-        public List<Attack> attacks { get; set; }
-        public float gravity { get; set; }
-        public abstract float xSpeed { get; set; }
-        public float ySpeed { get; set; }
-        public Face face { get; set; }
-        public bool grounded { get; set; }
-        public bool canAttack { get; set; }
-        public Cooldown attackCooldown { get; set; }
-        public abstract Aggression aggression { get; set; }
-        public bool isAlive { get; set; }
-        public Cooldown knockback { get; set; }
-        public abstract int attackRange { get; set; }
-        public HealthBar healthBar { get; set; }
+        public Aggression aggression { get; set; }
+        public int attackRange { get; set; }
 
         /// <summary>
         /// Class made for enemies. 
@@ -34,40 +20,11 @@ namespace C2Eindopdracht.Classes
         /// <param name="yPos">Vertical position</param> 
         /// <param name="width">Width enemy</param>  
         /// <param name="height">Height enemy</param>
-        public Enemy(int xPos, int yPos, int width, int height)
+        protected Enemy(int xPos, int yPos, int width, int height, int hp) : base(xPos, yPos, width, height)
         {
-            this.position = new Vector2(xPos, yPos);
-            this.hitBox = new Rectangle(xPos, yPos, width, height);
-            this.attacks = new List<Attack>();
-            this.gravity = gravity;
-            this.ySpeed = 0;
-            this.face = Face.RIGHT;
-            this.grounded = false;
-            this.canAttack = true;
-            this.knockback = null;
-            this.attackCooldown = new Cooldown(0);
-            this.isAlive = true;
+            this.maxHp = hp;
+            this.currHp = hp;
             this.healthBar = new HealthBar(new Rectangle(xPos, yPos, 20, 10), 20, Color.Purple, 0, -15);
-        }
-
-        public Vector2 getPosition()
-        {
-            return this.position;
-        }
-
-        public void setPosition(Vector2 position)
-        {
-            this.position = position;
-        }
-
-        public Rectangle getHitbox()
-        {
-            return this.hitBox;
-        }
-
-        public void setHitbox(Rectangle hitBox)
-        {
-            this.hitBox = hitBox;
         }
 
         /// <summary>
@@ -79,7 +36,8 @@ namespace C2Eindopdracht.Classes
         /// <param name="ui">UI object</param> 
         public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, Player player, UI ui)
         {
-            checkCollisions(levelComponents, player, ui);
+            checkWallCollisions(levelComponents);
+            checkHitboxCollisions(player, ui);
             if (knockback != null)
             {
                 updateKnockBack(gameTime);
@@ -91,201 +49,42 @@ namespace C2Eindopdracht.Classes
             updateAttacks(gameTime);
             alignHitboxToPosition();
             alignHealthBarToPosition();
-            //printEnemyValues();
+            //printValues();
         }
 
-        /// <summary>
-        /// Adjusts hitbox to current position enemy
-        /// </summary>
-        private void alignHitboxToPosition()
-        {
-            Rectangle hitbox = this.hitBox;
-            hitbox.Location = position.ToPoint();
-            this.hitBox = hitbox;
-        }
-
-        /// <summary>
-        /// Adjust healthbar to current position enemy
-        /// </summary>
-        private void alignHealthBarToPosition()
-        {
-            int healthBarHeight = this.healthBar.getBar().Height;
-            int healthBarWidth = this.healthBar.getBar().Width;
-            this.healthBar.setBar(new Rectangle(new Point((int)position.X + healthBar.xOffset, (int)position.Y + healthBar.yOffset), new Point(healthBarWidth, healthBarHeight)));
-        }
-
-        /// <summary>
-        /// Checks for collissions between the enemy and walls
-        /// </summary>
-        /// <param name="walls">Walls of the level</param> 
-        /// <param name="player">Player object</param>
-        /// <param name="ui">UI object</param> 
-        private void checkCollisions(List<List<LevelComponent>> walls, Player player, UI ui)
-        {
-            int touchingGrounds = 0;
-
-            foreach (List<LevelComponent> rowList in walls)
-            {
-                foreach (LevelComponent levelComponent in rowList)
-                {
-                    foreach (Rectangle wall in levelComponent.colliders)
-                    {
-                        if (wall.Left < hitBox.Right && wall.Right > hitBox.Left)
-                        {
-                            if (wall.Top - hitBox.Bottom == 0)
-                            {
-                                touchingGrounds++;
-                            }
-                            else if (hitBox.Top - wall.Bottom < 1 && hitBox.Top - wall.Bottom > -10)
-                            {
-                                ySpeed = 0;
-                            }
-                            else if (wall.Top - hitBox.Bottom < 1 && wall.Top - hitBox.Bottom > -11)
-                            {
-                                touchingGrounds++;
-                                position.Y = wall.Top - hitBox.Height;
-                            }
-                        }
-                        if (wall.Top < hitBox.Bottom && wall.Bottom > hitBox.Top)
-                        {
-                            if (hitBox.Left - wall.Right < 1 && hitBox.Left - wall.Right > -5)
-                            {
-                                position.X = wall.Right + 2;
-                            }
-                            if (wall.Left - hitBox.Right < 1 && wall.Left - hitBox.Right > -5)
-                            {
-                                position.X = wall.Left - hitBox.Width - 2;
-                            }
-                        }
-                    }
-                }
-            }
-            
+        private void checkHitboxCollisions(Player player, UI ui)
+		{
             foreach (Attack attack in attacks)
             {
-                if (attack.getHitbox().Intersects(player.getHitbox()) && attack.playerHit == false && !player.shieldActive)
-                {
-                    player.currHp -= 1;
-                    player.healthBar.updateHealthBar(player.maxHp, player.currHp);
-                    player.knockback = new Cooldown(.2f);
-                    if(position.X < player.getPosition().X)
-                    {
-                        player.xSpeed = 0 - player.xSpeed;
-                    }
-                    player.ySpeed = -5f;
-                    player.setPosition(new Vector2(player.getPosition().X, player.getPosition().Y - 5f));
-                    attack.hitPlayer();
-                    if(player.currHp <= 0)
-					{
-                        player.gameOver(ui);
-					}
-                }
-            }
-
-            if (touchingGrounds >= 1)
-            {
-                grounded = true;
-            }
-            else
-            {
-                grounded = false;
-            }
-            if (grounded)
-            {
-                ySpeed = 0;
-            }
-            else
-            {
-                if (ySpeed < 10)
-                {
-                    ySpeed += gravity;
-                }
-                position.Y += ySpeed;
+                player.struck(ui, attack);
             }
         }
 
-        /// <summary>
-        /// Updates the attacks. Adds/removes cooldown
-        /// </summary>
-        /// <param name="gameTime">Timespan since start of game</param> 
-        private void updateAttacks(GameTime gameTime)
+        public void struck(UIElementLabelValue enemyCounter, Attack attack)
         {
-            for (int i = 0; i < attacks.Count; i++)
+            if (attack.getHitbox().Intersects(hitBox) && !attack.enemiesHit.Contains(this))
             {
-                if (attacks[i].cooldown.elapsedTime <= attacks[i].cooldown.duration && canAttack)
+                currHp -= 1;
+                healthBar.updateHealthBar(maxHp, currHp);
+                knockback = new Cooldown(.5f);
+                if (position.X < position.X)
                 {
-                    canAttack = false;
-                    attackCooldown = new Cooldown(attacks[i].cooldown.duration);
+                    xSpeed = 0 - xSpeed;
                 }
-                if (attacks[i] is Projectile)
+                ySpeed = -5f;
+                setPosition(new Vector2(position.X, position.Y - 5f));
+                attack.hitEnemy(this);
+                if (currHp <= 0)
                 {
-                    Projectile projectile = (Projectile)attacks[i];
-                    projectile.move(gameTime);
-                    attacks[i] = projectile;
-                }
-                if (attacks[i].cooldown.elapsedTime >= attacks[i].activeTime)
-                {
-                    attacks.RemoveAt(i);
-                }
-                else
-                {
-                    attacks[i].cooldown.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    isAlive = false;
+                    enemyCounter.value--;
                 }
             }
-
-            if (!canAttack)
-            {
-                if (attackCooldown.elapsedTime >= attackCooldown.duration)
-                {
-                    canAttack = true;
-                }
-                else
-                {
-                    attackCooldown.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Changes knockback values
-        /// </summary>
-        /// <param name="gameTime"></param>
-        private void updateKnockBack(GameTime gameTime)
-        {
-            knockback.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            position.X -= xSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (knockback.duration <= knockback.elapsedTime)
-            {
-                knockback = null;
-                if (xSpeed < 0)
-                {
-                    xSpeed = xSpeed - xSpeed * 2;
-                }
-            }
-        }
+        }        
 
         public abstract void decideMovement(GameTime gameTime, Player player);
 
-        protected void moveLeft(GameTime gameTime)
-        {
-            if (attackCooldown.elapsedTime >= attackCooldown.duration)
-            {
-                position.X -= xSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                face = Face.LEFT;
-            }
-        }
-
-        protected void moveRight(GameTime gameTime)
-        {
-            if (attackCooldown.elapsedTime >= attackCooldown.duration)
-            {
-                position.X += xSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                face = Face.RIGHT;
-            }
-        }
-
-        protected void jump(float jumpSpeed, float jumpStartHeight)
+        protected override void jump(float jumpSpeed, float jumpStartHeight)
         {
             if (attackCooldown.elapsedTime >= attackCooldown.duration)
             {
@@ -295,23 +94,9 @@ namespace C2Eindopdracht.Classes
                     position.Y -= jumpStartHeight;
                 }
             }
-        }
-
-        public abstract Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet);
-
-        /// <summary>
-        /// Prints values of enemy
-        /// </summary>
-        public void printEnemyValues()
-        {
-            Debug.WriteLine("=============================");
-            Debug.WriteLine("Enemy Pos:\tX " + position.X + ",\tY " + position.Y);
-            Debug.WriteLine("Hitbox Pos:\t\tX " + hitBox.X + ",\tY " + hitBox.Y);
-            Debug.WriteLine("Speed:\t\t\tX " + xSpeed + ",\tY" + ySpeed);
-            Debug.WriteLine("Grounded: " + grounded);
-            Debug.WriteLine("Double jump available: " + grounded);
-        } 
+        }        
     }
+
     /// <summary>
     /// Enum which shows all possible aggression levels of enemies
     /// </summary>

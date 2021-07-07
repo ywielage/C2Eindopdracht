@@ -42,7 +42,7 @@ namespace C2Eindopdracht
             level.init(false);
             level.drawLevelInDebug();
 
-            player = new Player(20 + level.levelComponentSize, 170 + level.levelComponentSize, 20, .3f, 200f);
+            player = new Player(20 + level.levelComponentSize, 170 + level.levelComponentSize, 18, 30, 20);
 
             ui = new UI(new Vector2(player.getPosition().X - _graphics.PreferredBackBufferWidth / 2, player.getPosition().Y - _graphics.PreferredBackBufferHeight / 2));
             ui.addUIElement("Enemies alive", level.enemies.Count, new Vector2(5, 5), 0);
@@ -63,7 +63,7 @@ namespace C2Eindopdracht
             LevelComponent.tileSet = Content.Load<Texture2D>("tileset-map-squared");
             Player.tileSet = Content.Load<Texture2D>("character1");
             MageEnemy.tileSet = Content.Load<Texture2D>("enemyMage");
-            FighterEnemy.tileSet = Content.Load<Texture2D>("enemyFighter");
+            FighterEnemy.TileSet = Content.Load<Texture2D>("enemyFighter");
             Projectile.tileSet = Content.Load<Texture2D>("fireball");
             Arial16 = Content.Load<SpriteFont>("fonts/Arial16");
 
@@ -148,7 +148,7 @@ namespace C2Eindopdracht
                     if (enemy is FighterEnemy)
                     {
                         _spriteBatch.Draw(
-                            FighterEnemy.tileSet,
+                            FighterEnemy.TileSet,
                             enemy.getPosition(),
                             Color.White
                         );
