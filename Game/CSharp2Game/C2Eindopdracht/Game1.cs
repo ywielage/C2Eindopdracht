@@ -15,11 +15,11 @@ namespace C2Eindopdracht
         private Player player;
         private Level level;
         private UI ui;
-        private SpriteFont Arial16;
         private bool renderHitboxes;
+        private SpriteFont arial16;
 
         //Texture mainly for drawing hitboxes
-        private Texture2D blankTexture;
+        public static Texture2D blankTexture;
 
         public Game1()
         {
@@ -30,13 +30,12 @@ namespace C2Eindopdracht
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            
-            camera = new Camera();
-            camera.Zoom = 1.1f;
-            
-            renderHitboxes = false;
-            
+			// TODO: Add your initialization logic here
+			camera = new Camera
+			{
+				Zoom = 1.1f
+			};
+
             //Level with (levelcomponents wide, levelcomponents high, amount of enemies)
             level = new Level(4, 4, 8);
             level.init(false);
@@ -65,7 +64,7 @@ namespace C2Eindopdracht
             MageEnemy.tileSet = Content.Load<Texture2D>("enemyMage");
             FighterEnemy.tileSet = Content.Load<Texture2D>("enemyFighter");
             Projectile.tileSet = Content.Load<Texture2D>("fireball");
-            Arial16 = Content.Load<SpriteFont>("fonts/Arial16");
+            arial16 = Content.Load<SpriteFont>("fonts/Arial16");
 
             blankTexture = Content.Load<Texture2D>("blankTexture");
         }
@@ -101,229 +100,20 @@ namespace C2Eindopdracht
             // TODO: Add your drawing code here
             _spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
 
-            //Draw every sprite element
-
-            drawSpriteElements();
-
-            if (renderHitboxes)
+            foreach (UIElement element in ui.elements)
             {
-                //Draw player hitbox
-                drawPlayer();
-
-                //Draw tile hitboxes
-                foreach (List<LevelComponent> rowList in level.list)
-                {
-                    foreach (LevelComponent levelComponent in rowList)
-                    {
-                        foreach (Rectangle wall in levelComponent.colliders)
-                        {
-                            _spriteBatch.Draw(
-                                blankTexture,
-                                wall,
-                                Color.DimGray
-                            );
-                        }
-                    }
-                }
+                element.draw(_spriteBatch, arial16);
             }
-            else
+            foreach (Enemy enemy in level.enemies)
             {
-                //Draw player
-                _spriteBatch.Draw(
-                    Player.tileSet,
-                    player.position,
-                    Color.White
-                );
-
-                //Draw player healthbar
-                _spriteBatch.Draw(
-                    blankTexture,
-                    player.healthBar.getBar(),
-                    player.healthBar.color
-                );
-
-                foreach (Enemy enemy in level.enemies)
-                {
-                    //Draw enemy
-                    if (enemy is FighterEnemy)
-                    {
-                        _spriteBatch.Draw(
-                            FighterEnemy.tileSet,
-                            enemy.position,
-                            Color.White
-                        );
-                    }
-                    else if (enemy is MageEnemy)
-                    {
-                        _spriteBatch.Draw(
-                           MageEnemy.tileSet,
-                           enemy.position,
-                           Color.White
-                       );
-                    }
-
-                    //Draw enemy healthbar
-                    _spriteBatch.Draw(
-                        blankTexture,
-                        enemy.healthBar.getBar(),
-                        enemy.healthBar.color
-                    );
-
-                    //Draw projectiles
-                    foreach (Attack attack in enemy.attacks)
-                    {
-                        if (attack is Projectile)
-                        {
-                            Projectile projectileAttack = (Projectile)attack;
-                            if (projectileAttack.face == Face.LEFT)
-                            {
-                                _spriteBatch.Draw(
-                                    Projectile.tileSet,
-                                    new Vector2(attack.hitbox.X, attack.hitbox.Y),
-                                    new Rectangle(0, 0, 20, 15),
-                                    Color.White
-                                );
-                            }
-                            else if (projectileAttack.face == Face.RIGHT)
-                            {
-                                _spriteBatch.Draw(
-                                    Projectile.tileSet,
-                                    new Vector2(attack.hitbox.X, attack.hitbox.Y),
-                                    new Rectangle(20, 0, 20, 15),
-                                    Color.White
-                                );
-                            }
-                        }
-                    }
-                }
-
-                //Draw every tile of every levelcomponent
-                foreach (List<LevelComponent> rowList in level.list)
-                {
-                    foreach (LevelComponent levelComponent in rowList)
-                    {
-                        for (int i = 0; i < levelComponent.tileMap.tiles.Count; i++)
-                        {
-                            for (int j = 0; j < levelComponent.tileMap.tiles[i].Count; j++)
-                            {
-                                if (levelComponent.tileMap.tiles[i][j] != 0)
-                                {
-                                    _spriteBatch.Draw(
-                                        LevelComponent.tileSet,
-                                        new Vector2(levelComponent.position.X + (j * 24), levelComponent.position.Y + (i * 24)),
-                                        levelComponent.getTileTextureOffset(levelComponent.tileMap.tiles[i][j], level.tileSize),
-                                        Color.DarkSlateGray
-                                    );
-                                }
-                            }
-                        }
-                    }
-                }
+                enemy.draw(_spriteBatch, renderHitboxes);
             }
+            player.draw(_spriteBatch, renderHitboxes);
+            level.draw(_spriteBatch, renderHitboxes);
 
             _spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-
-        private void drawPlayer()
-        {
-            if (player.shieldActive)
-            {
-                _spriteBatch.Draw(
-                    blankTexture,
-                    player.hitbox,
-                    Color.GreenYellow
-                );
-            }
-            else
-            {
-                _spriteBatch.Draw(
-                    blankTexture,
-                    player.hitbox,
-                    Color.Green
-                );
-            }
-
-            //Draw player healthbar
-            _spriteBatch.Draw(
-                blankTexture,
-                player.healthBar.getBar(),
-                player.healthBar.color
-            );
-
-            //Draw player attack hitboxes
-            foreach (Attack attack in player.attacks)
-            {
-                _spriteBatch.Draw(
-                    blankTexture,
-                    attack.hitbox,
-                    Color.Red
-                );
-            }
-
-            foreach (Enemy enemy in level.enemies)
-            {
-                //Draw enemy hitboxes
-                _spriteBatch.Draw(
-                    blankTexture,
-                    enemy.hitbox,
-                    Color.Yellow
-                );
-
-                //Draw enemy healthbar
-                _spriteBatch.Draw(
-                    blankTexture,
-                    enemy.healthBar.getBar(),
-                    enemy.healthBar.color
-                );
-
-                //Draw enemy attack hitboxes
-                foreach (Attack attack in enemy.attacks)
-                {
-                    _spriteBatch.Draw(
-                        blankTexture,
-                        attack.hitbox,
-                        Color.Orange
-                    );
-                }
-            }
-        }
-
-        private void drawSpriteElements()
-        {
-            foreach (UIElement element in ui.elements)
-            {
-                if(element is UIElementLabelValue)
-				{
-                    UIElementLabelValue labelValue = (UIElementLabelValue)element;
-                    _spriteBatch.DrawString(
-                        Arial16,
-                        labelValue.label + ": " + labelValue.value,
-                        element.position,
-                        Color.White,
-                        0f,
-                        new Vector2(0, 0),
-                        1f,
-                        SpriteEffects.None,
-                        .1f
-                    );
-                }
-                else if(element is UIElementLabel)
-				{
-                    _spriteBatch.DrawString(
-                        Arial16,
-                        element.label,
-                        element.position,
-                        Color.White,
-                        0f,
-                        new Vector2(0, 0),
-                        1f,
-                        SpriteEffects.None,
-                        .1f
-                    );
-                }
-            }
         }
     }
 }

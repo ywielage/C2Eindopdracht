@@ -22,12 +22,10 @@ namespace C2Eindopdracht.Classes
         public void setTileMapsFromJson()
         {
             string path = Path.Combine(Environment.CurrentDirectory, @"../../../Content", "tileMaps.json");
-            using (StreamReader r = new StreamReader(path))
-            {
-                string json = r.ReadToEnd();
-                this.tileMaps = JsonConvert.DeserializeObject<List<TileMap>>(json);
-            }
-        }
+			using StreamReader streamReader = new StreamReader(path);
+			string json = streamReader.ReadToEnd();
+			this.tileMaps = JsonConvert.DeserializeObject<List<TileMap>>(json);
+		}
 
         /// <summary>
         /// Get a tilemap for a levelcomponent

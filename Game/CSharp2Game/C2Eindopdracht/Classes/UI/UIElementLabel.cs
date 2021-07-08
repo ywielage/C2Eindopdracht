@@ -10,5 +10,10 @@ namespace C2Eindopdracht.Classes
 		public UIElementLabel(string label, Vector2 parentOffset, Vector2 position, float activeTime) : base(label, parentOffset, position, activeTime)
 		{
 		}
+
+		public override string getDrawText()
+		{
+			return label;
+		}
 	}
 }

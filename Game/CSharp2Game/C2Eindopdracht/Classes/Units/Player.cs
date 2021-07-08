@@ -30,17 +30,19 @@ namespace C2Eindopdracht.Classes
         /// <param name="xSpeed">Horizontal speed</param> 
         public Player(int xPos, int yPos, int width, int height, int hp) : base(xPos, yPos, width, height)
         {
-            this.maxHp = hp;
-            this.currHp = hp;
-            this.xSpeed = 200f;
-            this.gravity = .3f;
-            this.doubleJumpAvailable = false;
-            this.canDoubleJump = true;
-            this.shieldActive = false;
-            this.healthBar = new HealthBar(new Rectangle(xPos, yPos, 50, 10), 50, Color.Gold, -17, -15);
-            this.maxShieldTime = 120;
-            this.shieldRefill = 1;
-            this.shieldUsed = false;
+            maxHp = hp;
+            currHp = hp;
+            xSpeed = 200f;
+            gravity = .3f;
+            jumpSpeed = 6f;
+            jumpStartHeight = 3f;
+            doubleJumpAvailable = false;
+            canDoubleJump = true;
+            shieldActive = false;
+            healthBar = new HealthBar(new Rectangle(xPos, yPos, 50, 10), 50, Color.Gold, -17, -15);
+            maxShieldTime = 120;
+            shieldRefill = 1;
+            shieldUsed = false;
         }
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace C2Eindopdracht.Classes
         /// <param name="enemyCounter">Count of alive enemies</param>
         public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, List<Enemy> enemies, UIElementLabelValue enemyCounter)
         {
-            doubleJumpAvailable = checkWallCollisions(levelComponents);
+            doubleJumpAvailable = checkWallCollisions(levelComponents, doubleJumpAvailable);
             checkHitboxCollisions(enemies, enemyCounter);
             if (knockback != null)
             {
@@ -66,7 +68,28 @@ namespace C2Eindopdracht.Classes
             alignHitboxToPosition();
             alignHealthBarToPosition();
             //printValues();
-        }        
+        }
+
+        protected override void setYSpeed(int touchingGrounds)
+        {
+            if (touchingGrounds >= 1)
+            {
+                doubleJumpAvailable = true;
+                ySpeed = 0;
+                grounded = true;
+            }
+            else
+            {
+                if (ySpeed < 10)
+                {
+                    ySpeed += gravity;
+                }
+                Vector2 tempPosition = position;
+                tempPosition.Y += ySpeed;
+                position = tempPosition;
+                grounded = false;
+            }
+        }
 
         /// <summary>
         /// Check if any of the enemy attack hitboxes collide with the player.
@@ -143,7 +166,7 @@ namespace C2Eindopdracht.Classes
 
             if (SmartKeyboard.HasBeenPressed(Keys.Space) || SmartKeyboard.HasBeenPressed(Keys.W))
             {
-                jump(6f, 3f);
+                jump();
             }
 
             if (SmartKeyboard.HasBeenPressed(Keys.J) && canAttack && !shieldActive)
@@ -162,7 +185,7 @@ namespace C2Eindopdracht.Classes
             else if(shieldUsed == true)
             {
                 shieldActive = false;
-                shieldTime = shieldTime - shieldRefill;
+                shieldTime -= shieldRefill;
                 if (shieldTime == 0)
                 {
                     shieldUsed = false;
@@ -174,7 +197,7 @@ namespace C2Eindopdracht.Classes
             }
         }
 
-        protected override void jump(float jumpSpeed, float jumpStartHeight)
+        protected override void jump()
         {
             Vector2 tempPosition = position;
             if (attackCooldown.elapsedTime >= attackCooldown.duration)
@@ -199,7 +222,7 @@ namespace C2Eindopdracht.Classes
         }
 
         /// <summary>
-        /// Game over
+        /// Make the player dead, making them unable to do anything
         /// </summary>
         /// <param name="ui">UI to add element to</param>
         public void gameOver(UI ui)
@@ -207,7 +230,16 @@ namespace C2Eindopdracht.Classes
             isAlive = false;
             ui.addUIElement("You've died!", new Vector2(5, 50), 0);
         }
-    }
+
+		protected override void drawHitbox(SpriteBatch spriteBatch, bool renderHitboxes)
+		{
+            spriteBatch.Draw(
+                renderHitboxes ? Game1.blankTexture : tileSet,
+                hitbox,
+                renderHitboxes ? Color.Green : Color.White
+            );
+        }
+	}
 
     enum Face
     {

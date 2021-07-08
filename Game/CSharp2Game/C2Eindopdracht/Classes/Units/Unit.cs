@@ -7,23 +7,25 @@ using System.Text;
 
 namespace C2Eindopdracht.Classes.Units
 {
-	abstract class Unit
-	{
-		public Vector2 position { get; set; }
+    abstract class Unit : ITileSet
+    {
+        public Vector2 position { get; set; }
         public Rectangle hitbox { get; set; }
         public int maxHp { get; set; }
-        public int currHp { get; set; } 
+        public int currHp { get; set; }
         public float xSpeed { get; set; }
         public float ySpeed { get; set; }
-		public float gravity { get; set; }
+        public float gravity { get; set; }
         public bool grounded { get; set; }
-		public Face face { get; set; }
+        public float jumpSpeed { get; set; }
+        public float jumpStartHeight { get; set; }
+        public Face face { get; set; }
         public Cooldown knockback { get; set; }
-		public List<Attack> attacks { get; set; }
-		public bool canAttack { get; set; }
-		public Cooldown attackCooldown { get; set; }
+        public List<Attack> attacks { get; set; }
+        public bool canAttack { get; set; }
+        public Cooldown attackCooldown { get; set; }
         public HealthBar healthBar { get; set; }
-		public bool isAlive { get; set; }
+        public bool isAlive { get; set; }
 
         /// <summary>
         /// Every moving unit with hp and a healthbar
@@ -34,17 +36,17 @@ namespace C2Eindopdracht.Classes.Units
         /// <param name="height">Height of the unit</param>
 		protected Unit(int xPos, int yPos, int width, int height)
 		{
-			this.position = new Vector2(xPos, yPos);
-			this.hitbox = new Rectangle(xPos, yPos, width, height);
-			this.attacks = new List<Attack>();
-			this.gravity = gravity;
-			this.ySpeed = 0;
-			this.face = Face.RIGHT;
-			this.grounded = false;
-			this.canAttack = true;
-			this.knockback = null;
-			this.attackCooldown = new Cooldown(0);
-			this.isAlive = true;
+			position = new Vector2(xPos, yPos);
+			hitbox = new Rectangle(xPos, yPos, width, height);
+			attacks = new List<Attack>();
+			gravity = gravity;
+			ySpeed = 0;
+			face = Face.RIGHT;
+			grounded = false;
+			canAttack = true;
+			knockback = null;
+			attackCooldown = new Cooldown(0);
+			isAlive = true;
 		}
 
 		/// <summary>
@@ -71,10 +73,9 @@ namespace C2Eindopdracht.Classes.Units
         /// Check if unit collides with any walls
         /// </summary>
         /// <param name="walls">All walls it can collide with</param>
-        protected bool checkWallCollisions(List<List<LevelComponent>> walls)
+        protected bool checkWallCollisions(List<List<LevelComponent>> walls, bool doubleJumpAvailable )
         {
             int touchingGrounds = 0;
-            bool doubleJumpAvailable = false;
 
             foreach (List<LevelComponent> rowList in walls)
             {
@@ -86,26 +87,17 @@ namespace C2Eindopdracht.Classes.Units
                     }
                 }
             }
-
-            if (touchingGrounds >= 1)
-            {
-                doubleJumpAvailable = true;
-                ySpeed = 0;
-            }
-            else
-            {
-                if (ySpeed < 10)
-                {
-                    ySpeed += gravity;
-                }
-                Vector2 tempPosition = position;
-                tempPosition.Y += ySpeed;
-                position = tempPosition;
-            }
+            setYSpeed(touchingGrounds);
 
             //TODO: Added to let player class know if doublejump is available 
             return doubleJumpAvailable;
         }
+
+        /// <summary>
+        /// Increase Y speed if not grounded, set to 0 if grounded
+        /// </summary>
+        /// <param name="touchingGrounds">Amount of surfaces the unit is standing on</param>
+        protected abstract void setYSpeed(int touchingGrounds);
 
         /// <summary>
         /// Check with how many walls the unit collides
@@ -156,13 +148,12 @@ namespace C2Eindopdracht.Classes.Units
         {
             foreach (Attack attack in attacks)
             {
-                Attack updatedAttack = attack.update(gameTime);
-
-                if (updatedAttack.cooldown.elapsedTime <= updatedAttack.cooldown.duration && canAttack)
+                if (attack.cooldown.elapsedTime <= attack.cooldown.duration && canAttack)
                 {
                     canAttack = false;
-                    attackCooldown = new Cooldown(updatedAttack.cooldown.duration);
+                    attackCooldown = new Cooldown(attack.cooldown.duration);
                 }
+                attack.update(gameTime);
             }
 
             List<Attack> expiredAttacks = new List<Attack>();
@@ -173,7 +164,7 @@ namespace C2Eindopdracht.Classes.Units
                     expiredAttacks.Add(attack);
                 }
             }
-            expiredAttacks.RemoveAll(attack => expiredAttacks.Contains(attack));
+            attacks.RemoveAll(attack => expiredAttacks.Contains(attack));
 
             if (!canAttack && attackCooldown.elapsedTime >= attackCooldown.duration)
             {
@@ -201,7 +192,7 @@ namespace C2Eindopdracht.Classes.Units
                 knockback = null;
                 if (xSpeed < 0)
                 {
-                    xSpeed = xSpeed - xSpeed * 2;
+                    xSpeed -= xSpeed * 2;
                 }
             }
         }
@@ -237,11 +228,9 @@ namespace C2Eindopdracht.Classes.Units
         }
 
         /// <summary>
-        /// Let the player jump with a given speed
+        /// Let the unit jump with a given speed
         /// </summary>
-        /// <param name="jumpSpeed">Initial jump speed</param>
-        /// <param name="jumpStartHeight">Height to start the jump from</param>
-        protected abstract void jump(float jumpSpeed, float jumpStartHeight);
+        protected abstract void jump();
 
         /// <summary>
         /// Attack based on the offset of which direction the unit is facing
@@ -254,6 +243,7 @@ namespace C2Eindopdracht.Classes.Units
         /// <returns>A new offset based on the face</returns>
         protected virtual Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet)
         {
+            
             if (face == Face.LEFT)
             {
                 hitbox.X -= hitboxXOffSet;
@@ -276,5 +266,27 @@ namespace C2Eindopdracht.Classes.Units
             Debug.WriteLine("Speed:\t\t\tX " + xSpeed + ",\tY" + ySpeed);
             Debug.WriteLine("Grounded: " + grounded);
         }
+
+        /// <summary>
+        /// Draw the unit
+        /// </summary>
+        /// <param name="spriteBatch">Helper class for drawing text strings and sprites in one or more optimized batches</param>
+        /// <param name="renderHitboxes">Renders just the hitbox Rectangles if true</param>
+        public void draw(SpriteBatch spriteBatch, bool renderHitboxes)
+		{
+            drawHitbox(spriteBatch, renderHitboxes);
+            healthBar.draw(spriteBatch);
+            foreach (Attack attack in attacks)
+            {
+                attack.draw(spriteBatch, renderHitboxes);
+            }
+        }
+
+        /// <summary>
+        /// Draw the hitbox of the unit
+        /// </summary>
+        /// <param name="spriteBatch">Helper class for drawing text strings and sprites in one or more optimized batches</param>
+        /// <param name="renderHitboxes">Renders just the hitbox Rectangles if true</param>
+        protected abstract void drawHitbox(SpriteBatch spriteBatch, bool renderHitboxes);
     }
 }

@@ -13,6 +13,7 @@ namespace C2Eindopdracht.Classes
         public Aggression aggression { get; set; }
         public int attackRange { get; set; }
 
+
         /// <summary>
         /// Class made for enemies. 
         /// </summary>
@@ -36,7 +37,7 @@ namespace C2Eindopdracht.Classes
         /// <param name="ui">UI object</param> 
         public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, Player player, UI ui)
         {
-            checkWallCollisions(levelComponents);
+            checkWallCollisions(levelComponents, false);
             checkHitboxCollisions(player, ui);
             if (knockback != null)
             {
@@ -50,6 +51,26 @@ namespace C2Eindopdracht.Classes
             alignHitboxToPosition();
             alignHealthBarToPosition();
             //printValues();
+        }
+
+        protected override void setYSpeed(int touchingGrounds)
+        {
+            if (touchingGrounds >= 1)
+            {
+                ySpeed = 0;
+                grounded = true;
+            }
+            else
+            {
+                if (ySpeed < 10)
+                {
+                    ySpeed += gravity;
+                }
+                Vector2 tempPosition = position;
+                tempPosition.Y += ySpeed;
+                position = tempPosition;
+                grounded = false;
+            }
         }
 
         /// <summary>
@@ -97,9 +118,36 @@ namespace C2Eindopdracht.Classes
         /// </summary>
         /// <param name="gameTime">Holds the timestate of a Game</param>
         /// <param name="player">The player</param>
-        public abstract void decideMovement(GameTime gameTime, Player player);
+        private void decideMovement(GameTime gameTime, Player player)
+        {
+            Rectangle playerHitbox = player.hitbox;
+            if (playerHitbox.Y < hitbox.Y)
+            {
+                jump();
+            }
+            if (playerHitbox.X < hitbox.X)
+            {
+                moveLeft(gameTime);
+            }
+            if (playerHitbox.X > hitbox.X)
+            {
+                moveRight(gameTime);
+            }
+            if (playerHitbox.X - hitbox.X < attackRange && playerHitbox.X - hitbox.X > -attackRange &&
+                playerHitbox.Y - hitbox.Y < attackRange && playerHitbox.Y - hitbox.Y > -attackRange &&
+                canAttack)
+            {
+                attacks.Add(getAttack());
+            }
+        }
 
-        protected override void jump(float jumpSpeed, float jumpStartHeight)
+        /// <summary>
+        /// Get the attack values for the specific enemy
+        /// </summary>
+        /// <returns></returns>
+        protected abstract Attack getAttack();
+
+        protected override void jump()
         {
             if (attackCooldown.elapsedTime >= attackCooldown.duration)
             {
@@ -111,8 +159,10 @@ namespace C2Eindopdracht.Classes
                     position = tempPosition;
                 }
             }
-        }        
-    }
+        }
+
+        protected abstract override void drawHitbox(SpriteBatch spriteBatch, bool renderHitboxes);
+	}
 
     /// <summary>
     /// Enum which shows all possible aggression levels of enemies

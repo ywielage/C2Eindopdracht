@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -49,6 +50,19 @@ namespace C2Eindopdracht.Classes
         {
             float percentHealthBar = (float)currHp / (float)maxHp;
             bar.Width = (int)(fullWidth * percentHealthBar);
+        }
+
+        /// <summary>
+        /// Draw the healthbar of the unit
+        /// </summary>
+        /// <param name="spriteBatch">Helper class for drawing text strings and sprites in one or more optimized batches</param>
+        public void draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(
+                Game1.blankTexture,
+                bar,
+                color
+            );
         }
     }
 }

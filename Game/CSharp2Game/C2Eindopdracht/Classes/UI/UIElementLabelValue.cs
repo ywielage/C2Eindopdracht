@@ -12,5 +12,10 @@ namespace C2Eindopdracht.Classes
 		{
 			this.value = value;
 		}
+
+		public override string getDrawText()
+		{
+			return label + ": " + value;
+		}
 	}
 }

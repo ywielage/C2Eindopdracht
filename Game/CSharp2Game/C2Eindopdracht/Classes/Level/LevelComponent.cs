@@ -52,6 +52,39 @@ namespace C2Eindopdracht.Classes
                 }
             }
         }
+        
+        public void draw(SpriteBatch spriteBatch, bool renderHitboxes, int tileSize)
+		{
+            if(renderHitboxes)
+			{
+				foreach (Rectangle wall in colliders)
+				{
+					spriteBatch.Draw(
+						Game1.blankTexture,
+						wall,
+						Color.DimGray
+					);
+				}
+		    }
+            else
+			{
+                for (int i = 0; i < tileMap.tiles.Count; i++)
+                {
+                    for (int j = 0; j < tileMap.tiles[i].Count; j++)
+                    {
+                        if (tileMap.tiles[i][j] != 0)
+                        {
+                            spriteBatch.Draw(
+                                tileSet,
+                                new Vector2(position.X + (j * 24), position.Y + (i * 24)),
+                                getTileTextureOffset(tileMap.tiles[i][j], tileSize),
+                                Color.White
+                            );
+                        }
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Get the tiletextureOffset from the tileset
@@ -59,48 +92,30 @@ namespace C2Eindopdracht.Classes
         /// <param name="tileId">The position to get from the tileset 1-16 going from left to right, then from top to bottom</param>
         /// <param name="tileSize">The size of the tile</param>
         /// <returns>Returns an area of the tileset to use</returns>
-        public Rectangle? getTileTextureOffset(int tileId, int tileSize)
+        private Rectangle? getTileTextureOffset(int tileId, int tileSize)
         {
             tileSize++;
             int offSet = tileSize + 5;
-            switch (tileId)
+            return tileId switch
             {
-                case 1:
-                    return new Rectangle(0, 0, tileSize, tileSize);
-                case 2:
-                    return new Rectangle(offSet, 0, tileSize, tileSize);
-                case 3:
-                    return new Rectangle(offSet * 2, 0, tileSize , tileSize);
-                case 4:
-                    return new Rectangle(offSet * 3, 0, tileSize, tileSize);
-                case 5:
-                    return new Rectangle(0, offSet, tileSize, tileSize);
-                case 6:
-                    return new Rectangle(offSet, offSet, tileSize, tileSize);
-                case 7:
-                    return new Rectangle(offSet * 2, offSet, tileSize, tileSize);
-                case 8:
-                    return new Rectangle(offSet * 3, offSet, tileSize, tileSize);
-                case 9:
-                    return new Rectangle(0, offSet * 2, tileSize, tileSize);
-                case 10:
-                    return new Rectangle(offSet, offSet * 2, tileSize, tileSize);
-                case 11:
-                    return new Rectangle(offSet * 2, offSet * 2, tileSize, tileSize);
-                case 12:
-                    return new Rectangle(offSet * 3, offSet * 2, tileSize, tileSize);
-                case 13:
-                    return new Rectangle(0, offSet * 3, tileSize, tileSize);
-                case 14:
-                    return new Rectangle(offSet, offSet * 3, tileSize, tileSize);
-                case 15:
-                    return new Rectangle(offSet * 2, offSet * 3, tileSize, tileSize);
-                case 16:
-                    return new Rectangle(offSet * 3, offSet * 3, tileSize, tileSize);
-
-                default:
-                    return new Rectangle(offSet, offSet * 3, tileSize + 1, tileSize + 1);
-            }
+                1 => new Rectangle(0, 0, tileSize, tileSize),
+                2 => new Rectangle(offSet, 0, tileSize, tileSize),
+                3 => new Rectangle(offSet * 2, 0, tileSize, tileSize),
+                4 => new Rectangle(offSet * 3, 0, tileSize, tileSize),
+                5 => new Rectangle(0, offSet, tileSize, tileSize),
+                6 => new Rectangle(offSet, offSet, tileSize, tileSize),
+                7 => new Rectangle(offSet * 2, offSet, tileSize, tileSize),
+                8 => new Rectangle(offSet * 3, offSet, tileSize, tileSize),
+                9 => new Rectangle(0, offSet * 2, tileSize, tileSize),
+                10 => new Rectangle(offSet, offSet * 2, tileSize, tileSize),
+                11 => new Rectangle(offSet * 2, offSet * 2, tileSize, tileSize),
+                12 => new Rectangle(offSet * 3, offSet * 2, tileSize, tileSize),
+                13 => new Rectangle(0, offSet * 3, tileSize, tileSize),
+                14 => new Rectangle(offSet, offSet * 3, tileSize, tileSize),
+                15 => new Rectangle(offSet * 2, offSet * 3, tileSize, tileSize),
+                16 => new Rectangle(offSet * 3, offSet * 3, tileSize, tileSize),
+                _ => new Rectangle(offSet, offSet * 3, tileSize, tileSize),
+            };
         }
     }
 

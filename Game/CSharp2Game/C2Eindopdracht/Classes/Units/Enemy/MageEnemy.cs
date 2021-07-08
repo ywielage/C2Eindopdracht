@@ -23,31 +23,10 @@ namespace C2Eindopdracht.Classes
         {
             xSpeed = 80f;
             gravity = .3f;
+            jumpSpeed = 4.5f;
+            jumpStartHeight = 3f;
             aggression = Aggression.AGGRESSIVE;
             attackRange = 100;
-        }
-
-        public override void decideMovement(GameTime gameTime, Player player)
-        {
-            Rectangle playerHitbox = player.hitbox;
-            if (playerHitbox.Y < hitbox.Y)
-            {
-                jump(4.5f, 3f);
-            }
-            if (playerHitbox.X < hitbox.X)
-            {
-                moveLeft(gameTime);
-            }
-            if (playerHitbox.X > hitbox.X)
-            {
-                moveRight(gameTime);
-            }
-            if (playerHitbox.X - hitbox.X < attackRange && playerHitbox.X - hitbox.X > -attackRange && 
-                playerHitbox.Y - hitbox.Y < attackRange && playerHitbox.Y - hitbox.Y > -attackRange && 
-                canAttack)
-            {
-                attacks.Add(attack(1, new Cooldown(.8f), .8f, new Rectangle((int)position.X, (int)position.Y, 20, 15), 5));
-            }
         }
 
         protected override Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet)
@@ -60,7 +39,22 @@ namespace C2Eindopdracht.Classes
             {
                 hitbox.X += hitboxXOffSet;
             }
+
             return new Projectile(damage, cooldown, duration, hitbox, 200f, face);
-        } 
+        }
+
+		protected override Attack getAttack()
+		{
+            return attack(1, new Cooldown(.8f), .8f, new Rectangle((int)position.X, (int)position.Y, 20, 15), 5);
+        }
+
+		protected override void drawHitbox(SpriteBatch spriteBatch, bool renderHitboxes)
+		{
+            spriteBatch.Draw(
+                renderHitboxes ? Game1.blankTexture : tileSet,
+                hitbox,
+                renderHitboxes ? Color.OrangeRed : Color.White
+            );
+        }
     }
 }

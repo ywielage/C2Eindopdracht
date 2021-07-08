@@ -23,31 +23,24 @@ namespace C2Eindopdracht.Classes
         {
             xSpeed = 100f;
             gravity = .3f;
+            jumpSpeed = 6f;
+            jumpStartHeight = 3f;
             aggression = Aggression.AGGRESSIVE;
             attackRange = 20;
         }
 
-        public override void decideMovement(GameTime gameTime, Player player)
+        protected override Attack getAttack()
         {
-            Rectangle playerHitbox = player.hitbox;
-            if (playerHitbox.Y < hitbox.Y)
-            {
-                jump(6f, 3f);
-            }
-            if (playerHitbox.X < hitbox.X)
-            {
-                moveLeft(gameTime);
-            }
-            if (playerHitbox.X > hitbox.X)
-            {
-                moveRight(gameTime);
-            }
-            if (playerHitbox.X - hitbox.X < attackRange && playerHitbox.X - hitbox.X > -attackRange && 
-                playerHitbox.Y - hitbox.Y < attackRange && playerHitbox.Y - hitbox.Y > -attackRange && 
-                canAttack)
-            {
-                attacks.Add(attack(1, new Cooldown(.5f), .4f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5));
-            }
+            return attack(1, new Cooldown(.5f), .4f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5);
+        }
+
+        protected override void drawHitbox(SpriteBatch spriteBatch, bool renderHitboxes)
+        {
+            spriteBatch.Draw(
+                renderHitboxes ? Game1.blankTexture : tileSet,
+                hitbox,
+                renderHitboxes ? Color.Orange : Color.White
+            );
         }
     }
 }

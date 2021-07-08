@@ -540,5 +540,16 @@ namespace C2Eindopdracht.Classes
                 }
             }
         }
+
+        public void draw(SpriteBatch spriteBatch, bool renderHitboxes)
+		{
+            foreach(List<LevelComponent> rowList in list)
+			{
+                foreach(LevelComponent levelComponent in rowList)
+				{
+                    levelComponent.draw(spriteBatch, renderHitboxes, tileSize);
+				}
+			}
+		}
     }
 }

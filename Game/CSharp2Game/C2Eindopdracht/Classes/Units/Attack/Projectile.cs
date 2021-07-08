@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using C2Eindopdracht.Classes.Units;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace C2Eindopdracht.Classes
 {
-	class Projectile : Attack
+	class Projectile : Attack, ITileSet
 	{
 		public float xSpeed { get; set; } 
 		public Face face { get; set; }
@@ -32,7 +33,7 @@ namespace C2Eindopdracht.Classes
 		/// </summary>
 		/// <param name="gameTime">Holds the timestate of a Game</param>
 		/// <returns></returns>
-		public override Attack update(GameTime gameTime)
+		public override void update(GameTime gameTime)
 		{
 			move(gameTime);
 			if (cooldown.elapsedTime >= activeTime)
@@ -43,8 +44,6 @@ namespace C2Eindopdracht.Classes
 			{
 				cooldown.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
 			}
-
-			return this;
 		}
 
 		/// <summary>
@@ -63,6 +62,32 @@ namespace C2Eindopdracht.Classes
 				tempHitbox.X += (int)(xSpeed * gameTime.ElapsedGameTime.TotalSeconds);
 			}
 			hitbox = tempHitbox;
+		}
+
+		/// <summary>
+		/// Draw the projectile to the screen
+		/// </summary>
+		/// <param name="spriteBatch">Helper class for drawing text strings and sprites in one or more optimized batches</param>
+		/// <param name="renderHitboxes">Renders just the hitbox Rectangles if true</param>
+		public override void draw(SpriteBatch spriteBatch, bool renderHitboxes)
+		{
+			if(renderHitboxes)
+			{
+				spriteBatch.Draw(
+					Game1.blankTexture,
+					hitbox,
+					Color.Red
+				);
+			}
+			else
+			{
+				spriteBatch.Draw(
+					tileSet,
+					new Vector2(hitbox.X, hitbox.Y),
+					new Rectangle(face == Face.LEFT ? 0 : 20, 0, 20, 15),
+					Color.White
+				);
+			}
 		}
 	}
 }

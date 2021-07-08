@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Text;
+using C2Eindopdracht.Classes.Units;
 
 namespace C2Eindopdracht.Classes
 {
@@ -57,7 +58,7 @@ namespace C2Eindopdracht.Classes
         /// </summary>
         /// <param name="gameTime">Holds the timestate of a Game</param>
         /// <returns>The updated attack</returns>
-        public virtual Attack update(GameTime gameTime)
+        public virtual void update(GameTime gameTime)
 		{
             if (cooldown.elapsedTime >= activeTime)
             {
@@ -67,7 +68,23 @@ namespace C2Eindopdracht.Classes
             {
                 cooldown.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-            return this;
 		}
+
+        /// <summary>
+        /// Draw the attack
+        /// </summary>
+        /// <param name="spriteBatch">Helper class for drawing text strings and sprites in one or more optimized batches</param>
+        /// <param name="renderHitboxes">Renders just the hitbox Rectangles if true</param>
+        public virtual void draw(SpriteBatch spriteBatch, bool renderHitboxes)
+		{
+            if(renderHitboxes)
+			{
+                spriteBatch.Draw(
+                    renderHitboxes ? Game1.blankTexture : ITileSet.tileSet,
+                    hitbox,
+                    Color.Red
+                );
+            }
+        }
     }
 }
