@@ -20,6 +20,8 @@ namespace C2Eindopdracht
         private GameStatus gameStatus;
         private bool keyDown;
         private UIElementLabel uie;
+        private Rectangle menuRect;
+        private Texture2D menuTexture;
 
 
         //Texture mainly for drawing hitboxes
@@ -34,8 +36,12 @@ namespace C2Eindopdracht
 
         protected override void Initialize()
         {
+            menuRect.X = -120;
+            menuRect.Y = -80;
+            menuRect.Width =  254;
+            menuRect.Height = 104;
             // TODO: Add your initialization logic here
-            gameStatus = GameStatus.GAME;
+            gameStatus = GameStatus.MENU;
             keyDown = false;
 
             camera = new Camera
@@ -64,7 +70,8 @@ namespace C2Eindopdracht
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content hereWW
+            // TODO: use this.Content to load your game content here
+            menuTexture = Content.Load<Texture2D>("startImage");
             LevelComponent.tileSet = Content.Load<Texture2D>("tileset-map-squared");
             Player.tileSet = Content.Load<Texture2D>("character1");
             MageEnemy.tileSet = Content.Load<Texture2D>("enemyMage");
@@ -80,7 +87,16 @@ namespace C2Eindopdracht
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                  Exit();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Y) && !keyDown)
+
+            if(gameStatus == GameStatus.MENU)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Space) && !keyDown)
+                {
+                    gameStatus = GameStatus.GAME;
+                }
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Y) && !keyDown && gameStatus != GameStatus.MENU)
 			{
                 if(gameStatus == GameStatus.GAME)
 				{
@@ -115,9 +131,13 @@ namespace C2Eindopdracht
                 ui.update(new Vector2(player.position.X - _graphics.PreferredBackBufferWidth / (2 * camera.Zoom), player.position.Y - _graphics.PreferredBackBufferHeight / (2 * camera.Zoom)), gameTime);
                 camera.Pos = player.position;
                 level.checkEndTriggerHit(player.hitbox, ui, 5, 50);
-            } else
+            } else if(gameStatus == GameStatus.PAUSE)
             {
-                uie = new UIElementLabel("Press Y to start playing", new Vector2(30, 120), new Vector2(player.position.X - _graphics.PreferredBackBufferWidth / 9, player.position.Y - _graphics.PreferredBackBufferHeight / 20), 0);
+                uie = new UIElementLabel("Press Y to continue playing", new Vector2(30, 120), new Vector2(player.position.X - _graphics.PreferredBackBufferWidth / 9, player.position.Y - _graphics.PreferredBackBufferHeight / 20), 0);
+            }
+            else if(gameStatus == GameStatus.MENU)
+            {
+                
             }
         }
 
@@ -143,11 +163,18 @@ namespace C2Eindopdracht
 
                 _spriteBatch.End();
             }
-            else
+            else if(gameStatus == GameStatus.PAUSE)
             {
                 GraphicsDevice.Clear(Color.DarkOliveGreen);
                 _spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
                 uie.draw(_spriteBatch, arial16);
+                _spriteBatch.End();
+            }
+            else if(gameStatus == GameStatus.MENU)
+            {
+                GraphicsDevice.Clear(Color.DarkOliveGreen);
+                _spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
+                _spriteBatch.Draw(menuTexture, menuRect, Color.White);
                 _spriteBatch.End();
             }
             base.Draw(gameTime);
@@ -156,6 +183,7 @@ namespace C2Eindopdracht
     public enum GameStatus
     {
         PAUSE,
-        GAME
+        GAME,
+        MENU
     }
 }
