@@ -17,23 +17,35 @@ namespace C2Eindopdracht
         private UI ui;
         private bool renderHitboxes;
         private SpriteFont arial16;
-        private GameStatus gameStatus;
+        private GameState gameStatus;
         private bool keyDown;
+        private UIElementLabel uie;
+        private Rectangle menuRect;
+        private Texture2D menuTexture;
+
 
         //Texture mainly for drawing hitboxes
         public static Texture2D blankTexture;
-
+        /// <summary>
+        /// Constructor of game. Initializes GraphicsDeviceManager and give Content a directory
+        /// </summary>
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
-
+        /// <summary>
+        /// Initializes camera that follows the player, the player itself, the level, and creates UI
+        /// </summary>
         protected override void Initialize()
         {
+            menuRect.X = -120;
+            menuRect.Y = -80;
+            menuRect.Width =  254;
+            menuRect.Height = 104;
             // TODO: Add your initialization logic here
-            gameStatus = GameStatus.GAME;
+            gameStatus = GameState.MENU;
             keyDown = false;
 
             camera = new Camera
@@ -57,12 +69,15 @@ namespace C2Eindopdracht
 
             base.Initialize();
         }
-
+        /// <summary>
+        /// Loads the content
+        /// </summary>
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            menuTexture = Content.Load<Texture2D>("startImage");
             LevelComponent.tileSet = Content.Load<Texture2D>("tileset-map-squared");
             Player.tileSet = Content.Load<Texture2D>("character1");
             MageEnemy.tileSet = Content.Load<Texture2D>("enemyMage");
@@ -72,21 +87,33 @@ namespace C2Eindopdracht
 
             blankTexture = Content.Load<Texture2D>("blankTexture");
         }
-
+        /// <summary>
+        /// Updates up to 60 times a second. Changes depending on gameState. 
+        /// </summary>
+        /// <param name="gameTime"></param>
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                  Exit();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Y) && !keyDown)
+
+            if(gameStatus == GameState.MENU)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Space) && !keyDown)
+                {
+                    gameStatus = GameState.GAME;
+                }
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Y) && !keyDown && gameStatus != GameState.MENU)
 			{
-                if(gameStatus == GameStatus.GAME)
+                if(gameStatus == GameState.GAME)
 				{
-                    gameStatus = GameStatus.MENU;
+                    gameStatus = GameState.PAUSE;
 				}
                 else
 				{
-                    gameStatus = GameStatus.GAME;
+                    gameStatus = GameState.GAME;
                 }
                 keyDown = true;
             }
@@ -100,7 +127,7 @@ namespace C2Eindopdracht
             if (SmartKeyboard.HasBeenPressed(Keys.Tab))
                 renderHitboxes = !renderHitboxes;
 
-            if (gameStatus == GameStatus.GAME)
+            if (gameStatus == GameState.GAME)
             {
                 // TODO: Add your update logic here
                 player.update(gameTime, level.list, level.enemies, (UIElementLabelValue)ui.getUIElementByLabel("Enemies alive"));
@@ -113,12 +140,23 @@ namespace C2Eindopdracht
                 ui.update(new Vector2(player.position.X - _graphics.PreferredBackBufferWidth / (2 * camera.Zoom), player.position.Y - _graphics.PreferredBackBufferHeight / (2 * camera.Zoom)), gameTime);
                 camera.Pos = player.position;
                 level.checkEndTriggerHit(player.hitbox, ui, 5, 50);
+            } else if(gameStatus == GameState.PAUSE)
+            {
+                uie = new UIElementLabel("Press Y to continue playing", new Vector2(30, 120), new Vector2(player.position.X - _graphics.PreferredBackBufferWidth / 9, player.position.Y - _graphics.PreferredBackBufferHeight / 20), 0);
+            }
+            else if(gameStatus == GameState.MENU)
+            {
+                
             }
         }
 
+        /// <summary>
+        /// Draws all elements. The elements that are drawn depend on gameState.
+        /// </summary>
+        /// <param name="gameTime">Running time</param>
         protected override void Draw(GameTime gameTime)
         {
-            if(gameStatus == GameStatus.GAME)
+            if(gameStatus == GameState.GAME)
             {
                 GraphicsDevice.Clear(Color.DarkSlateGray);
 
@@ -138,17 +176,27 @@ namespace C2Eindopdracht
 
                 _spriteBatch.End();
             }
-            else
+            else if(gameStatus == GameState.PAUSE)
             {
-                GraphicsDevice.Clear(Color.DarkSeaGreen);
-
+                GraphicsDevice.Clear(Color.DarkOliveGreen);
+                _spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
+                uie.draw(_spriteBatch, arial16);
+                _spriteBatch.End();
+            }
+            else if(gameStatus == GameState.MENU)
+            {
+                GraphicsDevice.Clear(Color.DarkOliveGreen);
+                _spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
+                _spriteBatch.Draw(menuTexture, menuRect, Color.White);
+                _spriteBatch.End();
             }
             base.Draw(gameTime);
         }
      }
-    public enum GameStatus
+    public enum GameState
     {
-        MENU,
-        GAME
+        PAUSE,
+        GAME,
+        MENU
     }
 }
