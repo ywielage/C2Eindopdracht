@@ -17,7 +17,8 @@ namespace C2Eindopdracht
         private UI ui;
         private bool renderHitboxes;
         private SpriteFont arial16;
-        private GameState gameState;
+        private GameStatus gameStatus;
+        private bool keyDown;
 
         //Texture mainly for drawing hitboxes
         public static Texture2D blankTexture;
@@ -31,10 +32,10 @@ namespace C2Eindopdracht
 
         protected override void Initialize()
         {
-            gameState = new GameState();
-            gameState = GameState.GAME;
-
             // TODO: Add your initialization logic here
+            gameStatus = GameStatus.GAME;
+            keyDown = false;
+
             camera = new Camera
 			{
 				Zoom = 1.1f
@@ -74,29 +75,32 @@ namespace C2Eindopdracht
 
         protected override void Update(GameTime gameTime)
         {
-            if (SmartKeyboard.HasBeenPressed(Keys.Y))
-            {
-                if (gameState.Equals(GameState.GAME))
-                {
-                    gameState = GameState.MENU;
-                }
-                else if (gameState.Equals(GameState.MENU))
-                {
-                    gameState = GameState.GAME;
-                }
-            }
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                  Exit();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Y) && !keyDown)
+			{
+                if(gameStatus == GameStatus.GAME)
+				{
+                    gameStatus = GameStatus.MENU;
+				}
+                else
+				{
+                    gameStatus = GameStatus.GAME;
+                }
+                keyDown = true;
+            }
+
+            if (Keyboard.GetState().IsKeyUp(Keys.Y) && keyDown)
+                keyDown = false;
 
             if (SmartKeyboard.HasBeenPressed(Keys.F))
                 _graphics.ToggleFullScreen();
 
+            if (SmartKeyboard.HasBeenPressed(Keys.Tab))
+                renderHitboxes = !renderHitboxes;
 
-                if (SmartKeyboard.HasBeenPressed(Keys.Tab))
-                    renderHitboxes = !renderHitboxes;
-
-            if (gameState == GameState.GAME)
+            if (gameStatus == GameStatus.GAME)
             {
                 // TODO: Add your update logic here
                 player.update(gameTime, level.list, level.enemies, (UIElementLabelValue)ui.getUIElementByLabel("Enemies alive"));
@@ -110,13 +114,11 @@ namespace C2Eindopdracht
                 camera.Pos = player.position;
                 level.checkEndTriggerHit(player.hitbox, ui, 5, 50);
             }
-
-            Debug.WriteLine(gameState);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            if(gameState == GameState.GAME)
+            if(gameStatus == GameStatus.GAME)
             {
                 GraphicsDevice.Clear(Color.DarkSlateGray);
 
@@ -136,7 +138,7 @@ namespace C2Eindopdracht
 
                 _spriteBatch.End();
             }
-            else if(gameState == GameState.MENU)
+            else
             {
                 GraphicsDevice.Clear(Color.DarkSeaGreen);
 
@@ -144,7 +146,7 @@ namespace C2Eindopdracht
             base.Draw(gameTime);
         }
      }
-    public enum GameState
+    public enum GameStatus
     {
         MENU,
         GAME
