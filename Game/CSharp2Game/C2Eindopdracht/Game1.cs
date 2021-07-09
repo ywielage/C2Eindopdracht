@@ -19,6 +19,8 @@ namespace C2Eindopdracht
         private SpriteFont arial16;
         private GameStatus gameStatus;
         private bool keyDown;
+        private UIElementLabel uie;
+
 
         //Texture mainly for drawing hitboxes
         public static Texture2D blankTexture;
@@ -113,6 +115,9 @@ namespace C2Eindopdracht
                 ui.update(new Vector2(player.position.X - _graphics.PreferredBackBufferWidth / (2 * camera.Zoom), player.position.Y - _graphics.PreferredBackBufferHeight / (2 * camera.Zoom)), gameTime);
                 camera.Pos = player.position;
                 level.checkEndTriggerHit(player.hitbox, ui, 5, 50);
+            } else
+            {
+                uie = new UIElementLabel("Press Y to start playing", new Vector2(30, 120), new Vector2(player.position.X - _graphics.PreferredBackBufferWidth / 9, player.position.Y - _graphics.PreferredBackBufferHeight / 20), 0);
             }
         }
 
@@ -142,7 +147,6 @@ namespace C2Eindopdracht
             {
                 GraphicsDevice.Clear(Color.DarkOliveGreen);
                 _spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
-                UIElementLabel uie = new UIElementLabel("Press Y to start playing", new Vector2(30, 120), new Vector2(player.position.X - _graphics.PreferredBackBufferWidth / 9, player.position.Y - _graphics.PreferredBackBufferHeight / 20), 0);
                 uie.draw(_spriteBatch, arial16);
                 _spriteBatch.End();
             }
