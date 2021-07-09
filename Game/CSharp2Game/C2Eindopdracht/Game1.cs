@@ -62,7 +62,7 @@ namespace C2Eindopdracht
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            // TODO: use this.Content to load your game content hereWW
             LevelComponent.tileSet = Content.Load<Texture2D>("tileset-map-squared");
             Player.tileSet = Content.Load<Texture2D>("character1");
             MageEnemy.tileSet = Content.Load<Texture2D>("enemyMage");
@@ -82,7 +82,7 @@ namespace C2Eindopdracht
 			{
                 if(gameStatus == GameStatus.GAME)
 				{
-                    gameStatus = GameStatus.MENU;
+                    gameStatus = GameStatus.PAUSE;
 				}
                 else
 				{
@@ -140,15 +140,18 @@ namespace C2Eindopdracht
             }
             else
             {
-                GraphicsDevice.Clear(Color.DarkSeaGreen);
-
+                GraphicsDevice.Clear(Color.DarkOliveGreen);
+                _spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
+                UIElementLabel uie = new UIElementLabel("Press Y to start playing", new Vector2(30, 120), new Vector2(player.position.X - _graphics.PreferredBackBufferWidth / 9, player.position.Y - _graphics.PreferredBackBufferHeight / 20), 0);
+                uie.draw(_spriteBatch, arial16);
+                _spriteBatch.End();
             }
             base.Draw(gameTime);
         }
      }
     public enum GameStatus
     {
-        MENU,
+        PAUSE,
         GAME
     }
 }
