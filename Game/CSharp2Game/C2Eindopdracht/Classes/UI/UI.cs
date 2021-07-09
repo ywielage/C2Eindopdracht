@@ -28,17 +28,9 @@ namespace C2Eindopdracht.Classes
 
 			foreach (UIElement element in elements)
 			{
-				element.position = position + element.parentOffset;
-				if (element.activeTime != null)
-				{
-					element.activeTime.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-					if (element.activeTime.elapsedTime >= element.activeTime.duration)
-					{
-						elapsedUI.Add(element);
-					}
-				}
+				element.update(position, gameTime);
 			}
-			elements.RemoveAll(element => elapsedUI.Contains(element));
+			elements.RemoveAll(element => element.expired);
 		}
 
 		/// <summary>

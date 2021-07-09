@@ -12,6 +12,7 @@ namespace C2Eindopdracht.Classes
 		public Vector2 parentOffset { get; set; }
 		public Vector2 position { get; set; }
 		public Cooldown activeTime { get; set; }
+		public bool expired { get; set; }
 
 		public UIElement(string label, Vector2 parentOffset, Vector2 position, float activeTime)
 		{
@@ -25,6 +26,24 @@ namespace C2Eindopdracht.Classes
 			else
 			{
 				this.activeTime = new Cooldown(activeTime);
+			}
+			this.expired = false;
+		}
+
+		/// <summary>
+		/// Update the position and active time
+		/// </summary>
+		/// <param name="gameTime">Holds the timestate of a Game</param>
+		public void update(Vector2 parentPosition, GameTime gameTime)
+		{
+			position = parentPosition + parentOffset;
+			if (activeTime != null)
+			{
+				activeTime.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+				if (activeTime.elapsedTime >= activeTime.duration)
+				{
+					expired = true;
+				}
 			}
 		}
 
