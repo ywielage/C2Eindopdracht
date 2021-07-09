@@ -52,7 +52,13 @@ namespace C2Eindopdracht.Classes
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Draw the levelcomponent
+        /// </summary>
+        /// <param name="spriteBatch">Helper class for drawing text strings and sprites in one or more optimized batches</param>
+        /// <param name="renderHitboxes">Renders just the hitbox Rectangles if true</param>
+        /// <param name="tileSize">Width and height of a tile</param>
         public void draw(SpriteBatch spriteBatch, bool renderHitboxes, int tileSize)
 		{
             if(renderHitboxes)

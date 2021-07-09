@@ -28,6 +28,11 @@ namespace C2Eindopdracht.Classes
 			}
 		}
 
+		/// <summary>
+		/// Draw the UI element
+		/// </summary>
+		/// <param name="spriteBatch">Helper class for drawing text strings and sprites in one or more optimized batches</param>
+		/// <param name="arial16">Arial font size 16</param>
 		public void draw(SpriteBatch spriteBatch, SpriteFont arial16)
 		{
 			spriteBatch.DrawString(
@@ -43,6 +48,10 @@ namespace C2Eindopdracht.Classes
 			);
 		}
 
+		/// <summary>
+		/// Get the UI text that should be drawn
+		/// </summary>
+		/// <returns>A string with the text to be drawn</returns>
 		public abstract string getDrawText();
 	}
 }

@@ -36,7 +36,6 @@ namespace C2Eindopdracht
 				Zoom = 1.1f
 			};
 
-            //Level with (levelcomponents wide, levelcomponents high, amount of enemies)
             level = new Level(4, 4, 8);
             level.init(false);
             level.drawLevelInDebug();

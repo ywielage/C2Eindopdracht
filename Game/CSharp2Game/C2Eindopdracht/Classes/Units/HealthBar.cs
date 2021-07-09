@@ -8,7 +8,7 @@ namespace C2Eindopdracht.Classes
 {
     class HealthBar
     {
-        private Rectangle bar;
+        public Rectangle bar { get; set; }
         public int fullWidth { get; set; }
         public Color color { get; set; }
         public int xOffset { get; set; }
@@ -31,16 +31,6 @@ namespace C2Eindopdracht.Classes
             this.yOffset = yOffset;
         }
 
-        public Rectangle getBar()
-        {
-            return this.bar;
-        }
-
-        public void setBar(Rectangle bar)
-        {
-            this.bar = bar;
-        }
-
         /// <summary>
         /// Change values healthbar
         /// </summary>
@@ -48,8 +38,10 @@ namespace C2Eindopdracht.Classes
         /// <param name="currHp"></param> Current hp
         public void updateHealthBar(int maxHp, int currHp)
         {
+            Rectangle tempBar = bar;
             float percentHealthBar = (float)currHp / (float)maxHp;
-            bar.Width = (int)(fullWidth * percentHealthBar);
+            tempBar.Width = (int)(fullWidth * percentHealthBar);
+            bar = tempBar;
         }
 
         /// <summary>

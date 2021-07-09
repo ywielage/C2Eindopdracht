@@ -64,9 +64,11 @@ namespace C2Eindopdracht.Classes.Units
 		/// </summary>
 		protected void alignHealthBarToPosition()
 		{
-			int healthBarHeight = this.healthBar.getBar().Height;
-			int healthBarWidth = this.healthBar.getBar().Width;
-			this.healthBar.setBar(new Rectangle(new Point((int)position.X + healthBar.xOffset, (int)position.Y + healthBar.yOffset), new Point(healthBarWidth, healthBarHeight)));
+			int healthBarHeight = healthBar.bar.Height;
+			int healthBarWidth = healthBar.bar.Width;
+            HealthBar tempBar = healthBar;
+            tempBar.bar = new Rectangle(new Point((int)position.X + healthBar.xOffset, (int)position.Y + healthBar.yOffset), new Point(healthBarWidth, healthBarHeight));
+            healthBar = tempBar;
 		}
 
         /// <summary>

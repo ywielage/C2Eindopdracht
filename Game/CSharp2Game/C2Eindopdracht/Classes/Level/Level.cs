@@ -47,12 +47,8 @@ namespace C2Eindopdracht.Classes
             list = initList(width, height);
 
             int resetCount = 0;
-            while (true)
+            while (!createPath(width, height, debug))
             {
-                if (createPath(width, height, debug))
-                {
-                    break;
-                }
                 resetList();
                 if (debug)
                 {
@@ -80,18 +76,9 @@ namespace C2Eindopdracht.Classes
             int yPos = 1;
             Directions lastExit = Directions.SOUTH;
             var random = new Random();
-            int count = 0;
 
-            while (true)  
+            while (hasFreeNeighbours(xPos, yPos))
             {
-                if(count == 3)
-                {
-                    if (!hasFreeNeighbours(xPos, yPos))
-                    {
-                        return false;
-                    }
-                    count = 0;
-                }
                 if (xPos == 1 && yPos == 1)
                 {
                     if(debug)
@@ -116,63 +103,136 @@ namespace C2Eindopdracht.Classes
                 else
                 {
                     int randomDirection = random.Next(1, 5);
-
                     if (debug)
                     {
                         printLevelComponent(xPos, yPos, lastExit, randomDirection);
                     }
-
-                    Directions exit;
-                    if (randomDirection == 1 && yPos > 1)
-                    {
-                        if (lastExit != Directions.SOUTH && !list[yPos-1][xPos].isFilled)
-                        {
-                            exit = Directions.NORTH;
-                            list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit, xPos, yPos);
-                            lastExit = exit;
-                            yPos--;
-                            count = 0;
-                        }
-
-                    }
-                    else if (randomDirection == 2 && xPos < width - 2)
-                    {
-                        if (lastExit != Directions.WEST && !list[yPos][xPos+1].isFilled)
-                        {
-                            exit = Directions.EAST;
-                            list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit, xPos, yPos);
-                            lastExit = exit;
-                            xPos++;
-                            count = 0;
-                        }
-
-                    }
-                    else if (randomDirection == 3 && yPos < height - 2)
-                    {
-                        if (lastExit != Directions.NORTH && !list[yPos+1][xPos].isFilled)
-                        {
-                            exit = Directions.SOUTH;
-                            list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit, xPos, yPos);
-                            lastExit = exit;
-                            yPos++;
-                            count = 0;
-                        }
-
-                    }
-                    else if (randomDirection == 4 && xPos > 1)
-                    {
-                        if (lastExit != Directions.EAST && !list[yPos][xPos-1].isFilled)
-                        {
-                            exit = Directions.WEST;
-                            list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit, xPos, yPos);
-                            lastExit = exit;
-                            xPos--;
-                            count = 0;
-                        }
-                    }
+                    generateLevelComponent(randomDirection, ref xPos, ref yPos, ref lastExit);
                 }
-                count++;
             }
+            return false;
+        }
+
+        /// <summary>
+        /// Generate a randome levelcomponent
+        /// </summary>
+        /// <param name="randomDirection">Direction the levelcomponent exit will go</param>
+        /// <param name="xPos">The horizontal position in the levelcompontent list</param>
+        /// <param name="yPos">The vertical position in the levelcompontent list</param>
+        /// <param name="lastExit">The exit this levelcomponent leads into</param>
+        private void generateLevelComponent(int randomDirection, ref int xPos, ref int yPos, ref Directions lastExit)
+		{
+            if (randomDirection == 1 && yPos > 1)
+            {
+                generateLevelComponentNorth(ref xPos, ref yPos, ref lastExit);
+            }
+            else if (randomDirection == 2 && xPos < width - 2)
+            {
+                generateLevelComponentEast(ref xPos, ref yPos, ref lastExit);
+            }
+            else if (randomDirection == 3 && yPos < height - 2)
+            {
+                generateLevelComponentSouth(ref xPos, ref yPos, ref lastExit);
+            }
+            else if (randomDirection == 4 && xPos > 1)
+            {
+                generateLevelComponentWest(ref xPos, ref yPos, ref lastExit);
+            }
+        }
+
+        /// <summary>
+        /// Generate a levelcomponent with a north exit
+        /// </summary>
+        /// <param name="xPos">The horizontal position in the levelcompontent list</param>
+        /// <param name="yPos">The vertical position in the levelcompontent list</param>
+        /// <param name="lastExit">The exit this levelcomponent leads into</param>
+        private void generateLevelComponentNorth(ref int xPos, ref int yPos, ref Directions lastExit)
+		{
+            if (lastExit != Directions.SOUTH && !list[yPos - 1][xPos].isFilled)
+            {
+                Directions exit;
+                exit = Directions.NORTH;
+                list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit, xPos, yPos);
+                lastExit = exit;
+                yPos--;
+            }
+        }
+
+        /// <summary>
+        /// Generate a levelcomponent with a east exit
+        /// </summary>
+        /// <param name="xPos">The horizontal position in the levelcompontent list</param>
+        /// <param name="yPos">The vertical position in the levelcompontent list</param>
+        /// <param name="lastExit">The exit this levelcomponent leads into</param>
+        private void generateLevelComponentEast(ref int xPos, ref int yPos, ref Directions lastExit)
+        {
+            if (lastExit != Directions.WEST && !list[yPos][xPos + 1].isFilled)
+            {
+                Directions exit;
+                exit = Directions.EAST;
+                list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit, xPos, yPos);
+                lastExit = exit;
+                xPos++;
+            }
+        }
+
+        /// <summary>
+        /// Generate a levelcomponent with a south exit
+        /// </summary>
+        /// <param name="xPos">The horizontal position in the levelcompontent list</param>
+        /// <param name="yPos">The vertical position in the levelcompontent list</param>
+        /// <param name="lastExit">The exit this levelcomponent leads into</param>
+        private void generateLevelComponentSouth(ref int xPos, ref int yPos, ref Directions lastExit)
+        {
+            if (lastExit != Directions.NORTH && !list[yPos + 1][xPos].isFilled)
+            {
+                Directions exit;
+                exit = Directions.SOUTH;
+                list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit, xPos, yPos);
+                lastExit = exit;
+                yPos++;
+            }
+        }
+
+        /// <summary>
+        /// Generate a levelcomponent with a west exit
+        /// </summary>
+        /// <param name="xPos">The horizontal position in the levelcompontent list</param>
+        /// <param name="yPos">The vertical position in the levelcompontent list</param>
+        /// <param name="lastExit">The exit this levelcomponent leads into</param>
+        private void generateLevelComponentWest(ref int xPos, ref int yPos, ref Directions lastExit)
+		{
+            if (lastExit != Directions.EAST && !list[yPos][xPos - 1].isFilled)
+            {
+                Directions exit;
+                exit = Directions.WEST;
+                list[yPos][xPos] = setSelectedListPos(list[yPos][xPos], getOppositeSide(lastExit), exit, xPos, yPos);
+                lastExit = exit;
+                xPos--;
+            }
+        }
+
+        /// <summary>
+        /// Set the current levelcomponent to the given entrance and exit
+        /// </summary>
+        /// <param name="levelComponent">The levelcomponent to set</param>
+        /// <param name="entrance">The entrance of the levelcomponent</param>
+        /// <param name="exit">The exit of the levelcomponent</param>
+        /// <param name="xPos">The horizontal position of the levelcomponent</param>
+        /// <param name="yPos">The vertical position of the levelcomponent</param>
+        /// <returns>The filled in levelcomponent</returns>
+        private LevelComponent setSelectedListPos(LevelComponent levelComponent, Directions entrance, Directions exit, int xPos, int yPos)
+        {
+            levelComponent.exit = exit;
+            levelComponent.entrance = entrance;
+            levelComponent.isFilled = true;
+
+            Point position = levelComponent.position;
+            position.X = xPos * levelComponentSize;
+            position.Y = yPos * levelComponentSize;
+            levelComponent.position = position;
+
+            return levelComponent;
         }
 
         /// <summary>
@@ -258,29 +318,6 @@ namespace C2Eindopdracht.Classes
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Set the current levelcomponent to the given entrance and exit
-        /// </summary>
-        /// <param name="levelComponent">The levelcomponent to set</param>
-        /// <param name="entrance">The entrance of the levelcomponent</param>
-        /// <param name="exit">The exit of the levelcomponent</param>
-        /// <param name="xPos">The horizontal position of the levelcomponent</param>
-        /// <param name="yPos">The vertical position of the levelcomponent</param>
-        /// <returns>The filled in levelcomponent</returns>
-        private LevelComponent setSelectedListPos(LevelComponent levelComponent, Directions entrance, Directions exit, int xPos, int yPos)
-        {
-            levelComponent.exit = exit;
-            levelComponent.entrance = entrance;
-            levelComponent.isFilled = true;
-
-            Point position = levelComponent.position;
-            position.X = xPos * levelComponentSize;
-            position.Y = yPos * levelComponentSize;
-            levelComponent.position = position;
-
-            return levelComponent;
         }
 
         /// <summary>
@@ -382,7 +419,6 @@ namespace C2Eindopdracht.Classes
             if(levelComponent.exit == side)
             {
                 setSide = side;
-                
             }
             else if(levelComponent.entrance == side)
             {
@@ -541,6 +577,11 @@ namespace C2Eindopdracht.Classes
             }
         }
 
+        /// <summary>
+        /// Draw the level colliders
+        /// </summary>
+        /// <param name="spriteBatch">Helper class for drawing text strings and sprites in one or more optimized batches</param>
+        /// <param name="renderHitboxes">Renders just the hitbox Rectangles if true</param>
         public void draw(SpriteBatch spriteBatch, bool renderHitboxes)
 		{
             foreach(List<LevelComponent> rowList in list)
