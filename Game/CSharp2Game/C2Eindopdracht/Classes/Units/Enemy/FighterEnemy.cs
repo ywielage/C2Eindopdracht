@@ -12,6 +12,14 @@ namespace C2Eindopdracht.Classes
     {
         public static Texture2D tileSet { get; set; }
 
+        /// <summary>
+        /// Fighter enemy, a melee powerhouse
+        /// </summary>
+        /// <param name="xPos">Horizontal position</param>
+        /// <param name="yPos">Vertical position</param>
+        /// <param name="width">Width of the hitbox</param>
+        /// <param name="height">Height of the hitbox</param>
+        /// <param name="hp">Amount of hp the figher has</param>
         public FighterEnemy(int xPos, int yPos, int width, int height, int hp) : base(xPos, yPos, width, height, hp)
         {
             xSpeed = 100f;
@@ -24,7 +32,7 @@ namespace C2Eindopdracht.Classes
 
         protected override Attack getAttack()
         {
-            return attack(1, new Cooldown(.5f), .4f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5);
+            return attack(1, new Cooldown(.5f), .4f, new Rectangle((int)position.X, (int)position.Y, 24, 24), .2f, 5);
         }
 
         protected override void drawHitbox(SpriteBatch spriteBatch, bool renderHitboxes)

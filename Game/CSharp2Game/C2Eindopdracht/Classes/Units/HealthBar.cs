@@ -15,13 +15,13 @@ namespace C2Eindopdracht.Classes
         public int yOffset { get; set; }
 
         /// <summary>
-        /// Sets default values
+        /// Visual representation of the health bar
         /// </summary>
-        /// <param name="bar">Bar rectangle</param>  
-        /// <param name="fullWidth">Width bar</param> 
-        /// <param name="color">Color bar</param> 
-        /// <param name="xOffset">Horizontal offset bar</param>
-        /// <param name="yOffset">Vertical offset bar</param> 
+        /// <param name="bar">Bar itself</param>  
+        /// <param name="fullWidth">Max length if full hp</param> 
+        /// <param name="color">Color of the bar</param> 
+        /// <param name="xOffset">Horizontal offset from unit</param>
+        /// <param name="yOffset">Vertical offset from unit</param> 
         public HealthBar(Rectangle bar, int fullWidth, Color color, int xOffset, int yOffset)
         {
             this.bar = bar;

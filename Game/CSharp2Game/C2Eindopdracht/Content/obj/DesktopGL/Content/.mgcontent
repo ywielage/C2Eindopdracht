@@ -11,6 +11,7 @@
     <File>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/enemyMage.png</File>
     <File>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/fireball.png</File>
     <File>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/fonts/Arial16.spritefont</File>
+    <File>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/startImage.png</File>
     <File>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/tileset-map.png</File>
     <File>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/tileset-map-squared.png</File>
   </SourceFiles>
@@ -19,6 +20,7 @@
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File>enemyFighter.png</File>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

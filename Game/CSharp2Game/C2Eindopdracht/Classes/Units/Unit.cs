@@ -28,16 +28,19 @@ namespace C2Eindopdracht.Classes.Units
         public bool isAlive { get; set; }
 
         /// <summary>
-        /// Every moving unit with hp and a healthbar
+        /// An absolute unit
         /// </summary>
-        /// <param name="xPos">Horizontal position</param>
-        /// <param name="yPos">Vertical position</param>
-        /// <param name="width">Width of the unit</param>
-        /// <param name="height">Height of the unit</param>
-		protected Unit(int xPos, int yPos, int width, int height)
+        /// <param name="xPos">Horizontal Position</param> 
+        /// <param name="yPos">Vertical position</param> 
+        /// <param name="width">Width unit</param>  
+        /// <param name="height">Height unit</param>
+        /// <param name="hp">Amount of hp the unit has</param>
+		protected Unit(int xPos, int yPos, int width, int height, int hp)
 		{
 			position = new Vector2(xPos, yPos);
 			hitbox = new Rectangle(xPos, yPos, width, height);
+            maxHp = hp;
+            currHp = hp;
 			attacks = new List<Attack>();
 			gravity = gravity;
 			ySpeed = 0;
@@ -96,7 +99,7 @@ namespace C2Eindopdracht.Classes.Units
         /// Check if the unit can move to the given new position
         /// </summary>
         /// <param name="newPosition">New position to check</param>
-        /// <param name="levelComponents">All levelcolliders</param>
+        /// <param name="levelComponents">The levelcomponents it can collide with</param>
         /// <returns></returns>
         protected bool canMove(Vector2 newPosition, List<List<LevelComponent>> levelComponents)
 		{
@@ -116,6 +119,27 @@ namespace C2Eindopdracht.Classes.Units
             }
             return true;
 		}
+
+        /// <summary>
+        /// Unit gets hit and takes damage and knockback
+        /// </summary>
+        /// <param name="attack">Attack the unit is hit with</param>
+        /// <param name="levelComponents">The levelcomponents it can collide with</param>
+        protected void struck(Attack attack, List<List<LevelComponent>> levelComponents) 
+        {
+            currHp -= attack.damage;
+            healthBar.updateHealthBar(maxHp, currHp);
+            knockback = new Cooldown(attack.knockbackTime);
+            if (position.X < attack.hitbox.Center.X)
+            {
+                xSpeed = 0 - xSpeed;
+            }
+            ySpeed = -5f;
+            if (canMove(new Vector2(position.X, position.Y - 5f), levelComponents))
+            {
+                position = new Vector2(position.X, position.Y - 5f);
+            }
+        }
 
         /// <summary>
         /// Updates the attacks.
@@ -221,11 +245,11 @@ namespace C2Eindopdracht.Classes.Units
         /// <param name="cooldown">Cooldown for the next attack</param>
         /// <param name="duration">Duration of the attack</param>
         /// <param name="hitbox">Hitbox of the attack which units can colide with</param>
+        /// <param name="knockbackTime">Time the knockback should last</param>
         /// <param name="hitboxXOffSet">Offset of the hitbox, if the unit is facing left the attack comes out slightly more to that side</param>
         /// <returns>A new offset based on the face</returns>
-        protected virtual Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet)
+        protected virtual Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, float knockbackTime, int hitboxXOffSet)
         {
-            
             if (face == Face.LEFT)
             {
                 hitbox.X -= hitboxXOffSet;
@@ -234,7 +258,7 @@ namespace C2Eindopdracht.Classes.Units
             {
                 hitbox.X += hitboxXOffSet;
             }
-            return new Attack(damage, cooldown, duration, hitbox);
+            return new Attack(damage, cooldown, duration, hitbox, knockbackTime);
         }
 
         /// <summary>
@@ -254,7 +278,7 @@ namespace C2Eindopdracht.Classes.Units
         /// </summary>
         /// <param name="spriteBatch">Helper class for drawing text strings and sprites in one or more optimized batches</param>
         /// <param name="renderHitboxes">Renders just the hitbox Rectangles if true</param>
-        public void draw(SpriteBatch spriteBatch, bool renderHitboxes)
+        public virtual void draw(SpriteBatch spriteBatch, bool renderHitboxes)
 		{
             drawHitbox(spriteBatch, renderHitboxes);
             healthBar.draw(spriteBatch);

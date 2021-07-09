@@ -10,9 +10,9 @@ namespace C2Eindopdracht.Classes
 		public List<Enemy> enemyPresets { get; set; }
 
 		/// <summary>
-		/// Sets amount of enemies
+		/// Spawns enemies into the level
 		/// </summary>
-		/// <param name="amount">Amount of enemies</param>
+		/// <param name="amount">Amount of enemies that spawn</param>
 		public EnemySpawner(int amount)
 		{
 			this.amount = amount;
@@ -32,11 +32,11 @@ namespace C2Eindopdracht.Classes
 		/// <summary>
 		/// Spawn a random enemy in any of the empty spots in the level
 		/// </summary>
-		/// <param name="width"></param>
-		/// <param name="height"></param>
+		/// <param name="width">Width of the level in levelcomponents</param>
+		/// <param name="height">Height of the level in levelcomponents</param>
 		/// <param name="levelComponent"></param>
 		/// <param name="tileSize"></param>
-		/// <param name="levelComponents"></param>
+		/// <param name="levelComponents">The levelcomponents it can collide with</param>
 		/// <returns></returns>
 		public List<Enemy> spawnEnemies(int width, int height, int levelComponent, int tileSize, List<List<LevelComponent>> levelComponents)
 		{

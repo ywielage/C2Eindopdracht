@@ -13,7 +13,6 @@ namespace C2Eindopdracht.Classes
         public Aggression aggression { get; set; }
         public int attackRange { get; set; }
 
-
         /// <summary>
         /// Class made for enemies. 
         /// </summary>
@@ -21,10 +20,9 @@ namespace C2Eindopdracht.Classes
         /// <param name="yPos">Vertical position</param> 
         /// <param name="width">Width enemy</param>  
         /// <param name="height">Height enemy</param>
-        protected Enemy(int xPos, int yPos, int width, int height, int hp) : base(xPos, yPos, width, height)
+        /// <param name="hp">Amount of hp the enemy has</param>
+        protected Enemy(int xPos, int yPos, int width, int height, int hp) : base(xPos, yPos, width, height, hp)
         {
-            this.maxHp = hp;
-            this.currHp = hp;
             this.healthBar = new HealthBar(new Rectangle(xPos, yPos, 20, 10), 20, Color.Purple, 0, -15);
         }
 
@@ -32,13 +30,13 @@ namespace C2Eindopdracht.Classes
         /// Update enemy
         /// </summary>
         /// <param name="gameTime">Holds the timestate of a Game</param>
-        /// <param name="levelComponents">List of levelcomponents</param>
+        /// <param name="levelComponents">The levelcomponents it can collide with</param>
         /// <param name="player">Player object</param> 
         /// <param name="ui">UI object</param> 
         public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, Player player, UI ui)
         {
             setYSpeed(levelComponents);
-            checkHitboxCollisions(player, ui);
+            checkHitboxCollisions(player, ui, levelComponents);
             if (knockback != null)
             {
                 updateKnockBack(gameTime, levelComponents);
@@ -58,11 +56,11 @@ namespace C2Eindopdracht.Classes
         /// </summary>
         /// <param name="enemies"></param>
         /// <param name="enemyCounter"></param>
-        private void checkHitboxCollisions(Player player, UI ui)
+        private void checkHitboxCollisions(Player player, UI ui, List<List<LevelComponent>> levelComponents)
 		{
             foreach (Attack attack in attacks)
             {
-                player.struck(ui, attack);
+                player.setUIonHit(ui, attack, levelComponents);
             }
         }
 
@@ -71,19 +69,11 @@ namespace C2Eindopdracht.Classes
         /// </summary>
         /// <param name="enemyCounter">User interface element which holds the count of enemies</param>
         /// <param name="attack">Attack to see if it collides with the enemy</param>
-        public void struck(UIElementLabelValue enemyCounter, Attack attack)
+        public void setUIonHit(UIElementLabelValue enemyCounter, Attack attack, List<List<LevelComponent>> levelComponents)
         {
             if (attack.hitbox.Intersects(hitbox) && !attack.enemiesHit.Contains(this))
             {
-                currHp -= 1;
-                healthBar.updateHealthBar(maxHp, currHp);
-                knockback = new Cooldown(.5f);
-                if (position.X < position.X)
-                {
-                    xSpeed = 0 - xSpeed;
-                }
-                ySpeed = -5f;
-                position = new Vector2(position.X, position.Y - 5f);
+                struck(attack, levelComponents);
                 attack.hitEnemy(this);
                 if (currHp <= 0)
                 {
@@ -140,10 +130,10 @@ namespace C2Eindopdracht.Classes
                 {
                     ySpeed = 0 - jumpSpeed;
                     tempPosition.Y -= jumpStartHeight;
-                    if (canMove(tempPosition, levelComponents))
-					{
-                        position = tempPosition;
-                    }
+                }
+                if (canMove(tempPosition, levelComponents))
+                {
+                    position = tempPosition;
                 }
             }
         }

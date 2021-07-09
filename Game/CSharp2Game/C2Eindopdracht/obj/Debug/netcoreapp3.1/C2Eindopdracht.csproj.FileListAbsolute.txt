@@ -132,3 +132,4 @@ C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\obj\De
 C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\obj\Debug\netcoreapp3.1\C2Eindopdracht.dll
 C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\obj\Debug\netcoreapp3.1\C2Eindopdracht.pdb
 C:\Users\hp\StudioProjects\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\obj\Debug\netcoreapp3.1\C2Eindopdracht.genruntimeconfig.cache
+C:\Users\larsk\OneDrive\Documenten\Stenden\Jaar 2\Periode 4\C2Eindopdracht\Game\CSharp2Game\C2Eindopdracht\bin\Debug\netcoreapp3.1\Content\startImage.xnb

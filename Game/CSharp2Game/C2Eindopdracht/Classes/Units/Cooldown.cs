@@ -12,7 +12,7 @@ namespace C2Eindopdracht.Classes
         /// <summary>
         /// Keeps track of cooldown
         /// </summary>
-        /// <param name="duration"></param>
+        /// <param name="duration">Time the cooldown lasts</param>
         public Cooldown(float duration)
         {
             this.duration = duration;

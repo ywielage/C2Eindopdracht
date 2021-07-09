@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/xampp/htdocs/GithubRepos/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/startImage.png</SourceFile>
-  <SourceTime>2021-07-09T18:04:21.4489243+02:00</SourceTime>
-  <DestFile>C:/xampp/htdocs/GithubRepos/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/bin/DesktopGL/Content/startImage.xnb</DestFile>
-  <DestTime>2021-07-09T18:14:36.4572119+02:00</DestTime>
+  <SourceFile>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/startImage.png</SourceFile>
+  <SourceTime>2021-07-09T20:28:54.0389343+02:00</SourceTime>
+  <DestFile>C:/Users/larsk/OneDrive/Documenten/Stenden/Jaar 2/Periode 4/C2Eindopdracht/Game/CSharp2Game/C2Eindopdracht/Content/bin/DesktopGL/Content/startImage.xnb</DestFile>
+  <DestTime>2021-07-09T20:28:55.1029367+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2020-08-10T18:17:54+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

@@ -19,10 +19,11 @@ namespace C2Eindopdracht.Classes
 		/// <param name="damage">Sets the amount of damage a projectile deals</param> 
 		/// <param name="cooldown">Sets the cooldown until the next attack</param> 
 		/// <param name="activeTime">Time the projectile is active</param>
-		/// <param name="hitbox">Hitbox of projectile</param>  
+		/// <param name="hitbox">Hitbox of projectile</param> 
+		/// <param name="knockbackTime">Time the knockback should last</param>
 		/// <param name="xSpeed">Horizontal speed</param> 
 		/// <param name="face">Direction which the projectile is facing</param>
-		public Projectile(int damage, Cooldown cooldown, float activeTime, Rectangle hitbox, float xSpeed, Face face) : base(damage, cooldown, activeTime, hitbox)
+		public Projectile(int damage, Cooldown cooldown, float activeTime, Rectangle hitbox, float knockbackTime, float xSpeed, Face face) : base(damage, cooldown, activeTime, hitbox, knockbackTime)
 		{
 			this.xSpeed = xSpeed;
 			this.face = face;

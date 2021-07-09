@@ -14,6 +14,13 @@ namespace C2Eindopdracht.Classes
 		public Cooldown activeTime { get; set; }
 		public bool expired { get; set; }
 
+		/// <summary>
+		/// UI element to hold text
+		/// </summary>
+		/// <param name="label">Text to hold</param>
+		/// <param name="parentOffset">Offset from UI parent topleft position</param>
+		/// <param name="position">Position in the game</param>
+		/// <param name="activeTime">Time the UI element is active</param>
 		public UIElement(string label, Vector2 parentOffset, Vector2 position, float activeTime)
 		{
 			this.label = label;
@@ -51,11 +58,11 @@ namespace C2Eindopdracht.Classes
 		/// Draw the UI element
 		/// </summary>
 		/// <param name="spriteBatch">Helper class for drawing text strings and sprites in one or more optimized batches</param>
-		/// <param name="arial16">Arial font size 16</param>
-		public void draw(SpriteBatch spriteBatch, SpriteFont arial16)
+		/// <param name="font">Font to use for the UI elements</param>
+		public void draw(SpriteBatch spriteBatch, SpriteFont font)
 		{
 			spriteBatch.DrawString(
-				arial16,
+				font,
 				getDrawText(),
 				position,
 				Color.White,

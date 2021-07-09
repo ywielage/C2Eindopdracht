@@ -17,32 +17,30 @@ namespace C2Eindopdracht.Classes
         public static Texture2D tileSet { get; set; }
 
         /// <summary>
-        /// Sets default values
+        /// Player character, the one you control
         /// </summary>
-        /// <param name="xPos">Horizontal position</param> 
+        /// <param name="xPos">Horizontal Position</param> 
         /// <param name="yPos">Vertical position</param> 
-        /// <param name="hp">Amount of lives</param>
-        /// <param name="gravity">Takes the player back to ground</param> 
-        /// <param name="xSpeed">Horizontal speed</param> 
-        public Player(int xPos, int yPos, int width, int height, int hp) : base(xPos, yPos, width, height)
+        /// <param name="width">Width player</param>  
+        /// <param name="height">Height player</param>
+        /// <param name="hp">Amount of hp the player has</param>
+        public Player(int xPos, int yPos, int width, int height, int hp) : base(xPos, yPos, width, height, hp)
         {
-            maxHp = hp;
-            currHp = hp;
             xSpeed = 200f;
             gravity = .3f;
             jumpSpeed = 6f;
             jumpStartHeight = 3f;
             doubleJumpAvailable = false;
             canDoubleJump = true;
-            healthBar = new HealthBar(new Rectangle(xPos, yPos, 50, 10), 50, Color.Gold, -17, -15);
-            shield = new Shield(false, false, 120, 1);
+            healthBar = new HealthBar(new Rectangle(xPos, yPos, 50, 10), 50, Color.Gold, -17, -21);
+            shield = new Shield(new HealthBar(new Rectangle(xPos, yPos, 50, 6), 50, Color.LightBlue, -17, -12), false, false, 120, 1);
         }
 
         /// <summary>
         /// Update player
         /// </summary>
         /// <param name="gameTime">Holds the timestate of a Game</param>
-        /// <param name="levelComponents">List of levelcomponents</param>
+        /// <param name="levelComponents">The levelcomponents it can collide with</param>
         /// <param name="enemies">List of enemies</param>
         /// <param name="enemyCounter">Count of alive enemies</param>
         public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, List<Enemy> enemies, UIElementLabelValue enemyCounter)
@@ -52,7 +50,7 @@ namespace C2Eindopdracht.Classes
 			{
                 doubleJumpAvailable = true;
 			}
-            checkHitboxCollisions(enemies, enemyCounter);
+            checkHitboxCollisions(enemies, enemyCounter, levelComponents);
             if (knockback != null)
             {
                 updateKnockBack(gameTime, levelComponents);
@@ -64,7 +62,20 @@ namespace C2Eindopdracht.Classes
             updateAttacks(gameTime);
             alignHitboxToPosition();
             alignHealthBarToPosition();
+            alignShieldBarToPosition();
             //printValues();
+        }
+
+        /// <summary>
+        /// Align the shieldbar to the player position
+        /// </summary>
+        protected void alignShieldBarToPosition()
+        {
+            int shieldBarWidth = shield.healthBar.bar.Width;
+            int shieldBarHeight = shield.healthBar.bar.Height;
+            HealthBar tempBar = shield.healthBar;
+            tempBar.bar = new Rectangle(new Point((int)position.X + shield.healthBar.xOffset, (int)position.Y + shield.healthBar.yOffset), new Point(shieldBarWidth, shieldBarHeight));
+            shield.healthBar = tempBar;
         }
 
         /// <summary>
@@ -73,13 +84,14 @@ namespace C2Eindopdracht.Classes
         /// </summary>
         /// <param name="enemies"></param>
         /// <param name="enemyCounter"></param>
-        private void checkHitboxCollisions(List<Enemy> enemies, UIElementLabelValue enemyCounter)
+        /// /// <param name="levelComponents">The levelcomponents it can collide with</param>
+        private void checkHitboxCollisions(List<Enemy> enemies, UIElementLabelValue enemyCounter, List<List<LevelComponent>> levelComponents)
 		{
             foreach (Enemy enemy in enemies)
             {
                 foreach (Attack attack in attacks)
                 {
-                    enemy.struck(enemyCounter, attack);
+                    enemy.setUIonHit(enemyCounter, attack, levelComponents);
                 }
             }
             enemies.RemoveAll(enemy => !enemy.isAlive);
@@ -90,19 +102,11 @@ namespace C2Eindopdracht.Classes
         /// </summary>
         /// <param name="ui">User interface to change</param>
         /// <param name="attack">Attack to see if it collides with the player</param>
-        public void struck(UI ui, Attack attack)
+        public void setUIonHit(UI ui, Attack attack, List<List<LevelComponent>> levelComponents)
         {
             if (attack.hitbox.Intersects(hitbox) && attack.playerHit == false && !shield.isActive)
             {
-                currHp -= 1;
-                healthBar.updateHealthBar(maxHp, currHp);
-                knockback = new Cooldown(.2f);
-                if (position.X < position.X)
-                {
-                    xSpeed = 0 - xSpeed;
-                }
-                ySpeed = -5f;
-                position = new Vector2(position.X, position.Y - 5f);
+                struck(attack, levelComponents);
                 attack.hitPlayer();
                 if (currHp <= 0)
                 {
@@ -138,10 +142,10 @@ namespace C2Eindopdracht.Classes
 
             if (SmartKeyboard.HasBeenPressed(Keys.J) && canAttack && !shield.isActive)
             {
-                attacks.Add(attack(1, new Cooldown(.5f), .2f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5));
+                attacks.Add(attack(1, new Cooldown(.5f), .2f, new Rectangle((int)position.X, (int)position.Y, 24, 24), .5f, 5));
             }
 
-            if (keyboardState.IsKeyDown(Keys.K) && canAttack)
+            if (keyboardState.IsKeyDown(Keys.K) && canAttack && isAlive)
             {
                 shield.activate();
             }
@@ -149,7 +153,6 @@ namespace C2Eindopdracht.Classes
             {
                 shield.deactivate();
             }
-            Debug.WriteLine(shield.currFill);
         }
 
         protected override void jump(List<List<LevelComponent>> levelComponents)
@@ -186,10 +189,27 @@ namespace C2Eindopdracht.Classes
         public void gameOver(UI ui)
 		{
             isAlive = false;
+            shield.healthBar.updateHealthBar(0, 0);
             ui.addUIElement("You've died!", new Vector2(5, 50), 0);
         }
 
-		protected override void drawHitbox(SpriteBatch spriteBatch, bool renderHitboxes)
+        /// <summary>
+        /// Draw the unit
+        /// </summary>
+        /// <param name="spriteBatch">Helper class for drawing text strings and sprites in one or more optimized batches</param>
+        /// <param name="renderHitboxes">Renders just the hitbox Rectangles if true</param>
+        public override void draw(SpriteBatch spriteBatch, bool renderHitboxes)
+        {
+            drawHitbox(spriteBatch, renderHitboxes);
+            healthBar.draw(spriteBatch);
+            shield.healthBar.draw(spriteBatch);
+            foreach (Attack attack in attacks)
+            {
+                attack.draw(spriteBatch, renderHitboxes);
+            }
+        }
+
+        protected override void drawHitbox(SpriteBatch spriteBatch, bool renderHitboxes)
 		{
             spriteBatch.Draw(
                 renderHitboxes ? Game1.blankTexture : tileSet,

@@ -19,7 +19,13 @@ namespace C2Eindopdracht.Classes
         public List<Enemy> enemies { get; set; }
         public List<List<LevelComponent>> list { get; set; }
         public Rectangle endTrigger { get; set; }
-        
+
+        /// <summary>
+        /// Create a level
+        /// </summary>
+        /// <param name="width">The amount of levelcomponents the level is wide</param>
+        /// <param name="height">The amount of levelcomponents the level is high</param>
+        /// <param name="enemyAmount">The amount of enemies to spawn into the level</param>
         public Level(int width, int height, int enemyAmount)
         {
             if(width < 2 || height < 2)

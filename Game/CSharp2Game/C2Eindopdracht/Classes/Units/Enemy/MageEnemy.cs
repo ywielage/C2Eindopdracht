@@ -12,6 +12,14 @@ namespace C2Eindopdracht.Classes
     {
         public static Texture2D tileSet { get; set; }
 
+        /// <summary>
+        /// Mage enemy, a dangerous ranged attacker
+        /// </summary>
+        /// <param name="xPos">Horizontal position</param>
+        /// <param name="yPos">Vertical position</param>
+        /// <param name="width">Width of the hitbox</param>
+        /// <param name="height">Height of the hitbox</param>
+        /// <param name="hp">Amount of hp the mage has</param>
         public MageEnemy(int xPos, int yPos, int  width, int height, int hp) : base(xPos, yPos, width, height, hp)
         {
             xSpeed = 80f;
@@ -22,7 +30,7 @@ namespace C2Eindopdracht.Classes
             attackRange = 100;
         }
 
-        protected override Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, int hitboxXOffSet)
+        protected override Attack attack(int damage, Cooldown cooldown, float duration, Rectangle hitbox, float knockbackTime, int hitboxXOffSet)
 		{
             if (face == Face.LEFT)
             {
@@ -33,12 +41,12 @@ namespace C2Eindopdracht.Classes
                 hitbox.X += hitboxXOffSet;
             }
 
-            return new Projectile(damage, cooldown, duration, hitbox, 200f, face);
+            return new Projectile(damage, cooldown, duration, hitbox, knockbackTime, 200f, face);
         }
 
 		protected override Attack getAttack()
 		{
-            return attack(1, new Cooldown(.8f), .8f, new Rectangle((int)position.X, (int)position.Y, 20, 15), 5);
+            return attack(1, new Cooldown(.8f), .8f, new Rectangle((int)position.X, (int)position.Y, 20, 15), .2f, 5);
         }
 
 		protected override void drawHitbox(SpriteBatch spriteBatch, bool renderHitboxes)
