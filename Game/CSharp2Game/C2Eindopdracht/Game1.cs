@@ -17,6 +17,7 @@ namespace C2Eindopdracht
         private UI ui;
         private bool renderHitboxes;
         private SpriteFont arial16;
+        private GameState gameState;
 
         //Texture mainly for drawing hitboxes
         public static Texture2D blankTexture;
@@ -30,8 +31,11 @@ namespace C2Eindopdracht
 
         protected override void Initialize()
         {
-			// TODO: Add your initialization logic here
-			camera = new Camera
+            gameState = new GameState();
+            gameState = GameState.GAME;
+
+            // TODO: Add your initialization logic here
+            camera = new Camera
 			{
 				Zoom = 1.1f
 			};
@@ -70,49 +74,79 @@ namespace C2Eindopdracht
 
         protected override void Update(GameTime gameTime)
         {
+            if (SmartKeyboard.HasBeenPressed(Keys.Y))
+            {
+                if (gameState.Equals(GameState.GAME))
+                {
+                    gameState = GameState.MENU;
+                }
+                else if (gameState.Equals(GameState.MENU))
+                {
+                    gameState = GameState.GAME;
+                }
+            }
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+                 Exit();
 
-            if(SmartKeyboard.HasBeenPressed(Keys.Tab))
-                renderHitboxes = !renderHitboxes;
-
-            if(SmartKeyboard.HasBeenPressed(Keys.F))
+            if (SmartKeyboard.HasBeenPressed(Keys.F))
                 _graphics.ToggleFullScreen();
 
-            // TODO: Add your update logic here
-            player.update(gameTime, level.list, level.enemies, (UIElementLabelValue)ui.getUIElementByLabel("Enemies alive"));
 
-            foreach(Enemy enemy in level.enemies)
-			{
-                enemy.update(gameTime, level.list, player, ui);
-			}
+                if (SmartKeyboard.HasBeenPressed(Keys.Tab))
+                    renderHitboxes = !renderHitboxes;
 
-            ui.update(new Vector2(player.position.X - _graphics.PreferredBackBufferWidth / (2 * camera.Zoom), player.position.Y - _graphics.PreferredBackBufferHeight / (2 * camera.Zoom)), gameTime);
-            camera.Pos = player.position;
-            level.checkEndTriggerHit(player.hitbox, ui, 5, 50);
+            if (gameState == GameState.GAME)
+            {
+                // TODO: Add your update logic here
+                player.update(gameTime, level.list, level.enemies, (UIElementLabelValue)ui.getUIElementByLabel("Enemies alive"));
+
+                foreach (Enemy enemy in level.enemies)
+                {
+                    enemy.update(gameTime, level.list, player, ui);
+                }
+
+                ui.update(new Vector2(player.position.X - _graphics.PreferredBackBufferWidth / (2 * camera.Zoom), player.position.Y - _graphics.PreferredBackBufferHeight / (2 * camera.Zoom)), gameTime);
+                camera.Pos = player.position;
+                level.checkEndTriggerHit(player.hitbox, ui, 5, 50);
+            }
+
+            Debug.WriteLine(gameState);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkSlateGray);
-
-            // TODO: Add your drawing code here
-            _spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
-
-            foreach (UIElement element in ui.elements)
+            if(gameState == GameState.GAME)
             {
-                element.draw(_spriteBatch, arial16);
+                GraphicsDevice.Clear(Color.DarkSlateGray);
+
+                // TODO: Add your drawing code here
+                _spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, null, null, null, null, camera.get_transformation(GraphicsDevice));
+
+                foreach (UIElement element in ui.elements)
+                {
+                    element.draw(_spriteBatch, arial16);
+                }
+                foreach (Enemy enemy in level.enemies)
+                {
+                    enemy.draw(_spriteBatch, renderHitboxes);
+                }
+                player.draw(_spriteBatch, renderHitboxes);
+                level.draw(_spriteBatch, renderHitboxes);
+
+                _spriteBatch.End();
             }
-            foreach (Enemy enemy in level.enemies)
+            else if(gameState == GameState.MENU)
             {
-                enemy.draw(_spriteBatch, renderHitboxes);
+                GraphicsDevice.Clear(Color.DarkSeaGreen);
+
             }
-            player.draw(_spriteBatch, renderHitboxes);
-            level.draw(_spriteBatch, renderHitboxes);
-
-            _spriteBatch.End();
-
             base.Draw(gameTime);
         }
+     }
+    public enum GameState
+    {
+        MENU,
+        GAME
     }
 }
