@@ -68,7 +68,7 @@ namespace C2Eindopdracht.Classes
         /// </summary>
         /// <param name="width">The amount of levelcomponents the level is wide</param>
         /// <param name="height">The amount of levelcomponents the level is high</param>
-        /// <param name="debug">Debug mode to see which levelcomponent at that time</param>
+        /// <param name="debug">Debug mode to see each levelcomponent at that time</param>
         /// <returns></returns>
         private bool createPath(int width, int height, bool debug)
         {
@@ -119,7 +119,7 @@ namespace C2Eindopdracht.Classes
         /// <param name="randomDirection">Direction the levelcomponent exit will go</param>
         /// <param name="xPos">The horizontal position in the levelcompontent list</param>
         /// <param name="yPos">The vertical position in the levelcompontent list</param>
-        /// <param name="lastExit">The exit this levelcomponent leads into</param>
+        /// <param name="lastExit">The entrance of this levelcomponent</param>
         private void generateLevelComponent(int randomDirection, ref int xPos, ref int yPos, ref Directions lastExit)
 		{
             if (randomDirection == 1 && yPos > 1)
@@ -145,7 +145,7 @@ namespace C2Eindopdracht.Classes
         /// </summary>
         /// <param name="xPos">The horizontal position in the levelcompontent list</param>
         /// <param name="yPos">The vertical position in the levelcompontent list</param>
-        /// <param name="lastExit">The exit this levelcomponent leads into</param>
+        /// <param name="lastExit">The entrance of this levelcomponent</param>
         private void generateLevelComponentNorth(ref int xPos, ref int yPos, ref Directions lastExit)
 		{
             if (lastExit != Directions.SOUTH && !list[yPos - 1][xPos].isFilled)
@@ -163,7 +163,7 @@ namespace C2Eindopdracht.Classes
         /// </summary>
         /// <param name="xPos">The horizontal position in the levelcompontent list</param>
         /// <param name="yPos">The vertical position in the levelcompontent list</param>
-        /// <param name="lastExit">The exit this levelcomponent leads into</param>
+        /// <param name="lastExit">The entrance of this levelcomponent</param>
         private void generateLevelComponentEast(ref int xPos, ref int yPos, ref Directions lastExit)
         {
             if (lastExit != Directions.WEST && !list[yPos][xPos + 1].isFilled)
@@ -181,7 +181,7 @@ namespace C2Eindopdracht.Classes
         /// </summary>
         /// <param name="xPos">The horizontal position in the levelcompontent list</param>
         /// <param name="yPos">The vertical position in the levelcompontent list</param>
-        /// <param name="lastExit">The exit this levelcomponent leads into</param>
+        /// <param name="lastExit">The entrance of this levelcomponent</param>
         private void generateLevelComponentSouth(ref int xPos, ref int yPos, ref Directions lastExit)
         {
             if (lastExit != Directions.NORTH && !list[yPos + 1][xPos].isFilled)
@@ -199,7 +199,7 @@ namespace C2Eindopdracht.Classes
         /// </summary>
         /// <param name="xPos">The horizontal position in the levelcompontent list</param>
         /// <param name="yPos">The vertical position in the levelcompontent list</param>
-        /// <param name="lastExit">The exit this levelcomponent leads into</param>
+        /// <param name="lastExit">The entrance of this levelcomponent</param>
         private void generateLevelComponentWest(ref int xPos, ref int yPos, ref Directions lastExit)
 		{
             if (lastExit != Directions.EAST && !list[yPos][xPos - 1].isFilled)

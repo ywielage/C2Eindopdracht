@@ -13,7 +13,7 @@ namespace C2Eindopdracht.Classes
         public static KeyboardState GetState()
         {
             previousKeyState = currentKeyState;
-            currentKeyState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
+            currentKeyState = Keyboard.GetState();
             return currentKeyState;
         }
 
