@@ -12,13 +12,6 @@ namespace C2Eindopdracht.Classes
     {
         public static Texture2D tileSet { get; set; }
 
-        /// <summary>
-        /// Constructor of Fighter enemy
-        /// </summary>
-        /// <param name="xPos">Horizontal position</param>
-        /// <param name="yPos">Vertical position</param> 
-        /// <param name="width">Width of fighter enemy</param> 
-        /// <param name="height">Height of fighter enemy</param> 
         public FighterEnemy(int xPos, int yPos, int width, int height, int hp) : base(xPos, yPos, width, height, hp)
         {
             xSpeed = 100f;

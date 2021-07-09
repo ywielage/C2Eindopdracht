@@ -13,11 +13,7 @@ namespace C2Eindopdracht.Classes
     {
         public bool doubleJumpAvailable { get; set; }
         public bool canDoubleJump { get; set; }
-        public bool shieldActive { get; set; }
-        private int shieldTime { get; set; }
-        private int maxShieldTime { get; set; }
-        private int shieldRefill { get; set; }
-        private bool shieldUsed { get; set; }
+        public Shield shield { get; set; }
         public static Texture2D tileSet { get; set; }
 
         /// <summary>
@@ -38,11 +34,8 @@ namespace C2Eindopdracht.Classes
             jumpStartHeight = 3f;
             doubleJumpAvailable = false;
             canDoubleJump = true;
-            shieldActive = false;
             healthBar = new HealthBar(new Rectangle(xPos, yPos, 50, 10), 50, Color.Gold, -17, -15);
-            maxShieldTime = 120;
-            shieldRefill = 1;
-            shieldUsed = false;
+            shield = new Shield(false, false, 120, 1);
         }
 
         /// <summary>
@@ -54,41 +47,24 @@ namespace C2Eindopdracht.Classes
         /// <param name="enemyCounter">Count of alive enemies</param>
         public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, List<Enemy> enemies, UIElementLabelValue enemyCounter)
         {
-            doubleJumpAvailable = checkWallCollisions(levelComponents, doubleJumpAvailable);
+            setYSpeed(levelComponents);
+            if(grounded)
+			{
+                doubleJumpAvailable = true;
+			}
             checkHitboxCollisions(enemies, enemyCounter);
             if (knockback != null)
             {
-                updateKnockBack(gameTime);
+                updateKnockBack(gameTime, levelComponents);
             }
             else if (knockback == null && isAlive)
             {
-                checkKeyPresses(gameTime);
+                checkKeyPresses(gameTime, levelComponents);
             }
             updateAttacks(gameTime);
             alignHitboxToPosition();
             alignHealthBarToPosition();
             //printValues();
-        }
-
-        protected override void setYSpeed(int touchingGrounds)
-        {
-            if (touchingGrounds >= 1)
-            {
-                doubleJumpAvailable = true;
-                ySpeed = 0;
-                grounded = true;
-            }
-            else
-            {
-                if (ySpeed < 10)
-                {
-                    ySpeed += gravity;
-                }
-                Vector2 tempPosition = position;
-                tempPosition.Y += ySpeed;
-                position = tempPosition;
-                grounded = false;
-            }
         }
 
         /// <summary>
@@ -106,16 +82,7 @@ namespace C2Eindopdracht.Classes
                     enemy.struck(enemyCounter, attack);
                 }
             }
-
-            List<Enemy> deadEnemies = new List<Enemy>();
-            foreach (Enemy enemy in enemies)
-            {
-                if (!enemy.isAlive)
-                {
-                    deadEnemies.Add(enemy);
-                }
-            }
-            enemies.RemoveAll(enemy => deadEnemies.Contains(enemy));
+            enemies.RemoveAll(enemy => !enemy.isAlive);
         }
 
         /// <summary>
@@ -125,7 +92,7 @@ namespace C2Eindopdracht.Classes
         /// <param name="attack">Attack to see if it collides with the player</param>
         public void struck(UI ui, Attack attack)
         {
-            if (attack.hitbox.Intersects(hitbox) && attack.playerHit == false && !shieldActive)
+            if (attack.hitbox.Intersects(hitbox) && attack.playerHit == false && !shield.isActive)
             {
                 currHp -= 1;
                 healthBar.updateHealthBar(maxHp, currHp);
@@ -151,57 +118,45 @@ namespace C2Eindopdracht.Classes
         /// J to attack or K to shield
         /// </summary>
         /// <param name="gameTime">Holds the timestate of a Game</param>
-        private void checkKeyPresses(GameTime gameTime)
+        private void checkKeyPresses(GameTime gameTime, List<List<LevelComponent>> levelComponents)
         {
             var keyboardState = SmartKeyboard.GetState();
+            if (SmartKeyboard.HasBeenPressed(Keys.Space) || SmartKeyboard.HasBeenPressed(Keys.W))
+            {
+                jump(levelComponents);
+            }
+
             if (keyboardState.IsKeyDown(Keys.A))
             {
-                moveLeft(gameTime);
+                moveLeft(gameTime, levelComponents);
             }
 
             if (keyboardState.IsKeyDown(Keys.D))
             {
-                moveRight(gameTime);
+                moveRight(gameTime, levelComponents);
             }
 
-            if (SmartKeyboard.HasBeenPressed(Keys.Space) || SmartKeyboard.HasBeenPressed(Keys.W))
-            {
-                jump();
-            }
-
-            if (SmartKeyboard.HasBeenPressed(Keys.J) && canAttack && !shieldActive)
+            if (SmartKeyboard.HasBeenPressed(Keys.J) && canAttack && !shield.isActive)
             {
                 attacks.Add(attack(1, new Cooldown(.5f), .2f, new Rectangle((int)position.X, (int)position.Y, 24, 24), 5));
             }
 
-            if (keyboardState.IsKeyDown(Keys.K) && canAttack && shieldTime <= maxShieldTime && shieldUsed == false)
+            if (keyboardState.IsKeyDown(Keys.K) && canAttack)
             {
-                shieldActive = true;
-                shieldTime++;
-                if(shieldTime == maxShieldTime) {
-                    shieldUsed = true;
-                }
+                shield.activate();
             }
-            else if(shieldUsed == true)
+            else if (keyboardState.IsKeyUp(Keys.K))
             {
-                shieldActive = false;
-                shieldTime -= shieldRefill;
-                if (shieldTime == 0)
-                {
-                    shieldUsed = false;
-                }
+                shield.deactivate();
             }
-            else if(keyboardState.IsKeyUp(Keys.K))
-            {
-                shieldActive = false;
-            }
+            Debug.WriteLine(shield.currFill);
         }
 
-        protected override void jump()
+        protected override void jump(List<List<LevelComponent>> levelComponents)
         {
-            Vector2 tempPosition = position;
             if (attackCooldown.elapsedTime >= attackCooldown.duration)
             {
+                Vector2 tempPosition = position;
                 if (grounded)
                 {
                     ySpeed = 0 - jumpSpeed;
@@ -217,8 +172,11 @@ namespace C2Eindopdracht.Classes
                         doubleJumpAvailable = false;
                     }
                 }
+                if(canMove(tempPosition, levelComponents))
+				{
+                    position = tempPosition;
+                }
             }
-            position = tempPosition;
         }
 
         /// <summary>
@@ -236,7 +194,7 @@ namespace C2Eindopdracht.Classes
             spriteBatch.Draw(
                 renderHitboxes ? Game1.blankTexture : tileSet,
                 hitbox,
-                renderHitboxes ? Color.Green : Color.White
+                !renderHitboxes ? Color.White : (shield.isActive ? Color.GreenYellow : Color.Green)
             );
         }
 	}

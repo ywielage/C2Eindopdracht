@@ -37,40 +37,20 @@ namespace C2Eindopdracht.Classes
         /// <param name="ui">UI object</param> 
         public void update(GameTime gameTime, List<List<LevelComponent>> levelComponents, Player player, UI ui)
         {
-            checkWallCollisions(levelComponents, false);
+            setYSpeed(levelComponents);
             checkHitboxCollisions(player, ui);
             if (knockback != null)
             {
-                updateKnockBack(gameTime);
+                updateKnockBack(gameTime, levelComponents);
             }
             else
             {
-                decideMovement(gameTime, player);
+                decideMovement(gameTime, player, levelComponents);
             }
             updateAttacks(gameTime);
             alignHitboxToPosition();
             alignHealthBarToPosition();
             //printValues();
-        }
-
-        protected override void setYSpeed(int touchingGrounds)
-        {
-            if (touchingGrounds >= 1)
-            {
-                ySpeed = 0;
-                grounded = true;
-            }
-            else
-            {
-                if (ySpeed < 10)
-                {
-                    ySpeed += gravity;
-                }
-                Vector2 tempPosition = position;
-                tempPosition.Y += ySpeed;
-                position = tempPosition;
-                grounded = false;
-            }
         }
 
         /// <summary>
@@ -118,21 +98,25 @@ namespace C2Eindopdracht.Classes
         /// </summary>
         /// <param name="gameTime">Holds the timestate of a Game</param>
         /// <param name="player">The player</param>
-        private void decideMovement(GameTime gameTime, Player player)
+        /// <param name="levelComponents">The levelcomponents it can collide with</param>
+        private void decideMovement(GameTime gameTime, Player player, List<List<LevelComponent>> levelComponents)
         {
             Rectangle playerHitbox = player.hitbox;
             if (playerHitbox.Y < hitbox.Y)
             {
-                jump();
+                jump(levelComponents);
             }
+
             if (playerHitbox.X < hitbox.X)
             {
-                moveLeft(gameTime);
+                moveLeft(gameTime, levelComponents);
             }
+
             if (playerHitbox.X > hitbox.X)
             {
-                moveRight(gameTime);
+                moveRight(gameTime, levelComponents);
             }
+
             if (playerHitbox.X - hitbox.X < attackRange && playerHitbox.X - hitbox.X > -attackRange &&
                 playerHitbox.Y - hitbox.Y < attackRange && playerHitbox.Y - hitbox.Y > -attackRange &&
                 canAttack)
@@ -147,16 +131,19 @@ namespace C2Eindopdracht.Classes
         /// <returns></returns>
         protected abstract Attack getAttack();
 
-        protected override void jump()
+        protected override void jump(List<List<LevelComponent>> levelComponents)
         {
             if (attackCooldown.elapsedTime >= attackCooldown.duration)
             {
+                Vector2 tempPosition = position;
                 if (grounded)
                 {
-                    Vector2 tempPosition = position;
                     ySpeed = 0 - jumpSpeed;
                     tempPosition.Y -= jumpStartHeight;
-                    position = tempPosition;
+                    if (canMove(tempPosition, levelComponents))
+					{
+                        position = tempPosition;
+                    }
                 }
             }
         }

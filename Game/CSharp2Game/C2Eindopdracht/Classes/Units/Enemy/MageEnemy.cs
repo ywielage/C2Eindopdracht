@@ -12,13 +12,6 @@ namespace C2Eindopdracht.Classes
     {
         public static Texture2D tileSet { get; set; }
 
-        /// <summary>
-        /// Constructor of mage enemies
-        /// </summary>
-        /// <param name="xPos">Horizontal position</param> 
-        /// <param name="yPos">Vertical position</param> 
-        /// <param name="width">Width of mage enemy</param> 
-        /// <param name="height">Height of mage enemy</param>
         public MageEnemy(int xPos, int yPos, int  width, int height, int hp) : base(xPos, yPos, width, height, hp)
         {
             xSpeed = 80f;

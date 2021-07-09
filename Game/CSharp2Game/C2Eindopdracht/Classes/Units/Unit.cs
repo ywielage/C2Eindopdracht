@@ -72,74 +72,50 @@ namespace C2Eindopdracht.Classes.Units
 		}
 
         /// <summary>
-        /// Check if unit collides with any walls
+        /// Increase Y speed if not grounded, set to 0 if grounded
         /// </summary>
-        /// <param name="walls">All walls it can collide with</param>
-        protected bool checkWallCollisions(List<List<LevelComponent>> walls, bool doubleJumpAvailable )
-        {
-            int touchingGrounds = 0;
+        /// <param name="touchingGrounds">Amount of surfaces the unit is standing on</param>
+        protected void setYSpeed(List<List<LevelComponent>> levelComponents)
+		{
+            Vector2 tempPosition = position;
+            tempPosition.Y += ySpeed + gravity;
+            if (canMove(tempPosition, levelComponents))
+            {
+                position = tempPosition;
+                ySpeed += gravity;
+                grounded = false;
+            }
+            else
+            {
+                ySpeed = 0;
+                grounded = true;
+            }
+        }
 
-            foreach (List<LevelComponent> rowList in walls)
+        /// <summary>
+        /// Check if the unit can move to the given new position
+        /// </summary>
+        /// <param name="newPosition">New position to check</param>
+        /// <param name="levelComponents">All levelcolliders</param>
+        /// <returns></returns>
+        protected bool canMove(Vector2 newPosition, List<List<LevelComponent>> levelComponents)
+		{
+            Rectangle newHitbox = new Rectangle((int)newPosition.X, (int)newPosition.Y, hitbox.Width, hitbox.Height);
+            foreach (List<LevelComponent> rowList in levelComponents)
             {
                 foreach (LevelComponent levelComponent in rowList)
                 {
                     foreach (Rectangle wall in levelComponent.colliders)
                     {
-                        touchingGrounds = countTouchingGrounds(touchingGrounds, wall);
+                        if (wall.Intersects(newHitbox))
+						{
+                            return false;
+						}
                     }
                 }
             }
-            setYSpeed(touchingGrounds);
-
-            //TODO: Added to let player class know if doublejump is available 
-            return doubleJumpAvailable;
-        }
-
-        /// <summary>
-        /// Increase Y speed if not grounded, set to 0 if grounded
-        /// </summary>
-        /// <param name="touchingGrounds">Amount of surfaces the unit is standing on</param>
-        protected abstract void setYSpeed(int touchingGrounds);
-
-        /// <summary>
-        /// Check with how many walls the unit collides
-        /// </summary>
-        /// <param name="touchingGrounds">Amount of colliding walls</param>
-        /// <param name="wall">The current wall</param>
-        /// <returns>How many walls it collides with</returns>
-        protected int countTouchingGrounds(int touchingGrounds, Rectangle wall)
-        {
-            Vector2 tempPosition = position;
-            if (wall.Left < hitbox.Right && wall.Right > hitbox.Left)
-            {
-                if (wall.Top - hitbox.Bottom == 0)
-                {
-                    touchingGrounds++;
-                }
-                else if (hitbox.Top - wall.Bottom < 1 && hitbox.Top - wall.Bottom > -10)
-                {
-                    ySpeed = 0;
-                }
-                else if (wall.Top - hitbox.Bottom < 1 && wall.Top - hitbox.Bottom > -11)
-                {
-                    touchingGrounds++;
-                    tempPosition.Y = wall.Top - hitbox.Height;
-                }
-            }
-            if (wall.Top < hitbox.Bottom && wall.Bottom > hitbox.Top)
-            {
-                if (hitbox.Left - wall.Right < 1 && hitbox.Left - wall.Right > -5)
-                {
-                    tempPosition.X = wall.Right + 2;
-                }
-                if (wall.Left - hitbox.Right < 1 && wall.Left - hitbox.Right > -5)
-                {
-                    tempPosition.X = wall.Left - hitbox.Width - 2;
-                }
-            }
-            position = tempPosition;
-            return touchingGrounds;
-        }
+            return true;
+		}
 
         /// <summary>
         /// Updates the attacks.
@@ -157,16 +133,7 @@ namespace C2Eindopdracht.Classes.Units
                 }
                 attack.update(gameTime);
             }
-
-            List<Attack> expiredAttacks = new List<Attack>();
-            foreach (Attack attack in attacks)
-            {
-                if (attack.expired)
-                {
-                    expiredAttacks.Add(attack);
-                }
-            }
-            attacks.RemoveAll(attack => expiredAttacks.Contains(attack));
+            attacks.RemoveAll(attack => attack.expired);
 
             if (!canAttack && attackCooldown.elapsedTime >= attackCooldown.duration)
             {
@@ -182,14 +149,17 @@ namespace C2Eindopdracht.Classes.Units
         /// Update the knockback
         /// </summary>
         /// <param name="gameTime">Holds the timestate of a Game</param>
-        protected void updateKnockBack(GameTime gameTime)
+        /// <param name="levelComponents">The levelcomponents it can collide with</param>
+        protected void updateKnockBack(GameTime gameTime, List<List<LevelComponent>> levelComponents)
         {
             Vector2 tempPosition = position;
             knockback.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            tempPosition.X -= xSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            position = tempPosition;
-
-            if (knockback.duration <= knockback.elapsedTime)
+			tempPosition.X -= xSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if(canMove(tempPosition, levelComponents))
+			{
+                position = tempPosition;
+            }
+			if (knockback.duration <= knockback.elapsedTime)
             {
                 knockback = null;
                 if (xSpeed < 0)
@@ -203,14 +173,18 @@ namespace C2Eindopdracht.Classes.Units
         /// Move the unit left
         /// </summary>
         /// <param name="gameTime">Holds the timestate of a Game</param>
-        protected void moveLeft(GameTime gameTime)
+        /// <param name="levelComponents">The levelcomponents it can collide with</param>
+        protected void moveLeft(GameTime gameTime, List<List<LevelComponent>> levelComponents)
         {
+            Vector2 tempPosition = position;
+            tempPosition.X -= xSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (canMove(tempPosition, levelComponents))
+            {
+                position = tempPosition;
+            }
             if (attackCooldown.elapsedTime >= attackCooldown.duration)
             {
-                Vector2 tempPosition = position;
-                tempPosition.X -= xSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 face = Face.LEFT;
-                position = tempPosition;
             }
         }
 
@@ -218,21 +192,27 @@ namespace C2Eindopdracht.Classes.Units
         /// Move the unit right
         /// </summary>
         /// <param name="gameTime">Holds the timestate of a Game</param>
-        protected void moveRight(GameTime gameTime)
+        /// <param name="levelComponents">The levelcomponents it can collide with</param>
+        protected void moveRight(GameTime gameTime, List<List<LevelComponent>> levelComponents)
         {
-            if (attackCooldown.elapsedTime >= attackCooldown.duration)
-            {
-                Vector2 tempPosition = position;
-                tempPosition.X += xSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                face = Face.RIGHT;
+            Vector2 tempPosition = position;
+            tempPosition.X += xSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (canMove(tempPosition, levelComponents))
+			{
                 position = tempPosition;
+            }
+            if (attackCooldown.elapsedTime >= attackCooldown.duration && canMove(tempPosition, levelComponents))
+            {
+                face = Face.RIGHT;
+                
             }
         }
 
         /// <summary>
         /// Let the unit jump with a given speed
         /// </summary>
-        protected abstract void jump();
+        /// <param name="levelComponents">The levelcomponents it can collide with</param>
+        protected abstract void jump(List<List<LevelComponent>> levelComponents);
 
         /// <summary>
         /// Attack based on the offset of which direction the unit is facing
